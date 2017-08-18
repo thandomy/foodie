@@ -1,7 +1,6 @@
 language: android
 before_install:
-    - chmod +x gradlew
-
+- chmod +x gradlew
 android:
         components:
                 - tools
@@ -16,8 +15,6 @@ android:
                 - 'android-sdk-preview-license-52d11cd2'
                 - 'android-sdk-license-.+'
                 - 'google-gdk-license-.+'
-               
-        
-                
-        script: 
-                - ./gradlew testDevelopmentDebug
+                  
+script: 
+ - ./gradlew testDevelopmentDebug
