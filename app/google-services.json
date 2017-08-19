@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963281907599:android:a0a0d8c6bac76a34",
+        "android_client_info": {
+          "package_name": "com.example.clubless.meals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963281907599-9p19riui9hrd4kfob6gc4qs4as5jvsuu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.clubless.meals",
+            "certificate_hash": "a066d95c7e179f0d092528df9a1844f56a206c81"
+          }
+        },
+        {
+          "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGz-SFJbVQAX4XbF5NMU4DKfYrIhMCecs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
