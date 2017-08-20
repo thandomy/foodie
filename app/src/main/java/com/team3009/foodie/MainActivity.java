@@ -1,5 +1,6 @@
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,14 +33,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -53,6 +48,32 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         };
+
+
+
+        final Button sign_up = (Button) findViewById(R.id.butn_signup);
+        sign_up.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
+                String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
+                createAccount(email,password);
+            ;
+            }
+        });
+        final Button login = (Button) findViewById(R.id.butn_login);
+        login.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
+                String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
+                loginAccount(email,password);
+
+            }
+        });
+
+
 
     }
     @Override
@@ -78,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the HomeActivity/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -91,23 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createAccount(String email, String password){
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                }
-                });
     }
     public void loginAccount(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
@@ -123,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(MainActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent home = new Intent(MainActivity.this, HomeActivity.class);
+                            startActivity(home);
                         }
 
                         // ...

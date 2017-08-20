@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "963281907599-bo4r10b4vq7huvq8a75mflvlumdrdj1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "a066d95c7e179f0d092528df9a1844f56a206c81"
+          }
+        },
+        {
+          "client_id": "963281907599-4233bfcdsebp1kdq0fob6k6fkt9ctjuu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "a5a52296ff0df80ae64f25ef5a849e59ea16ebdb"
+          }
+        },
+        {
           "client_id": "963281907599-hjasgm0295of9sbce7hb7bjtamlemcrl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

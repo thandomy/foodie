@@ -8,9 +8,48 @@
     tools:context="com.team3009.foodie.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+
+
+    <EditText
+        android:id="@+id/txt_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_marginTop="129dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Email"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/txt_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint = "password"
+        android:layout_below="@+id/txt_email"
+        android:layout_alignLeft="@+id/txt_email"
+        android:layout_alignStart="@+id/txt_email" />
+
+    <Button
+        android:id="@+id/butn_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signup"
+        android:layout_marginBottom="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/butn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/butn_signup"
+        android:layout_alignRight="@+id/butn_signup"
+        android:layout_below="@+id/txt_pass"
+        android:layout_marginTop="30dp"
+        android:text="Login" />
+
 
 </RelativeLayout>
