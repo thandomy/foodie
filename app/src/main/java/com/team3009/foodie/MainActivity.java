@@ -112,7 +112,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createAccount(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, R.string.auth_failed,
+                                    Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainActivity.this, "success",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
     public void loginAccount(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
@@ -129,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }else{
+                            Toast.makeText(MainActivity.this, "success",
+                                    Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(home);
                         }
