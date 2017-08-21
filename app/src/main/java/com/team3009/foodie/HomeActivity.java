@@ -34,6 +34,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -73,21 +75,14 @@ public class HomeActivity extends AppCompatActivity
 
         mFragmentManager = getSupportFragmentManager();
 
-        findViewById(R.id.order).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Show the PayPal/card "drop-in" at the bottom of the screen
 
-            }
-        });
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ServeFragment fragment = new ServeFragment();
-                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+                sendData("Chicken masala :)");
         }
         });
 
@@ -262,6 +257,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void sendData(String result) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+        }
         // Get the Firebase node to write the data to
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE).push();
         // Write an entry containing the location and payment data of the user to the Firebase node
