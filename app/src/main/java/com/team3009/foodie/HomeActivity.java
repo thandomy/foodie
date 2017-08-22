@@ -1,5 +1,6 @@
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity
 
    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serve";
+    private static final String SERVE_NODE = "Serving";
     //private static final int DROP_IN_REQUEST_CODE = 567;
 
     private static final long REQUEST_INTERVAL = 1000L;
@@ -73,11 +74,15 @@ public class HomeActivity extends AppCompatActivity
 
         mFragmentManager = getSupportFragmentManager();
 
-        findViewById(R.id.order).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Show the PayPal/card "drop-in" at the bottom of the screen
+               // sendData("Love this");
 
+                Intent post = new Intent(HomeActivity.this, PostActivity.class);
+                post.putExtra("latitude",lastLocation.getLatitude());
+                post.putExtra("longitude",lastLocation.getLongitude());
+                startActivity(post);
             }
         });
 
@@ -261,7 +266,7 @@ public class HomeActivity extends AppCompatActivity
         currentLocationMarker = googleMap.addMarker(markerOptions);
     }
 
-    private void sendData(String result) {
+   private void sendData(String result) {
         // Get the Firebase node to write the data to
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE).push();
         // Write an entry containing the location and payment data of the user to the Firebase node
