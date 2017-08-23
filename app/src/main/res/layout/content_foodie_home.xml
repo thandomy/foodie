@@ -11,7 +11,7 @@
         tools:context="com.team3009.foodie.HomeActivity" />
 
     <Button
-        android:id="@+id/order"
+        android:id="@+id/serve_food"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -50,7 +48,7 @@ public class HomeActivity extends AppCompatActivity
 
    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serve";
+    private static final String SERVE_NODE = "Serving";
     //private static final int DROP_IN_REQUEST_CODE = 567;
 
     private static final long REQUEST_INTERVAL = 1000L;
@@ -73,12 +71,16 @@ public class HomeActivity extends AppCompatActivity
 
         mFragmentManager = getSupportFragmentManager();
 
-        findViewById(R.id.order).setOnClickListener(new View.OnClickListener() {
+
+
+        findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Show the PayPal/card "drop-in" at the bottom of the screen
+               // sendData("Love this");
+                Post posting = new Post();
+                posting.post("this", "body",2.22,2.365,"this and that");
 
-            }
+                           }
         });
 
 
@@ -261,7 +263,7 @@ public class HomeActivity extends AppCompatActivity
         currentLocationMarker = googleMap.addMarker(markerOptions);
     }
 
-    private void sendData(String result) {
+   private void sendData(String result) {
         // Get the Firebase node to write the data to
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE).push();
         // Write an entry containing the location and payment data of the user to the Firebase node
