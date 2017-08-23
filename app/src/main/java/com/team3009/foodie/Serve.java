@@ -12,16 +12,16 @@ import java.util.Map;
 
 public class Serve {
 
-    String email;
+    String uid;
     String title;
     String description;
     Double latitude;
     Double longitude;
     String uri;
 
-    public Serve(String email, String title, String description, Double latitude, Double longitude, String uri) {
+    public Serve(String uid, String title, String description, Double latitude, Double longitude, String uri) {
         this.latitude = latitude;
-        this.email = email;
+        this.uid = uid;
         this.title = title;
         this.description = description;
         this.latitude = latitude;
