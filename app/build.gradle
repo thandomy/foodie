@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.kt3k.coveralls'
+
+
 
 android {
     compileSdkVersion 25
@@ -39,8 +42,25 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'build'
+    onlyIf { System.env.'CI' }
+}
+
+
+
+
+
+
 
 
 
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.github.kt3k.coveralls'
+
+
