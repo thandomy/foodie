@@ -88,8 +88,8 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ServeFragment fragment = new ServeFragment();
-                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+                //ServeFragment fragment = new ServeFragment();
+                //mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
         }
         });
 
