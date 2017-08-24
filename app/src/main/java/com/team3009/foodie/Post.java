@@ -30,6 +30,14 @@ public class Post {
     String TitleField;
     String BodyField ;
 
+   /* public Post(String TitleField,String BodyField, Double Latitude,Double Longitude,String uri_string){
+        this.Latitude = Latitude;
+        this.Longitude = Longitude;
+        this.uri_string = uri_string;
+        this.TitleField = TitleField;
+        this.BodyField = BodyField;
+    }*/
+
 
 
 

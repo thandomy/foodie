@@ -69,18 +69,18 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFragmentManager = getSupportFragmentManager();
+
 
 
 
         findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // sendData("Love this");
-                Post posting = new Post();
-                posting.post("this", "body",2.22,2.365,"this and that");
 
-                           }
+                UploadFoodFrag fragment = new UploadFoodFrag();
+                mFragmentManager = getSupportFragmentManager();
+                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+            }
         });
 
 
@@ -88,8 +88,7 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ServeFragment fragment = new ServeFragment();
-                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+
         }
         });
 
