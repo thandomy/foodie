@@ -28,19 +28,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Post"
-            android:label="post_activity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_foodie_home"
             android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

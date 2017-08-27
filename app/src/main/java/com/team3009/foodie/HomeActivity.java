@@ -108,6 +108,12 @@ public class HomeActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
 
+
+        ViewFragment fragment = new ViewFragment();
+        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+        //fragmentTransaction.replace()
+        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -160,6 +166,13 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if(id == R.id.nav_list_view){
+            System.out.println("Calliing fragmentn ");
+
+            ViewFragment fragment = new ViewFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.map,fragment, "ViewFragment");
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
