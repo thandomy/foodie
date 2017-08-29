@@ -35,3 +35,12 @@ Zanele Sibanyoni 1084687
 Joy Mabotja 716562
 Richard Thando Moyo 1132720 (Product owner)
 Andrie Sithole 1081126
+
+# VERSIONS
+
+# v1
+Logs in to the app
+
+# v2
+Has maps, can upload food and view food (in progress)
+
