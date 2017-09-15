@@ -95,16 +95,16 @@ public class UploadFoodFrag extends Fragment {
             public void onClick(View view) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String uid = user.getUid();
-                StorageReference riversRef = mStorageRef;
+                StorageReference riversRef = mStorageRef.child(uid);
+
                 riversRef.putFile(url)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // Get a URL to the uploaded content
                                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
-
-
-
+                                Post p = new Post();
+                                p.sendData(title,description,-22.22,27.365,downloadUrl);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -116,8 +116,7 @@ public class UploadFoodFrag extends Fragment {
                             }
                         });
 
-                Post p = new Post();
-                p.sendData(title,description,-22.22,27.365,downloadUrl);
+
             }
         });
 
