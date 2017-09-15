@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -52,7 +50,7 @@ public class HomeActivity extends AppCompatActivity
 
    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serve";
+    private static final String SERVE_NODE = "Serving";
     //private static final int DROP_IN_REQUEST_CODE = 567;
 
     private static final long REQUEST_INTERVAL = 1000L;
@@ -73,8 +71,18 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFragmentManager = getSupportFragmentManager();
 
+
+
+        findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                UploadFoodFrag fragment = new UploadFoodFrag();
+                mFragmentManager = getSupportFragmentManager();
+                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+            }
+        });
 
 
 
@@ -82,7 +90,9 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendData("Chicken masala :)");
+
+                //sendData("Chicken masala :)");
+
         }
         });
 
@@ -142,7 +152,10 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            PostListFragment fragment = new PostListFragment();
+
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("t").commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -256,16 +269,12 @@ public class HomeActivity extends AppCompatActivity
         currentLocationMarker = googleMap.addMarker(markerOptions);
     }
 
-    private void sendData(String result) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String uid = user.getUid();
-        }
-        // Get the Firebase node to write the data to
-        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE).push();
-        // Write an entry containing the location and payment data of the user to the Firebase node
-        node.setValue(new Order(result, lastLocation.getLatitude(), lastLocation.getLongitude()));
 
+
+   private void sendData(String result) {
+
+        // Get the Firebase node to write the data to
+        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE);
     }
 }
 

@@ -18,8 +18,7 @@ android:
                 - 'android-sdk-preview-license-52d11cd2'
                 - 'android-sdk-license-.+'
                 - 'google-gdk-license-.+'
-                
 
 script:
-    - ./gradlew build check
+    - ./gradlew build check coveralls
                   

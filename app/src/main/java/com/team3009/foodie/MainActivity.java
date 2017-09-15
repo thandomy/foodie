@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
                 String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
+
                 createAccount(email,password);
             ;
             }
