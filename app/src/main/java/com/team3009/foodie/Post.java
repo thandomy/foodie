@@ -18,7 +18,7 @@ public class Post {
 
     }
 
-    public void sendData(String title, String body, Double latitude, Double longitude,String url) {
+    public void sendData(String title, String body, Float latitude, Float longitude,String url) {
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Serving").push();
         String userId = getUid();
         node.setValue(new Serve(title,body,latitude,longitude, url));

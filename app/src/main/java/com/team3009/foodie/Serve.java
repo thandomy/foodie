@@ -10,8 +10,8 @@ import java.util.Map;
 public class Serve {
     String title;
     String description;
-    Double latitude;
-    Double longitude;
+    Float latitude;
+    Float longitude;
     String downloadUrl;
 
 
@@ -19,7 +19,7 @@ public class Serve {
 
     }
 
-    public Serve(String title, String description, Double latitude, Double longitude,String downloadUrl) {
+    public Serve(String title, String description, Float latitude, Float longitude,String downloadUrl) {
         this.downloadUrl = downloadUrl;
         this.title = title;
         this.description = description;

@@ -58,6 +58,8 @@ public class UploadFoodFrag extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
+        Bundle loc = this.getArguments();
+        final float[] locData = loc.getFloatArray("location");
 
         v = inflater.inflate(R.layout.uploadfrag,container,false);
         selImage = (Button) v.findViewById(R.id.getPic);
@@ -104,7 +106,8 @@ public class UploadFoodFrag extends Fragment {
                                 // Get a URL to the uploaded content
                                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
                                 Post p = new Post();
-                                p.sendData(title,description,-22.22,27.365,downloadUrl);
+                                assert locData != null;
+                                p.sendData(title,description,locData[0],locData[1],downloadUrl);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

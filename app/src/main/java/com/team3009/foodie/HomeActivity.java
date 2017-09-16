@@ -34,6 +34,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,7 +51,7 @@ public class HomeActivity extends AppCompatActivity
     FragmentTransaction mFragmentTransaction;
 
 
-   // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
+    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
     private static final String SERVE_NODE = "Serving";
     //private static final int DROP_IN_REQUEST_CODE = 567;
@@ -61,6 +64,7 @@ public class HomeActivity extends AppCompatActivity
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
+    private LatLng aLocation;
     private Marker currentLocationMarker;
 
 
@@ -72,18 +76,24 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
-
         findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 UploadFoodFrag fragment = new UploadFoodFrag();
                 mFragmentManager = getSupportFragmentManager();
-                mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("v").commit();
+
+                Bundle loc = new Bundle();
+
+
+                float [] location = new float[2];
+                location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+                location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+                loc.putFloatArray("location",location);
+                fragment.setArguments(loc);
+                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
             }
         });
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -93,7 +103,7 @@ public class HomeActivity extends AppCompatActivity
 
                 //sendData("Chicken masala :)");
 
-        }
+            }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,7 +165,7 @@ public class HomeActivity extends AppCompatActivity
             PostListFragment fragment = new PostListFragment();
 
             mFragmentManager = getSupportFragmentManager();
-            mFragmentManager.beginTransaction().replace(R.id.containerView,fragment ).addToBackStack("t").commit();
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -219,7 +229,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
-
     /**
      * Sets up the Google API client to use the location services API and relevant callbacks.
      */
@@ -255,6 +264,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
     }
+
     /**
      * Adds a marker to the current position.
      */
@@ -270,11 +280,45 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
+    private void recieveData() {
 
-   private void sendData(String result) {
+        // Get the Firebase node to write the  read data from
+        DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Serving");
 
-        // Get the Firebase node to write the data to
-        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child(SERVE_NODE);
+        refDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                LatLng aLocation = new LatLng(
+                        dataSnapshot.child("latitude").getValue(Long.class),
+                        dataSnapshot.child("longitude").getValue(Long.class)
+                );
+                googleMap.addMarker(new MarkerOptions()
+                        .position(aLocation)
+                        .title(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
     }
 }
 
