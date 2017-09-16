@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +33,11 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static com.team3009.foodie.R.id.imageView;
+
 
 /**
  * Created by clubless on 2017/08/23.
@@ -93,11 +98,12 @@ public class UploadFoodFrag extends Fragment {
             }
         });
         upload.setOnClickListener(new OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
-                StorageReference riversRef = mStorageRef.child(uid);
+
+
+                StorageReference riversRef = mStorageRef.child(url.toString());
 
                 riversRef.putFile(url)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -157,5 +163,6 @@ public class UploadFoodFrag extends Fragment {
         }
 
     }
+
 
 }

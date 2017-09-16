@@ -120,7 +120,7 @@ public class HomeActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        recieveData();
     }
 
     @Override
@@ -292,9 +292,11 @@ public class HomeActivity extends AppCompatActivity
                         dataSnapshot.child("latitude").getValue(Long.class),
                         dataSnapshot.child("longitude").getValue(Long.class)
                 );
+
                 googleMap.addMarker(new MarkerOptions()
                         .position(aLocation)
                         .title(dataSnapshot.getKey()));
+                System.out.println("LOOCATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       :" + aLocation);
             }
 
             @Override
@@ -316,7 +318,6 @@ public class HomeActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
 
         });
     }
