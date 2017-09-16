@@ -64,8 +64,8 @@ public class HomeActivity extends AppCompatActivity
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
-    private LatLng aLocation;
     private Marker currentLocationMarker;
+    private Marker aLocationMarker;
 
 
     @Override
@@ -271,7 +271,7 @@ public class HomeActivity extends AppCompatActivity
     private void replaceMarker(LatLng latLng) {
         // Remove the previous marker
         if (currentLocationMarker != null) {
-            currentLocationMarker.remove();
+                currentLocationMarker.remove();
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
