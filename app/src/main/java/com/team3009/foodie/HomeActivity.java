@@ -76,7 +76,9 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        findViewById(R.id.serve_food).setOnClickListener(new View.OnClickListener() {
+
+        FloatingActionButton add = (FloatingActionButton) findViewById(R.id.fab);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -92,17 +94,18 @@ public class HomeActivity extends AppCompatActivity
                 loc.putFloatArray("location",location);
                 fragment.setArguments(loc);
                 mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
+
             }
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton list = (FloatingActionButton) findViewById(R.id.list);
+        list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //sendData("Chicken masala :)");
-
+                PostListFragment fragment = new PostListFragment();
+                mFragmentManager = getSupportFragmentManager();
+                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
             }
         });
 
@@ -162,10 +165,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            PostListFragment fragment = new PostListFragment();
 
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -296,7 +296,7 @@ public class HomeActivity extends AppCompatActivity
                 googleMap.addMarker(new MarkerOptions()
                         .position(aLocation)
                         .title(dataSnapshot.getKey()));
-                System.out.println("LOOCATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       :" + aLocation);
+
             }
 
             @Override

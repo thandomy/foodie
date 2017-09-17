@@ -57,6 +57,7 @@ public class PostListFragment extends Fragment {
             protected void populateViewHolder(final PostViewHolder viewHolder, final Serve model, final int position) {
                 viewHolder.title.setText(model.title);
                 viewHolder.body.setText(model.description);
+                viewHolder.location.setText(model.latitude + " , " +model.longitude);
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
