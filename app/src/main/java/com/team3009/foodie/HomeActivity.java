@@ -39,16 +39,27 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+
+
 
 import android.Manifest;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+
+import java.lang.*;
+
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
-    FragmentTransaction mFragmentTransaction;
+
 
 
     // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
@@ -65,7 +76,6 @@ public class HomeActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
-    private Marker aLocationMarker;
 
 
     @Override
@@ -281,37 +291,12 @@ public class HomeActivity extends AppCompatActivity
 
 
     private void recieveData() {
-
         // Get the Firebase node to write the  read data from
         DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Serving");
-
-        refDatabase.addChildEventListener(new ChildEventListener() {
+        refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                LatLng aLocation = new LatLng(
-                        dataSnapshot.child("latitude").getValue(Long.class),
-                        dataSnapshot.child("longitude").getValue(Long.class)
-                );
-
-                googleMap.addMarker(new MarkerOptions()
-                        .position(aLocation)
-                        .title(dataSnapshot.getKey()));
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //ollectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
             }
 
             @Override
@@ -319,8 +304,36 @@ public class HomeActivity extends AppCompatActivity
 
             }
 
+
         });
     }
+    private void collectLacationsAndPutOnMap(Map<String,Object> servings) {
+
+        ArrayList<Long> latitudes = new ArrayList<>();
+        ArrayList<Long> longitudes = new ArrayList<>();
+
+        //iterate through each user, ignoring their UID
+        for (Map.Entry<String, Object> entry : servings.entrySet()){
+
+            //Get user map
+            Map singleUser = (Map) entry.getValue();
+            //Get phone field and append to list
+            latitudes.add(longValue(singleUser.get("latitude")));
+            longitudes.add(longValue(singleUser.get("longitude")));
+        }
+
+        for (int i = 0; i < latitudes.size(); i++){
+            LatLng aLocation = new LatLng(
+                    latitudes.get(i),longitudes.get(i)
+            );
+            googleMap.addMarker(new MarkerOptions()
+                    .position(aLocation));
+        }
+    }
+    private static long longValue(Object value) {
+        return (value instanceof Number ? ((Number)value).longValue() : -1);
+    }
+
 }
 
 
