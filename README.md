@@ -42,5 +42,5 @@ Andrie Sithole 1081126
 Logs in to the app
 
 # v2
-Has maps, can upload food and view food (in progress)
+Has maps, can upload food and view food and view food
 

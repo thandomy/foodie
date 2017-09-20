@@ -14,13 +14,16 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class Tester {
 
     private String mStringToBetyped;
+    private String mNumberToBetyped;
 
     @Rule
     public ActivityTestRule<MainActivity> MainActivity = new ActivityTestRule<>(
@@ -30,18 +33,20 @@ public class Tester {
     public void initValidString() {
         // Specify a valid string.
         mStringToBetyped = "thandomy@gmail.com";
+        mNumberToBetyped = "12345678";
     }
 
     @Test
-    public void changeText_sameActivity() {
-        // Type text and then press the button.
+    public void inputText_sameActivity() {
+        // Type text.
         onView(withId(R.id.txt_email))
                 .perform(typeText(mStringToBetyped), closeSoftKeyboard());
-        onView(withId(R.id.butn_login)).perform(click());
+        onView(withId(R.id.txt_pass))
+                .perform(typeText(mNumberToBetyped), closeSoftKeyboard());
+        //onView(withId(R.id.butn_login)).perform(click());
 
-        // Check that the text was changed.
-        //onView(withId(R.id.textToBeChanged))
-               // .check(matches(withText(mStringToBetyped)));
+        onView(withId(R.id.txt_email)).check(matches(withText( mStringToBetyped)));
+        onView(withId(R.id.txt_pass)).check(matches(withText( mNumberToBetyped)));
     }
 
 

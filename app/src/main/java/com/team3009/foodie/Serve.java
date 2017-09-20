@@ -1,32 +1,44 @@
 package com.team3009.foodie;
 
-import android.net.Uri;
 
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
 import java.util.Map;
-/**
- * Created by Thando Moyo on 20-Aug-17.
- */
+
 
 public class Serve {
-
-    String uid;
     String title;
     String description;
-    Double latitude;
-    Double longitude;
-    String uri;
+    Float latitude;
+    Float longitude;
+    String downloadUrl;
 
-    public Serve(String uid, String title, String description, Double latitude, Double longitude, String uri) {
-        this.latitude = latitude;
-        this.uid = uid;
+
+    public Serve(){
+
+    }
+
+    public Serve(String title, String description, Float latitude, Float longitude,String downloadUrl) {
+        this.downloadUrl = downloadUrl;
         this.title = title;
         this.description = description;
-        this.latitude = latitude;
         this.longitude = longitude;
-        this.uri=uri;
+        this.latitude = latitude;
+
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        //result.put("uid", uid);
+        //result.put("author", author);
+        result.put("title",title);
+        result.put("description",description);
+        //result.put("starCount", starCount);
+        result.put("downloadUrl",downloadUrl);
+
+        return result;
     }
 
 
