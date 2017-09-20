@@ -296,7 +296,7 @@ public class HomeActivity extends AppCompatActivity
         refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //ollectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+               // collectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
             }
 
             @Override
