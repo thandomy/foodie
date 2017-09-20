@@ -11,6 +11,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
@@ -23,7 +26,10 @@ public class homeTester {
 
     @Test
     public void homeActivity() {
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.list)).perform(click());
+        onView(withId(R.id.fab)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.list)).check(matches(isCompletelyDisplayed()));
+
+        onView(withId(R.id.fab)).perform(scrollTo(), click());
+        onView(withId(R.id.list)).perform(scrollTo(),click());
     }
 }
