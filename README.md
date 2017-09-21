@@ -38,9 +38,17 @@ Andrie Sithole 1081126
 
 # VERSIONS
 
-# v1
+# v1.0
 Logs in to the app
+-on MainActivity (called first)
+-Uses firebase ad backend (noSQL)
 
-# v2
+# v1.1
 Has maps, can upload food and view food and view food
+-on HomeActivity (houses everything else)
+-Google Maps API 
+-RecyclerView for listing items
+-Upload and List fragments spawned off (no intents)
+
+https://travis-ci.org/thandomy/foodie.svg?branch=master
 
