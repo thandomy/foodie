@@ -39,6 +39,10 @@ public class Tester {
             new IntentsTestRule<>(HomeActivity.class,
                     true,    // initialTouchMode
                     false); // launchActivity. False to set intent.
+    
+    @Rule
+    public ActivityTestRule<HomeActivity> home = new ActivityTestRule<>(
+HomeActivity.class);
 
     @Before
     public void initValidString() {
@@ -65,11 +69,18 @@ public class Tester {
         intent.setAction(Intent.ACTION_SEND);
 
         intentsTestRule.launchActivity(intent);
-        
-        
+    }
+    
+    
+    
+    @Test
+    public void homeActivity() {
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.list)).perform(click());
     }
+
+
+
 
 
 
