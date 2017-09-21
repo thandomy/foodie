@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
-    FragmentTransaction mFragmentTransaction;
+
 
 
     // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
@@ -76,7 +76,6 @@ public class HomeActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
-    private Marker aLocationMarker;
 
 
     @Override
@@ -292,10 +291,8 @@ public class HomeActivity extends AppCompatActivity
 
 
     private void recieveData() {
-
         // Get the Firebase node to write the  read data from
         DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Serving");
-
         refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
