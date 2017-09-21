@@ -65,6 +65,10 @@ public class Tester {
         intent.setAction(Intent.ACTION_SEND);
 
         intentsTestRule.launchActivity(intent);
+        
+        
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.list)).perform(click());
     }
 
 
