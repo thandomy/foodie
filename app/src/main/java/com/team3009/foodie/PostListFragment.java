@@ -60,13 +60,13 @@ public class PostListFragment extends Fragment {
                 viewHolder.body.setText(model.description);
                 viewHolder.location.setText(model.latitude + " , " +model.longitude);
 
-                /*viewHolder.itemView.setOnClickListener( new View.OnClickListener(){
+                viewHolder.itemView.setOnClickListener( new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
                         Toast.makeText(getActivity(),"You Clicked a View", Toast.LENGTH_LONG).show();
                     }
 
-                });*/
+                });
 
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
