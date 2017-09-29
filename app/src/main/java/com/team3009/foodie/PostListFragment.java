@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,6 +59,15 @@ public class PostListFragment extends Fragment {
                 viewHolder.title.setText(model.title);
                 viewHolder.body.setText(model.description);
                 viewHolder.location.setText(model.latitude + " , " +model.longitude);
+
+                /*viewHolder.itemView.setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        Toast.makeText(getActivity(),"You Clicked a View", Toast.LENGTH_LONG).show();
+                    }
+
+                });*/
+
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
@@ -70,6 +80,8 @@ public class PostListFragment extends Fragment {
         mRecycler.setAdapter(mAdapter);
         return rootView;
     }
+
+
 
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();

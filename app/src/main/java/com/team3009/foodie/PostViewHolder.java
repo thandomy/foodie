@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
+    View mView;
     public TextView title;
     public ImageView imageView;
     public TextView body;
@@ -15,6 +16,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public PostViewHolder(View itemView) {
         super(itemView);
+        mView = itemView;
         title = (TextView) itemView.findViewById(R.id.post_title);
         body = (TextView) itemView.findViewById(R.id.post_body);
         location = (TextView) itemView.findViewById(R.id.location);
