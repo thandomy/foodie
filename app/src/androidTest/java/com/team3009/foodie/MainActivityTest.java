@@ -15,6 +15,7 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -38,36 +39,15 @@ public class MainActivityTest {
             e.printStackTrace();
         }
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.txt_email), isDisplayed()));
-        appCompatEditText.perform(click());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.txt_email), isDisplayed()));
-        appCompatEditText2.perform(replaceText("thandom"), closeSoftKeyboard());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.txt_email), withText("thandomy"), isDisplayed()));
-        appCompatEditText4.perform(replaceText("thandomy@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.txt_email))
+                .perform(typeText("thandomy@gmail.com"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.txt_pass), isDisplayed()));
-        appCompatEditText5.perform(replaceText("12345678"), closeSoftKeyboard());
-
-        pressBack();
+        onView(withId(R.id.txt_email))
+                .perform(typeText("12345678"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.butn_login), withText("Login"), isDisplayed()));
@@ -78,19 +58,6 @@ public class MainActivityTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatCheckedTextView = onView(
-                allOf(withId(R.id.design_menu_item_text), withText("List All"), isDisplayed()));
-        appCompatCheckedTextView.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -125,11 +92,13 @@ public class MainActivityTest {
 
         ViewInteraction appCompatEditText6 = onView(
                 allOf(withId(R.id.mealtitle), isDisplayed()));
-        appCompatEditText6.perform(replaceText("tf"), closeSoftKeyboard());
+        appCompatEditText6.perform(typeText("tf"), closeSoftKeyboard());
+
+
 
         ViewInteraction appCompatEditText7 = onView(
                 allOf(withId(R.id.mealDescription), isDisplayed()));
-        appCompatEditText7.perform(replaceText("ggg"), closeSoftKeyboard());
+        appCompatEditText7.perform(typeText("ggg"), closeSoftKeyboard());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
