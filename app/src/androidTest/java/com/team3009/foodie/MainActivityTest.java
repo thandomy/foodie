@@ -33,7 +33,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(600000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(60000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3558675);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -90,7 +90,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(50000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -103,25 +103,10 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(50000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        ViewInteraction floatingActionButton2 = onView(
-                allOf(withId(R.id.list), isDisplayed()));
-        floatingActionButton2.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(49870);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        pressBack();
 
         pressBack();
 
@@ -133,7 +118,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(478400);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -150,7 +135,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(49160);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -163,7 +148,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3559740);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -176,7 +161,7 @@ public class MainActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(50000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
