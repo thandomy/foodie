@@ -224,7 +224,7 @@ public class HomeActivity extends AppCompatActivity
             // Move the camera to the user's current location on the first location update
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
-        replaceMarker(latLng);
+        //replaceMarker(latLng);
     }
 
 
@@ -296,7 +296,7 @@ public class HomeActivity extends AppCompatActivity
         refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //ollectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+                if(dataSnapshot.exists()) collectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
             }
 
             @Override
@@ -309,17 +309,18 @@ public class HomeActivity extends AppCompatActivity
     }
     private void collectLacationsAndPutOnMap(Map<String,Object> servings) {
 
-        ArrayList<Long> latitudes = new ArrayList<>();
-        ArrayList<Long> longitudes = new ArrayList<>();
-
+        ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> longitudes = new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : servings.entrySet()){
 
             //Get user map
             Map singleUser = (Map) entry.getValue();
             //Get phone field and append to list
-            latitudes.add(longValue(singleUser.get("latitude")));
-            longitudes.add(longValue(singleUser.get("longitude")));
+            latitudes.add((Double) singleUser.get("latitude"));
+            longitudes.add((Double) singleUser.get("longitude"));
+            titles.add((String) singleUser.get("title"));
         }
 
         for (int i = 0; i < latitudes.size(); i++){
@@ -327,12 +328,12 @@ public class HomeActivity extends AppCompatActivity
                     latitudes.get(i),longitudes.get(i)
             );
             googleMap.addMarker(new MarkerOptions()
-                    .position(aLocation));
+                    .position(aLocation)
+                    .title(titles.get(i)));
+
         }
     }
-    private static long longValue(Object value) {
-        return (value instanceof Number ? ((Number)value).longValue() : -1);
-    }
+
 
 }
 

@@ -1,18 +1,21 @@
 package com.team3009.foodie;
 
 
-import com.google.firebase.database.Exclude;
+
+
+
 
 import java.util.HashMap;
 import java.util.Map;
 
 
+
 public class Serve {
-    String title;
-    String description;
-    Float latitude;
-    Float longitude;
-    String downloadUrl;
+    public String title;
+    public String description;
+    public Float latitude;
+    public Float longitude;
+    public String downloadUrl;
 
 
     public Serve(){
@@ -28,7 +31,7 @@ public class Serve {
 
     }
 
-    @Exclude
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         //result.put("uid", uid);
