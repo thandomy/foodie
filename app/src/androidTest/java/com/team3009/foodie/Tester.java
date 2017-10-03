@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
@@ -33,7 +35,7 @@ public class Tester {
     private String mNumberToBetyped;
 
     @Rule
-    public ActivityTestRule<MainActivity> MainActivity = new ActivityTestRule<>(
+    public ActivityTestRule<MainActivity> mMainActivity = new ActivityTestRule<>(
             MainActivity.class);
 
 
@@ -60,6 +62,14 @@ public class Tester {
 
     }
 
+    private IdlingResource mIdlingResource;
+    //@Before
+   // public void registerIdlingResource() {
+        //mIdlingResource = mMainActivity.getActivity().getIdlingResource();
+        // To prove that the test fails, omit this call:
+        //Espresso.registerIdlingResources(mIdlingResource);
+    //}
+
     @Test
     public void inputText_sameActivity() {
         // Type text.
@@ -74,19 +84,19 @@ public class Tester {
 
         onView(withId(R.id.butn_login)).perform(click());
 
-        onView(withId(R.id.butn_signup)).perform(click());
+        //onView(withId(R.id.butn_signup)).perform(click());
 
-        /*Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intentsTestRule.launchActivity(intent);
+        //Intent intent = new Intent();
+        //intent.setAction(Intent.ACTION_SEND);
+        //intentsTestRule.launchActivity(intent);
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.fab)).perform(click());*/
+        //onView(withId(R.id.fab)).perform(click());*/
 
 
     }
