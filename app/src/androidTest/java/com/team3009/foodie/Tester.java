@@ -6,12 +6,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -46,6 +49,16 @@ public class Tester {
         mStringToBetyped = "thandomy@gmail.com";
         mNumberToBetyped = "12345678";
     }
+    @Before
+    public void grantPermission() {
+        getInstrumentation().getUiAutomation().executeShellCommand(
+                "pm grant " + getTargetContext().getPackageName()
+                        + " android.permission.ACCESS_FINE_LOCATION");
+        getInstrumentation().getUiAutomation().executeShellCommand(
+                "pm grant " + getTargetContext().getPackageName()
+                        + " android.permission.INTERNET");
+
+    }
 
     @Test
     public void inputText_sameActivity() {
@@ -61,7 +74,9 @@ public class Tester {
 
         onView(withId(R.id.butn_login)).perform(click());
 
-        Intent intent = new Intent();
+        onView(withId(R.id.butn_signup)).perform(click());
+
+        /*Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intentsTestRule.launchActivity(intent);
 
@@ -71,13 +86,8 @@ public class Tester {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.fab)).perform(click());*/
 
-     
+
     }
-
-
-
-
-
 }
