@@ -114,7 +114,7 @@ public class Tester {
 
        ;*/
         try {
-            Thread.sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -125,7 +125,7 @@ public class Tester {
         pressBack();
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -141,8 +141,4 @@ public class Tester {
         }
     }
 
-    @Test
-    public void testNavigateToScrollingActivity() throws Exception {
-
-    }
 }
