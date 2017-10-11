@@ -111,13 +111,13 @@ public class Tester {
 
        ;*/
         try {
-            Thread.sleep(50);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewInteraction fab = onView(
+        ViewInteraction list = onView(
                 allOf(withId(R.id.list)));
-        fab.perform(click());
+        list.perform(click());
 
 
 
@@ -129,9 +129,9 @@ public class Tester {
             e.printStackTrace();
         }
 
-        ViewInteraction list = onView(
+        ViewInteraction fsb = onView(
                 allOf(withId(R.id.fab)));
-        list.perform(click());
+        fsb.perform(click());
 
         try {
             Thread.sleep(50);
