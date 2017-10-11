@@ -52,6 +52,7 @@ public class Tester {
         // Specify a valid string.
         mStringToBetyped = "thandomy@gmail.com";
         mNumberToBetyped = "12345678";
+        FirebaseDatabase.getInstance().getReference("Serving");
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseDatabase.getInstance().goOffline();
     }
@@ -81,11 +82,12 @@ public class Tester {
         onView(withId(R.id.txt_email)).check(matches(withText(mStringToBetyped)));
         onView(withId(R.id.txt_pass)).check(matches(withText(mNumberToBetyped)));
 
+
+
+        onView(withId(R.id.butn_signup)).perform(click());
         onView(withId(R.id.butn_login)).perform(click());
 
-        //onView(withId(R.id.butn_signup)).perform(click());
-
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intentsTestRule.launchActivity(intent);
 
@@ -95,7 +97,7 @@ public class Tester {
             e.printStackTrace();
         }
 
-        //onView(withId(R.id.fab)).perform(click());*/
+        onView(withId(R.id.fab)).perform(click());*/
 
 
     }
