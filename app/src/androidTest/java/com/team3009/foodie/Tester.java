@@ -119,7 +119,7 @@ public class Tester {
             e.printStackTrace();
         }
         ViewInteraction fab = onView(
-                allOf(withId(R.id.fab)));
+                allOf(withId(R.id.list)));
         fab.perform(click());
 
         pressBack();
