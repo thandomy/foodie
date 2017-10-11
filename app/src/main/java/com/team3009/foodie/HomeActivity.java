@@ -74,9 +74,9 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
-        FirebaseDatabase.getInstance().goOffline();
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
+        //FirebaseDatabase.getInstance().goOffline();
 
         FloatingActionButton add = (FloatingActionButton) findViewById(R.id.fab);
         add.setOnClickListener(new View.OnClickListener() {
@@ -98,15 +98,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        FloatingActionButton list = (FloatingActionButton) findViewById(R.id.list);
-        list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PostListFragment fragment = new PostListFragment();
-                mFragmentManager = getSupportFragmentManager();
-                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -164,6 +155,9 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            PostListFragment fragment = new PostListFragment();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
 
         } else if (id == R.id.nav_gallery) {
 
