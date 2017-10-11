@@ -45,5 +45,5 @@ cache:
     - $HOME/.android/build-cache
 
 script:
-    - ./gradlew connectedAndroidTest coveralls
+    - ./gradlew connectedAndroidTest --stacktrace coveralls
                   
