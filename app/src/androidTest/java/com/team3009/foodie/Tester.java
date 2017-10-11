@@ -52,9 +52,8 @@ public class Tester {
         // Specify a valid string.
         mStringToBetyped = "thandomy@gmail.com";
         mNumberToBetyped = "12345678";
-        FirebaseDatabase.getInstance().getReference("Serving");
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseDatabase.getInstance().goOffline();
+
+
     }
 
     @Before
@@ -87,6 +86,14 @@ public class Tester {
         onView(withId(R.id.butn_signup)).perform(click());
         onView(withId(R.id.butn_login)).perform(click());
 
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.fab)).perform(click());
+
         /*Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intentsTestRule.launchActivity(intent);
@@ -97,7 +104,7 @@ public class Tester {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.fab)).perform(click());*/
+       ;*/
 
 
     }
