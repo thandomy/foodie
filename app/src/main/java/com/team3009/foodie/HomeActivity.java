@@ -42,8 +42,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -55,18 +53,13 @@ public class HomeActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
-
-
-
     // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
     private static final String SERVE_NODE = "Serving";
     //private static final int DROP_IN_REQUEST_CODE = 567;
-
     private static final long REQUEST_INTERVAL = 1000L;
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
-
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
@@ -95,7 +88,6 @@ public class HomeActivity extends AppCompatActivity
 
                 Bundle loc = new Bundle();
 
-
                 float [] location = new float[2];
                 location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
                 location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
@@ -105,7 +97,6 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
-
 
         FloatingActionButton list = (FloatingActionButton) findViewById(R.id.list);
         list.setOnClickListener(new View.OnClickListener() {
@@ -202,16 +193,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -224,8 +210,6 @@ public class HomeActivity extends AppCompatActivity
         }
         //replaceMarker(latLng);
     }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -235,7 +219,6 @@ public class HomeActivity extends AppCompatActivity
             this.googleMap.setMyLocationEnabled(true);
         }
     }
-
 
     /**
      * Sets up the Google API client to use the location services API and relevant callbacks.
@@ -334,6 +317,10 @@ public class HomeActivity extends AppCompatActivity
                     .title("fake location"));
 
         }
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
+}
 
 

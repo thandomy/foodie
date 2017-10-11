@@ -42,8 +42,6 @@ public class PostListFragment extends Fragment {
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 
-
-
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
@@ -62,11 +60,8 @@ public class PostListFragment extends Fragment {
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
                         .into(viewHolder.imageView);
-
             }
         };
-
-
         mRecycler.setAdapter(mAdapter);
         return rootView;
     }
