@@ -37,8 +37,8 @@ public class Tester {
     private String mNumberToBetyped;
 
     @Rule
-    public ActivityTestRule<MainActivity> mMainActivity = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<HomeActivity> mMainActivity = new ActivityTestRule<>(
+            HomeActivity.class);
 
 
     @Rule
@@ -72,7 +72,7 @@ public class Tester {
     @Test
     public void inputText_sameActivity() {
         // Type text.
-        onView(withId(R.id.txt_email))
+        /*onView(withId(R.id.txt_email))
                 .perform(typeText(mStringToBetyped), closeSoftKeyboard());
         onView(withId(R.id.txt_pass))
                 .perform(typeText(mNumberToBetyped), closeSoftKeyboard());
@@ -106,6 +106,11 @@ public class Tester {
 
        ;*/
 
-
+        onView(withId(R.id.fab)).perform(click());
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
