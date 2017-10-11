@@ -7,28 +7,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="297dp"
+        android:layout_height="320dp"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/star"
             android:layout_width="190dp"
-            android:layout_height="70dp"
+            android:layout_height="150dp"
             android:layout_alignEnd="@+id/post_title"
-            android:layout_alignLeft="@+id/post_title"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/post_title"
             android:layout_alignStart="@+id/post_title"
-            android:layout_marginTop="13dp"
-            android:layout_above="@+id/location" />
+            android:layout_below="@+id/post_title" />
 
         <TextView
             android:id="@+id/post_title"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="300dp"
             android:layout_height="35dp"
-            android:layout_above="@+id/post_body"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/post_body"
             android:ellipsize="end"
             android:maxLines="1"
             android:textStyle="bold" />
@@ -36,20 +32,29 @@
         <TextView
             android:id="@+id/post_body"
             android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:layout_alignLeft="@+id/post_title"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/post_title" />
+            android:layout_height="50dp"
+            android:layout_below="@+id/star"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_above="@+id/editText" />
 
-        <TextView
-            android:id="@+id/location"
+        <Button
+            android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/post_title"
-            android:layout_alignLeft="@+id/post_title"
-            android:layout_alignStart="@+id/post_title"
-            android:layout_alignRight="@+id/post_title"
-            android:layout_alignEnd="@+id/post_title" />
+            android:text="Order"
+            android:layout_below="@+id/post_body"
+            android:layout_alignStart="@+id/post_body" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="R"
+            android:layout_alignParentBottom="true"
+            android:layout_alignEnd="@+id/post_body" />
 
 
     </RelativeLayout>

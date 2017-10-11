@@ -14,7 +14,7 @@ android:
                 - extra-google-google_play_services
                 - addon-google_apis-google-19
                 - extra-android-support
-                - sys-img-armeabi-v7a-android-22
+                - sys-img-armeabi-v7a-android-25
 
 
 
@@ -25,8 +25,8 @@ android:
 
 before_script:
   # Create and start emulator
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell settings put global window_animation_scale 0 &
   - adb shell settings put secure location_providers_allowed +gps

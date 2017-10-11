@@ -109,14 +109,16 @@ public class Tester {
         }
 
        ;*/
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab)));
-        floatingActionButton.perform(click());
-
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        ViewInteraction floatingActionButton = onView(
+                allOf(withId(R.id.list)));
+        floatingActionButton.perform(click());
+
+
     }
 }
