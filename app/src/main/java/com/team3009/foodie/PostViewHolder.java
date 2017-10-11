@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
-
     public TextView title;
     public ImageView imageView;
     public TextView body;

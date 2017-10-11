@@ -35,23 +35,21 @@
             android:layout_height="50dp"
             android:layout_below="@+id/star"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:layout_above="@+id/editText" />
+            android:layout_marginTop="15dp" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order"
+            android:layout_alignStart="@+id/post_body"
             android:layout_below="@+id/post_body"
-            android:layout_alignStart="@+id/post_body" />
+            android:text="Order" />
 
-        <EditText
-            android:id="@+id/editText"
+        <TextView
+            android:id="@+id/price"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="R"
             android:layout_alignParentBottom="true"
             android:layout_alignEnd="@+id/post_body" />

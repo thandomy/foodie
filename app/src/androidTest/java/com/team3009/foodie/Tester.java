@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -110,15 +111,32 @@ public class Tester {
 
        ;*/
         try {
-            Thread.sleep(5000);
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ViewInteraction fab = onView(
+                allOf(withId(R.id.list)));
+        fab.perform(click());
+
+
+
+        pressBack();
+
+        try {
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.list)));
-        floatingActionButton.perform(click());
+        ViewInteraction list = onView(
+                allOf(withId(R.id.fab)));
+        list.perform(click());
 
-
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

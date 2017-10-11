@@ -8,7 +8,6 @@ public class Serve {
     public String ingredients;
     public Float price;
     public Serve(){
-
     }
 
     public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl, Float price) {

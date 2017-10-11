@@ -1,11 +1,8 @@
 package com.team3009.foodie;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,7 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
+
 
 public class MainActivity extends AppCompatActivity {
     final String TAG = "state";
@@ -33,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -48,37 +43,27 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
-
-
-
         final Button sign_up = (Button) findViewById(R.id.butn_signup);
         sign_up.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
                 String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
-
                 createAccount(email,password);
-            ;
             }
         });
         final Button login = (Button) findViewById(R.id.butn_login);
         login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
                 String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
                 String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
                 loginAccount(email,password);
 
             }
         });
-
-
-
     }
     @Override
     public void onStart() {
@@ -132,13 +117,11 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "success",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
     }
     public void loginAccount(String email, String password){
-       /* mAuth.signInWithEmailAndPassword(email, password)
+       mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -153,13 +136,12 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();*/
+                                    Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(home);
-                       /* }
+                       }
 
-                        // ...
                     }
-                });*/
+                });
     }
 }
