@@ -15,6 +15,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -50,7 +52,10 @@ public class Tester {
         // Specify a valid string.
         mStringToBetyped = "thandomy@gmail.com";
         mNumberToBetyped = "12345678";
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().goOffline();
     }
+
     @Before
     public void grantPermission() {
         getInstrumentation().getUiAutomation().executeShellCommand(
@@ -62,13 +67,7 @@ public class Tester {
 
     }
 
-    private IdlingResource mIdlingResource;
-    //@Before
-   // public void registerIdlingResource() {
-        //mIdlingResource = mMainActivity.getActivity().getIdlingResource();
-        // To prove that the test fails, omit this call:
-        //Espresso.registerIdlingResources(mIdlingResource);
-    //}
+
 
     @Test
     public void inputText_sameActivity() {
@@ -79,16 +78,16 @@ public class Tester {
                 .perform(typeText(mNumberToBetyped), closeSoftKeyboard());
 
 
-        onView(withId(R.id.txt_email)).check(matches(withText( mStringToBetyped)));
-        onView(withId(R.id.txt_pass)).check(matches(withText( mNumberToBetyped)));
+        onView(withId(R.id.txt_email)).check(matches(withText(mStringToBetyped)));
+        onView(withId(R.id.txt_pass)).check(matches(withText(mNumberToBetyped)));
 
         onView(withId(R.id.butn_login)).perform(click());
 
         //onView(withId(R.id.butn_signup)).perform(click());
 
-        //Intent intent = new Intent();
-        //intent.setAction(Intent.ACTION_SEND);
-        //intentsTestRule.launchActivity(intent);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intentsTestRule.launchActivity(intent);
 
         try {
             Thread.sleep(10000);

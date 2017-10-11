@@ -292,7 +292,7 @@ public class HomeActivity extends AppCompatActivity
         refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+                collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
             }
 
             @Override
@@ -305,7 +305,7 @@ public class HomeActivity extends AppCompatActivity
     }
     private void collectLocationsAndPutOnMap(Map<String,Object> servings) {
 
-        ArrayList<Double> latitudes = new ArrayList<>();
+        /*ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
@@ -325,12 +325,13 @@ public class HomeActivity extends AppCompatActivity
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));
+                    .title(titles.get(i)));*/
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(
+                            20,-25))
+                    .title("fake location"));
 
         }
     }
-
-
-}
 
 
