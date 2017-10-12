@@ -114,14 +114,12 @@ public class Tester {
 
        ;*/
         try {
-            Thread.sleep(5000);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewInteraction fab = onView(
-                allOf(withId(R.id.fab)));
-        fab.perform(click());
-
+        
+        onView(withId(R.id.fab)).perform(click());
         pressBack();
 
         try {
