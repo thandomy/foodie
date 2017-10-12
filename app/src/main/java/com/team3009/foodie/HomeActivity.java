@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity
         FirebaseDatabase.getInstance().goOffline();
 
 
-        FloatingActionButton list = (FloatingActionButton) findViewById(R.id.fab);
+        Button list = (Button) findViewById(R.id.fab);
         list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
