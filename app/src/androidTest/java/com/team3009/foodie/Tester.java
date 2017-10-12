@@ -133,7 +133,7 @@ public class Tester {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
         //Here's the difference
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_list_view)) 
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_list_view)) ;
         try{
             Thread.sleep(5000);
         } catch (InterruptedException e) {
