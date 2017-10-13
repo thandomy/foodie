@@ -37,22 +37,26 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/post_body"
-            android:layout_below="@+id/post_body"
-            android:text="Order" />
-
         <TextView
             android:id="@+id/price"
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:layout_below="@+id/post_body"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
             android:ems="10"
-            android:text="R"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/RTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignEnd="@+id/post_body" />
+            android:layout_alignTop="@+id/price"
+            android:layout_marginEnd="12dp"
+            android:layout_toStartOf="@+id/price"
+            android:text="R"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
 
     </RelativeLayout>
