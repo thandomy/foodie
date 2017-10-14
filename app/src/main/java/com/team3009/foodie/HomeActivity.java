@@ -5,11 +5,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -80,23 +80,7 @@ public class HomeActivity extends AppCompatActivity
         FirebaseDatabase.getInstance().goOffline();
 
 
-        Button list = (Button) findViewById(R.id.fab);
-        list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UploadFoodFrag fragment = new UploadFoodFrag();
-                mFragmentManager = getSupportFragmentManager();
 
-                Bundle loc = new Bundle();
-
-                float [] location = new float[2];
-                location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
-                location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
-                loc.putFloatArray("location",location);
-                fragment.setArguments(loc);
-                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -157,7 +141,26 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        }else if (id == R.id.nav_list_view) {
+            PostListFragment fragment = new PostListFragment();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
+        }
+
+        else if (id == R.id.nav_serve) {
+            UploadFoodFrag fragment = new UploadFoodFrag();
+            mFragmentManager = getSupportFragmentManager();
+
+            Bundle loc = new Bundle();
+
+            float [] location = new float[2];
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+            loc.putFloatArray("location",location);
+            fragment.setArguments(loc);
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
+        }
+        else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -165,10 +168,6 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        }else if (id == R.id.nav_list_view) {
-            PostListFragment fragment = new PostListFragment();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

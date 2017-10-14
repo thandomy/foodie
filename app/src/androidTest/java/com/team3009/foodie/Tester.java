@@ -81,17 +81,25 @@ public class Tester {
     public void HomeActivityTest() {
 
         try {
-            Thread.sleep(50);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.fab), withText("Serve.."), isDisplayed()));
-        appCompatButton2.perform(click());
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
+        //Here's the difference
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_serve)) ;
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        pressBack();
+
+        try {
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -101,12 +109,13 @@ public class Tester {
         //Here's the difference
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_list_view)) ;
 
-        pressBack();
-        try{
-            Thread.sleep(5000);
+        try {
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
 
+        pressBack();
+
+    }
 }

@@ -132,12 +132,8 @@ public class UploadFoodFrag extends Fragment {
 
                             }
                         });
-
-
             }
         });
-
-
         return v;
     }
 
