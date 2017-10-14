@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
     public void loginAccount(String email, String password){
-       mAuth.signInWithEmailAndPassword(email, password)
+      /* mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT).show();*/
                             Intent home = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(home);
-                       }
+                       /*}
 
                     }
-                });
+                });*/
     }
 }

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 package com.team3009.foodie;
 
 import org.junit.Before;
@@ -37,9 +38,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+
 /**
  * Basic sample for unbundled UiAutomator.
  */
+
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class UITestser {
@@ -80,10 +83,10 @@ public class UITestser {
     }
 
     @Test
-    public void testChangeText_sameActivity() {
+    public void testHomeActivity() {
         // Type text and then press the button.
         try {
-            Thread.sleep(5000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,6 +94,8 @@ public class UITestser {
                 .setText("thandomy@gmail.com");
         mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "txt_pass"))
                 .setText("12345678");
+        mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "butn_signup"))
+                .click();
         mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "butn_login"))
                 .click();
 
@@ -102,11 +107,13 @@ public class UITestser {
     }
 
 
-    /**
+
+/**
      * Uses package manager to find the package name of the device launcher. Usually this package
      * is "com.android.launcher" but can be different at times. This is a generic solution which
      * works on all platforms.`
      */
+
     private String getLauncherPackageName() {
         // Create launcher Intent
         final Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -118,3 +125,4 @@ public class UITestser {
         return resolveInfo.activityInfo.packageName;
     }
 }
+

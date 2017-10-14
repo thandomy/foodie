@@ -320,7 +320,6 @@ public class HomeActivity extends AppCompatActivity
                 .position(new LatLng(
                         20,-25))
                 .title("fake location"));
-
         }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
