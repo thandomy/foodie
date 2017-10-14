@@ -75,9 +75,9 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
-        FirebaseDatabase.getInstance().goOffline();
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+       // FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
+        //FirebaseDatabase.getInstance().goOffline();
 
 
 
@@ -148,6 +148,8 @@ public class HomeActivity extends AppCompatActivity
         }
 
         else if (id == R.id.nav_serve) {
+            lastLocation.setLatitude(23.5678); //remove in production
+            lastLocation.setLongitude(34.456);
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
