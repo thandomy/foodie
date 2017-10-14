@@ -2,6 +2,7 @@ package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -149,16 +150,17 @@ public class HomeActivity extends AppCompatActivity
         }
 
         else if (id == R.id.nav_serve) {
-            lastLocation.setLatitude(23.5678); //remove in production
-            lastLocation.setLongitude(34.456);
+            Location temp = new Location(LocationManager.GPS_PROVIDER);
+            temp.setLatitude(23.5678); //remove in production
+            temp.setLongitude(34.456);
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
             float [] location = new float[2];
-            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
-            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+            location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
             loc.putFloatArray("location",location);
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
