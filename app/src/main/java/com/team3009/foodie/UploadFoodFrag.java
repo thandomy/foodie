@@ -1,7 +1,9 @@
 package com.team3009.foodie;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.icu.util.Calendar;
@@ -148,6 +150,9 @@ public class UploadFoodFrag extends Fragment {
         if(requestCode == G_I && resultCode == RESULT_OK){
             url = data.getData();
             // Bitmap bitmap = MediaStore.Images.Media.getBitmap(UploadFoodFrag.this.getContentResolver(), url);
+            url =  Uri.parse("/storage/emulated/0/Pictures/imgen/new.png");
+
+
             url1 = url.toString();
             textView.setText(url1);
             textView.setTextColor(Color.BLUE);

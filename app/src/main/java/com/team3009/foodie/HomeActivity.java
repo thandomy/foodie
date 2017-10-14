@@ -77,11 +77,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_foodie_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
-        FirebaseDatabase.getInstance().goOffline();
-
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,9 +96,6 @@ public class HomeActivity extends AppCompatActivity
         mapView = mapFragment.getView();
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
-
-
-
 
         recieveData();
     }
