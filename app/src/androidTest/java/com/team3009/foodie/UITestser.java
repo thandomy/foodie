@@ -29,7 +29,11 @@ import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -40,12 +44,9 @@ import static org.junit.Assert.assertThat;
 @SdkSuppress(minSdkVersion = 18)
 public class UITestser {
 
-    private static final String BASIC_SAMPLE_PACKAGE
-            = "com.team3009.foodie";
+    private static final String BASIC_SAMPLE_PACKAGE = "com.team3009.foodie";
 
     private static final int LAUNCH_TIMEOUT = 5000;
-
-    private static final String STRING_TO_BE_TYPED = "UiAutomator";
 
     private UiDevice mDevice;
 
@@ -81,6 +82,11 @@ public class UITestser {
     @Test
     public void testChangeText_sameActivity() {
         // Type text and then press the button.
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "txt_email"))
                 .setText("thandomy@gmail.com");
         mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "txt_pass"))
@@ -88,20 +94,12 @@ public class UITestser {
         mDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "butn_login"))
                 .click();
 
-
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        // Verify the test is displayed in the Ui
-        //UiObject2 changedText = mDevice
-                //.wait(Until.findObject(By.res(BASIC_SAMPLE_PACKAGE, "textToBeChanged")),
-               // /        500 /* wait 500ms */);
-       // assertThat(changedText.getText(), is(equalTo(STRING_TO_BE_TYPED)));
     }
-
 
 
     /**
