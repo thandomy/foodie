@@ -74,10 +74,9 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_foodie_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-       // FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
-        //FirebaseDatabase.getInstance().goOffline();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
+        FirebaseDatabase.getInstance().goOffline();
 
 
 
