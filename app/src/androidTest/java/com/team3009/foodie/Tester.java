@@ -78,49 +78,17 @@ public class Tester {
 
 
     @Test
-    public void inputText_sameActivity() {
-        // Type text.
-        /*onView(withId(R.id.txt_email))
-                .perform(typeText(mStringToBetyped), closeSoftKeyboard());
-        onView(withId(R.id.txt_pass))
-                .perform(typeText(mNumberToBetyped), closeSoftKeyboard());
+    public void HomeActivityTest() {
 
-
-        onView(withId(R.id.txt_email)).check(matches(withText(mStringToBetyped)));
-        onView(withId(R.id.txt_pass)).check(matches(withText(mNumberToBetyped)));
-
-
-
-        onView(withId(R.id.butn_signup)).perform(click());
-        onView(withId(R.id.butn_login)).perform(click());
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        onView(withId(R.id.fab)).perform(click());
-
-        /*Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intentsTestRule.launchActivity(intent);
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-       ;*/
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
-        onView(withId(R.id.fab)).perform(click());
-        pressBack();
+
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.fab), withText("Serve.."), isDisplayed()));
+        appCompatButton2.perform(click());
 
         try {
             Thread.sleep(5000);
@@ -132,6 +100,8 @@ public class Tester {
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
         //Here's the difference
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_list_view)) ;
+
+        pressBack();
         try{
             Thread.sleep(5000);
         } catch (InterruptedException e) {
