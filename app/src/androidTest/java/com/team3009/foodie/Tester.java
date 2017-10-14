@@ -1,3 +1,4 @@
+/*
 package com.team3009.foodie;
 
 import org.junit.Before;
@@ -7,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.ViewAction;
@@ -17,6 +19,9 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,7 +66,8 @@ public class Tester {
         mStringToBetyped = "thandomy@gmail.com";
         mNumberToBetyped = "12345678";
 
-
+        UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject map = mDevice.findObject(new UiSelector().descriptionContains("MAP"));
     }
 
     @Before
@@ -79,12 +85,15 @@ public class Tester {
 
     @Test
     public void HomeActivityTest() {
-
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject map = mDevice.findObject(new UiSelector().descriptionContains("MAP"));
+
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
@@ -119,3 +128,4 @@ public class Tester {
 
     }
 }
+*/

@@ -55,6 +55,18 @@ public class PostListFragment extends Fragment {
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
                         .into(viewHolder.imageView);
+
+
+                final DatabaseReference postRef = getRef(position);
+                final String postKey = postRef.getKey();
+
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
             }
         };
         mRecycler.setAdapter(mAdapter);

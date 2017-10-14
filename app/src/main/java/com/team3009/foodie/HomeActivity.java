@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import android.Manifest;
+import android.view.View;
 import android.widget.Toast;
 import java.util.Map;
 
@@ -66,6 +67,8 @@ public class HomeActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
+
+    View mapView;
 
 
     @Override
@@ -93,7 +96,14 @@ public class HomeActivity extends AppCompatActivity
         checkLocationPermission();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+
+        mapView = mapFragment.getView();
+        mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
+
+
+
 
         recieveData();
     }
@@ -206,6 +216,7 @@ public class HomeActivity extends AppCompatActivity
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mapView.setContentDescription("MAP");
         this.googleMap = googleMap;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             setUpGoogleApiClient();
@@ -306,9 +317,9 @@ public class HomeActivity extends AppCompatActivity
                     .position(aLocation)
                     .title(titles.get(i)));*/
             googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(
-                            20,-25))
-                    .title("fake location"));
+                .position(new LatLng(
+                        20,-25))
+                .title("fake location"));
 
         }
     @Override
