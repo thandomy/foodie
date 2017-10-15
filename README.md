@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/thandomy/foodie.svg?branch=master)](https://travis-ci.org/thandomy/foodie)
+
+[![Coverage Status](https://coveralls.io/repos/github/thandomy/foodie/badge.svg)](https://coveralls.io/github/thandomy/foodie)
+
+
 # Foodie
 # Problem: 
 People don't really have a platform where they can sell home cooked food to people who would want to buy home cooked food. People who want home cooked food may not have the time or necessary skills to cook the food themselves and with our platform those with the necessary skills will be able to curb this and make money off it by offering home cooked food at their residence. 
@@ -38,9 +43,17 @@ Andrie Sithole 1081126
 
 # VERSIONS
 
-# v1
+# v1.0
 Logs in to the app
+-on MainActivity (called first)
+-Uses firebase ad backend (noSQL)
 
-# v2
+# v1.1
 Has maps, can upload food and view food and view food
+-on HomeActivity (houses everything else)
+-Google Maps API 
+-RecyclerView for listing items
+-Upload and List fragments spawned off (no intents)
+
+
 

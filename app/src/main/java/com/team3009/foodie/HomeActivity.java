@@ -51,11 +51,19 @@ import java.util.Map;
 import java.lang.*;
 
 
+import java.util.ArrayList;
+import java.util.Map;
+
+
+import java.lang.*;
+
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
+
     // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
     private static final String ORDER_NODE = "Order";
     private static final String SERVE_NODE = "Serving";
@@ -69,7 +77,9 @@ public class HomeActivity extends AppCompatActivity
     private Location lastLocation;
     private Marker currentLocationMarker;
 
+
     View mapView;
+
 
 
     @Override
@@ -274,6 +284,7 @@ public class HomeActivity extends AppCompatActivity
         // Get the Firebase node to write the  read data from
         DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Serving");
         refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
@@ -319,7 +330,19 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-}
 
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               // collectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
+   
 
