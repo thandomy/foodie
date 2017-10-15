@@ -93,7 +93,8 @@ public class PostListFragment extends Fragment {
             if (requestCode == DROP_IN_REQUEST_CODE) {
                 DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
                 // Send the result to Firebase
-                //sendData(result);
+                //Post p = new Post();
+                //p.sendData(result);
                 // Show a message that the transaction was successful
                 Toast.makeText(getActivity(), R.string.payment_succesful, Toast.LENGTH_LONG).show();
             }
