@@ -277,6 +277,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+
             }
 
             @Override

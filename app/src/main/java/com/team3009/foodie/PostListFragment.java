@@ -1,6 +1,7 @@
 package com.team3009.foodie;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,15 +10,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInResult;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
+
+import static android.app.Activity.RESULT_OK;
+
+
+
 
 public class PostListFragment extends Fragment {
+    private static final int DROP_IN_REQUEST_CODE = 567;
+    private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
+
     // [START define_database_reference]
     private DatabaseReference mDatabase;
     // [END define_database_reference]
@@ -63,7 +76,7 @@ public class PostListFragment extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
                     }
                 });
 
@@ -72,6 +85,28 @@ public class PostListFragment extends Fragment {
         mRecycler.setAdapter(mAdapter);
         return rootView;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == DROP_IN_REQUEST_CODE) {
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                // Send the result to Firebase
+                //sendData(result);
+                // Show a message that the transaction was successful
+                Toast.makeText(getActivity(), R.string.payment_succesful, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    private DropInRequest getDropInRequest() {
+        return new DropInRequest()
+                // Use the Braintree sandbox for dev/demo purposes
+                .clientToken(SANDBOX_TOKENIZATION_KEY)
+                .requestThreeDSecureVerification(true)
+                .collectDeviceData(true);
+    }
+
 }
 
 

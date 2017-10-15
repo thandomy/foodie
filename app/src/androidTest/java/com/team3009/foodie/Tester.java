@@ -104,7 +104,6 @@ public class Tester {
         getInstrumentation().getUiAutomation().executeShellCommand(
                 "pm grant " + getTargetContext().getPackageName()
                         + " android.permission.INTERNET");
-
     }
 
 
@@ -120,7 +119,7 @@ public class Tester {
     
         onView(withId(R.id.txt_email)).perform(typeText(mStringToBetyped)).perform(closeSoftKeyboard());
         onView(withId(R.id.txt_pass)).perform(typeText(mNumberToBetyped)).perform(closeSoftKeyboard());
-        //onView(withId(R.id.butn_signup)).perform(click());
+        onView(withId(R.id.butn_signup)).perform(click());
         onView(withId(R.id.butn_login)).perform(click());
 
         final Intent intent = new Intent();
