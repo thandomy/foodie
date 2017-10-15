@@ -81,7 +81,6 @@ public class HomeActivity extends AppCompatActivity
     View mapView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,13 +152,11 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
 
-        }else if (id == R.id.nav_list_view) {
+        } else if (id == R.id.nav_list_view) {
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
-        }
-
-        else if (id == R.id.nav_serve) {
+        } else if (id == R.id.nav_serve) {
             Location temp = new Location(LocationManager.GPS_PROVIDER);
             temp.setLatitude(23.5678); //remove in production
             temp.setLongitude(34.456);
@@ -168,14 +165,13 @@ public class HomeActivity extends AppCompatActivity
 
             Bundle loc = new Bundle();
 
-            float [] location = new float[2];
+            float[] location = new float[2];
             location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
             location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
-            loc.putFloatArray("location",location);
+            loc.putFloatArray("location", location);
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
-        }
-        else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -218,6 +214,7 @@ public class HomeActivity extends AppCompatActivity
         }
         //replaceMarker(latLng);
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapView.setContentDescription("MAP");
@@ -271,7 +268,7 @@ public class HomeActivity extends AppCompatActivity
     private void replaceMarker(LatLng latLng) {
         // Remove the previous marker
         if (currentLocationMarker != null) {
-                currentLocationMarker.remove();
+            currentLocationMarker.remove();
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -287,7 +284,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
+                collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
 
             }
 
@@ -299,7 +296,8 @@ public class HomeActivity extends AppCompatActivity
 
         });
     }
-    private void collectLocationsAndPutOnMap(Map<String,Object> servings) {
+
+    private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
         /*ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
@@ -322,27 +320,16 @@ public class HomeActivity extends AppCompatActivity
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
                     .title(titles.get(i)));*/
-            googleMap.addMarker(new MarkerOptions()
+        googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
-                        20,-25))
+                        20, -25))
                 .title("fake location"));
-        }
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               // collectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
     }
+}
    
 
