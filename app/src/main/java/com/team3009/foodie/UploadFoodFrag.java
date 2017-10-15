@@ -1,7 +1,9 @@
 package com.team3009.foodie;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.icu.util.Calendar;
@@ -50,9 +52,11 @@ public class UploadFoodFrag extends Fragment {
 
     private Button selImage,takePic,upload;
     private TextView textView;
-    private EditText titl,descrip;
+    private EditText titl,descrip,ingre,pric;
     private ImageView image;
-    String title,description,url1 ;
+    String title,description,url1,ingredients,price;
+    Float nPrice;
+
     private static final int G_I = 2, R_I_C = 1;
     private Uri url;
     View v;
@@ -68,18 +72,24 @@ public class UploadFoodFrag extends Fragment {
 
         v = inflater.inflate(R.layout.uploadfrag,container,false);
         selImage = (Button) v.findViewById(R.id.getPic);
-        textView = (TextView) v.findViewById(R.id.picUrl);
-        titl = (EditText) v.findViewById(R.id.mealtitle);
-        descrip = (EditText) v.findViewById(R.id.mealDescription);
         image = (ImageView) v.findViewById(imageView);
         takePic = (Button) v.findViewById(R.id.takePic);
         upload = (Button) v.findViewById(R.id.subImage);
+
+        textView = (TextView) v.findViewById(R.id.picUrl);
+        titl = (EditText) v.findViewById(R.id.mealtitle);
+        descrip = (EditText) v.findViewById(R.id.mealDescription);
+        ingre = (EditText) v.findViewById(R.id.Ingredients);
+        pric =(EditText) v.findViewById(R.id.price);
 
         selImage.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View view) {
                 title = titl.getText().toString();
                 description = descrip.getText().toString();
+                ingredients = ingre.getText().toString();
+                price = pric.getText().toString();
+                nPrice = Float.parseFloat(price);
 
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
@@ -113,7 +123,7 @@ public class UploadFoodFrag extends Fragment {
                                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
                                 Post p = new Post();
                                 assert locData != null;
-                                p.sendData(title,description,locData[0],locData[1],downloadUrl);
+                                p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -124,12 +134,8 @@ public class UploadFoodFrag extends Fragment {
 
                             }
                         });
-
-
             }
         });
-
-
         return v;
     }
 
@@ -144,6 +150,9 @@ public class UploadFoodFrag extends Fragment {
         if(requestCode == G_I && resultCode == RESULT_OK){
             url = data.getData();
             // Bitmap bitmap = MediaStore.Images.Media.getBitmap(UploadFoodFrag.this.getContentResolver(), url);
+            url =  Uri.parse("/storage/emulated/0/Pictures/imgen/new.png");
+
+
             url1 = url.toString();
             textView.setText(url1);
             textView.setTextColor(Color.BLUE);
