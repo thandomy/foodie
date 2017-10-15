@@ -59,7 +59,7 @@ public class PostListFragment extends Fragment {
             @Override
             protected void populateViewHolder(final PostViewHolder viewHolder, final Serve model, final int position) {
                 viewHolder.title.setText(model.title);
-                viewHolder.body.setText(model.description);
+                viewHolder.body.setText("Price: R"+model.price);
                 viewHolder.location.setText(model.latitude + " , " +model.longitude);
 
                 Picasso.with(getActivity())

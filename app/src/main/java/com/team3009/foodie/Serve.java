@@ -15,12 +15,13 @@ public class Serve {
     String downloadUrl;
     String userId;
     String key;
+    String price;
 
     public Serve(){
 
     }
 
-    public Serve(String title, String description, Float latitude, Float longitude,String downloadUrl,String  key,String  userId) {
+    public Serve(String title, String description, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, String price) {
         this.downloadUrl = downloadUrl;
         this.title = title;
         this.description = description;
@@ -28,6 +29,7 @@ public class Serve {
         this.latitude = latitude;
         this.key = key;
         this.userId = userId;
+        this.price= price;
     }
 
     @Exclude
@@ -37,6 +39,7 @@ public class Serve {
         //result.put("author", author);
         result.put("title",title);
         result.put("description",description);
+        result.put("price",price);
         //result.put("starCount", starCount);
         result.put("downloadUrl",downloadUrl);
         result.put("key",key);

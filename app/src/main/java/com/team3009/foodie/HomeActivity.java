@@ -2,6 +2,7 @@ package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -86,39 +87,6 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
-        FloatingActionButton add = (FloatingActionButton) findViewById(R.id.fab);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                UploadFoodFrag fragment = new UploadFoodFrag();
-                mFragmentManager = getSupportFragmentManager();
-
-                Bundle loc = new Bundle();
-
-
-                float [] location = new float[2];
-                location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
-                location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
-                loc.putFloatArray("location",location);
-                fragment.setArguments(loc);
-                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
-
-            }
-        });
-
-
-        FloatingActionButton list = (FloatingActionButton) findViewById(R.id.list);
-        list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PostListFragment fragment = new PostListFragment();
-                mFragmentManager = getSupportFragmentManager();
-                mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -174,11 +142,32 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_serve) {
+            Location temp = new Location(LocationManager.GPS_PROVIDER);
+            temp.setLatitude(23.5678); //remove in production
+            temp.setLongitude(34.456);
+            UploadFoodFrag fragment = new UploadFoodFrag();
+            mFragmentManager = getSupportFragmentManager();
 
+            Bundle loc = new Bundle();
+
+            float[] location = new float[2];
+            location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+            loc.putFloatArray("location", location);
+            fragment.setArguments(loc);
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        }else if (id == R.id.nav_list_view){
+            setTitle("Food");
+            PostListFragment fragment= new PostListFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"PostListFragment");
+            fragmentTransaction.commit();
+
+        }
+        else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

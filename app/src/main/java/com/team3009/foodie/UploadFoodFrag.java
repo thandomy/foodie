@@ -50,7 +50,7 @@ public class UploadFoodFrag extends Fragment {
 
     private Button selImage,takePic,upload;
     private TextView textView;
-    private EditText titl,descrip;
+    private EditText titl,descrip,price;
     private ImageView image;
     String title,description,url1 ;
     private static final int G_I = 2, R_I_C = 1;
@@ -69,6 +69,7 @@ public class UploadFoodFrag extends Fragment {
         v = inflater.inflate(R.layout.uploadfrag,container,false);
         selImage = (Button) v.findViewById(R.id.getPic);
         textView = (TextView) v.findViewById(R.id.picUrl);
+        price = (EditText) v.findViewById(R.id.price);
         titl = (EditText) v.findViewById(R.id.mealtitle);
         descrip = (EditText) v.findViewById(R.id.mealDescription);
         image = (ImageView) v.findViewById(imageView);
@@ -80,6 +81,7 @@ public class UploadFoodFrag extends Fragment {
             public void onClick(View view) {
                 title = titl.getText().toString();
                 description = descrip.getText().toString();
+
 
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
@@ -113,7 +115,7 @@ public class UploadFoodFrag extends Fragment {
                                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
                                 Post p = new Post();
                                 assert locData != null;
-                                p.sendData(title,description,locData[0],locData[1],downloadUrl);
+                                p.sendData(title,description,locData[0],locData[1],downloadUrl,price.getText().toString());
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
