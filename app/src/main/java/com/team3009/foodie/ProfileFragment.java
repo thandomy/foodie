@@ -7,10 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -78,7 +75,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_profile, container, false);
+        //return inflater.inflate(R.layout.fragment_profile1, container, false);
         v = inflater.inflate(R.layout.fragment_profile,container,false);
         mNameField=(EditText) v.findViewById(R.id.name);
         mPhoneField=(EditText) v.findViewById(R.id.phone);
@@ -94,7 +91,7 @@ public class ProfileFragment extends Fragment {
         mProfileImage= (ImageView) v.findViewById(R.id.profileImage);
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
-        mCustomerDatabase= FirebaseDatabase.getInstance().getReference().child("Serving").child(userID);
+        mCustomerDatabase= FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
        getUserInfo();
         msave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +195,7 @@ public class ProfileFragment extends Fragment {
         userInfo.put("age",mAge);
         userInfo.put("email",mEmail);
         userInfo.put("bio",mBio);
+
         //userInfo.put("profileImageUrl",mProfileImageUrl);
         mCustomerDatabase.updateChildren(userInfo);
 

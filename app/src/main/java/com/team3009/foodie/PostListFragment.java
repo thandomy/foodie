@@ -3,6 +3,8 @@ package com.team3009.foodie;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -60,20 +62,29 @@ public class PostListFragment extends Fragment {
                 viewHolder.body.setText(model.description);
                 viewHolder.location.setText(model.latitude + " , " +model.longitude);
 
-                viewHolder.itemView.setOnClickListener( new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view){
-                        Toast.makeText(getActivity(),"You Clicked a View", Toast.LENGTH_LONG).show();
-                    }
-
-                });
-
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
                         .into(viewHolder.imageView);
 
+                viewHolder.itemView.setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        //Toast.makeText(getActivity(),"model.key = "+model.key, Toast.LENGTH_LONG).show();
+                        Profile3 profile = new Profile3();
+                        Bundle args = new Bundle();
+                        args.putString("key",model.key);
+                        args.putString("userId",model.userId);
+                        profile.setArguments(args);
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack(null)
+                                .commit();
+                    }
+                });
             }
+
         };
 
 

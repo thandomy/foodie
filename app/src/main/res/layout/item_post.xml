@@ -9,6 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="297dp"
         android:padding="10dp">
+        <TextView
+            android:id="@+id/post_title"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="300dp"
+            android:layout_height="35dp"
+            android:layout_above="@+id/post_body"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/star"
@@ -22,16 +32,7 @@
             android:layout_marginTop="13dp"
             android:layout_above="@+id/location" />
 
-        <TextView
-            android:id="@+id/post_title"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="300dp"
-            android:layout_height="35dp"
-            android:layout_above="@+id/post_body"
-            android:layout_centerHorizontal="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textStyle="bold" />
+
 
         <TextView
             android:id="@+id/post_body"
