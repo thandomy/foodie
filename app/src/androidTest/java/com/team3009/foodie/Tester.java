@@ -108,6 +108,7 @@ public class Tester {
         intenty.setType("image/*");
         intenty.setAction(Intent.ACTION_PICK);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, intenty));
+
         onView(withId(R.id.getPic)).perform(click());
         onView(withId(R.id.subImage)).perform(click());
 
