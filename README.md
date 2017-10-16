@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/thandomy/foodie.svg?branch=master)](https://travis-ci.org/thandomy/foodie)
 
-[![Coverage Status](https://coveralls.io/repos/github/thandomy/foodie/badge.svg)](https://coveralls.io/github/thandomy/foodie)
+[![Coverage Status](https://coveralls.io/repos/github/thandomy/foodie/badge.svg?branch=master)](https://coveralls.io/github/thandomy/foodie?branch=master)
 
 
 # Foodie
