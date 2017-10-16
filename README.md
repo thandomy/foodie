@@ -54,5 +54,9 @@ Has maps, can upload food and view food and view food
 -RecyclerView for listing items
 -Upload and List fragments spawned off (no intents)
 
+# v1.2
+Now has profile feature
+-users can see the profile of the person posting the food.
+-map now shows food title.
 
 
