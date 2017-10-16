@@ -34,7 +34,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class Profile3 extends Fragment {
-    String key;
+    String key,amount;
     private Button mOrder;
     private TextView mIngredients, mUserName,mTitle;
     private ImageView mProfilepic;
@@ -70,6 +70,7 @@ public class Profile3 extends Fragment {
         }
         String key = getArguments().getString("key");
         String userId = getArguments().getString("userId");
+        amount = getArguments().getString("amount");
         Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
@@ -145,7 +146,7 @@ public class Profile3 extends Fragment {
 
     public void onBraintreeSubmit(View v) {
         DropInRequest dropInRequest = new DropInRequest()
-                .clientToken(token/*clientToken*/);
+                .clientToken(token/*clientToken*/).amount(amount);
         startActivityForResult(dropInRequest.getIntent(getActivity()), REQUEST_CODE);
         removeFragment();
     }
