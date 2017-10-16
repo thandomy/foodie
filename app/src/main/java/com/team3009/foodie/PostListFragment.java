@@ -7,21 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
-
-import com.braintreepayments.api.dropin.DropInRequest;
-import com.braintreepayments.api.dropin.DropInResult;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -82,6 +79,7 @@ public class PostListFragment extends Fragment {
                         Bundle args = new Bundle();
                         args.putString("key",model.key);
                         args.putString("userId",model.userId);
+                        args.putString("amount",model.price.toString());
                         profile.setArguments(args);
 
                         FragmentManager fragmentManager = getFragmentManager();

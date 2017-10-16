@@ -29,6 +29,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" ></action>
+                <category android:name="android.intent.category.DEFAULT" ></category>
+                <category android:name="android.intent.category.BROWSABLE" ></category>
+                <data android:scheme="${applicationId}.braintree" ></data>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_foodie_home"
