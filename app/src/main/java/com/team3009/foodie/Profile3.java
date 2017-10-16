@@ -46,8 +46,6 @@ public class Profile3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //TextView userName = () findView
         final View view = inflater.inflate(R.layout.fragment_profile2, container, false);
         String key = getArguments().getString("key");
         String userId = getArguments().getString("userId");
