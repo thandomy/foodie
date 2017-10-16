@@ -71,6 +71,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.android.gms:play-services-wallet:10.0.1'
+    compile 'com.braintreepayments.api:drop-in:3.+'
 
     testCompile 'junit:junit:4.12'
 }
@@ -86,6 +87,16 @@ tasks.coveralls {
 
 apply plugin: 'com.google.gms.google-services'
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.0.0'
+            }
+        }
+    }
+}
 
 
 
