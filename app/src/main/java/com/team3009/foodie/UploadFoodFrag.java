@@ -131,7 +131,6 @@ public class UploadFoodFrag extends Fragment {
                             public void onFailure(@NonNull Exception exception) {
                                 // Handle unsuccessful uploads
                                 //...
-
                             }
                         });
             }
@@ -150,7 +149,7 @@ public class UploadFoodFrag extends Fragment {
         if(requestCode == G_I && resultCode == RESULT_OK){
             url = data.getData();
             // Bitmap bitmap = MediaStore.Images.Media.getBitmap(UploadFoodFrag.this.getContentResolver(), url);
-            url =  Uri.parse("/storage/emulated/0/Pictures/imgen/new.png");
+            //url =  Uri.parse("/storage/emulated/0/Pictures/imgen/new.png");
 
 
             url1 = url.toString();

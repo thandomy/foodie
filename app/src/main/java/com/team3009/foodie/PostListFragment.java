@@ -4,6 +4,7 @@ package com.team3009.foodie;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -76,7 +77,17 @@ public class PostListFragment extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
+                        //startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
+                        Profile3 profile = new Profile3();
+                        Bundle args = new Bundle();
+                        args.putString("key",model.key);
+                        args.putString("userId",model.userId);
+                        profile.setArguments(args);
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack(null)
+                                .commit();
                     }
                 });
 

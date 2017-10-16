@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 
 import android.support.design.widget.NavigationView;
@@ -176,6 +177,12 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+            setTitle("Profile");
+            ProfileFragment fragment= new ProfileFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_send) {
 
