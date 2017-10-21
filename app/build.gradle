@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
     }
     buildTypes {
         release {
@@ -46,9 +47,6 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
 
-
-
-
     androidTestCompile 'com.android.support:support-annotations:25.3.1'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
@@ -71,7 +69,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.android.gms:play-services-wallet:10.0.1'
+
     compile 'com.cs:googlemaproute:1.0.0'
+
+    compile 'com.braintreepayments.api:drop-in:3.+'
+
 
     testCompile 'junit:junit:4.12'
 }
@@ -87,6 +89,16 @@ tasks.coveralls {
 
 apply plugin: 'com.google.gms.google-services'
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.0.0'
+            }
+        }
+    }
+}
 
 
 

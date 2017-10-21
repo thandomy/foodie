@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.cs.googlemaproute.DrawRoute;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -60,14 +62,9 @@ import java.lang.*;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, DrawRoute.onDrawRoute {
 
     FragmentManager mFragmentManager;
-
-    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
-    private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serving";
-    //private static final int DROP_IN_REQUEST_CODE = 567;
     private static final long REQUEST_INTERVAL = 1000L;
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
@@ -106,6 +103,9 @@ public class HomeActivity extends AppCompatActivity
         mapView = mapFragment.getView();
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
+
+        DrawRoute.getInstance(this,HomeActivity.this).setFromLatLong(24.905954,67.0803505)
+                .setToLatLong(24.9053485,67.079119).setGmapAndKey("AIzaSyBGSeZJymUZz8nzOYii1THtHtUONVEWOZI",googleMap).run();
 
         recieveData();
     }
@@ -157,17 +157,20 @@ public class HomeActivity extends AppCompatActivity
             mFragmentManager = getSupportFragmentManager();
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
-            Location temp = new Location(LocationManager.GPS_PROVIDER);
-            temp.setLatitude(23.5678); //remove in production
-            temp.setLongitude(34.456);
+            //Location temp = new Location(LocationManager.GPS_PROVIDER);
+            //temp.setLatitude(23.5678); //remove in production
+            //temp.setLongitude(34.456);
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
             float[] location = new float[2];
-            location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
-            location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("location", location);
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
@@ -176,6 +179,12 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+            setTitle("Profile");
+            ProfileFragment fragment= new ProfileFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_send) {
 
@@ -298,11 +307,11 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-        /*ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : servings.entrySet()){
+        for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
             //Get user map
             Map singleUser = (Map) entry.getValue();
@@ -312,21 +321,27 @@ public class HomeActivity extends AppCompatActivity
             titles.add((String) singleUser.get("title"));
         }
 
-        for (int i = 0; i < latitudes.size(); i++){
+        for (int i = 0; i < latitudes.size(); i++) {
             LatLng aLocation = new LatLng(
-                    latitudes.get(i),longitudes.get(i)
+                    latitudes.get(i), longitudes.get(i)
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));*/
-        googleMap.addMarker(new MarkerOptions()
+                    .title(titles.get(i)));
+        /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))
-                .title("fake location"));
+                .title("fake location"));*/
+        }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void afterDraw(String result) {
 
     }
 }
