@@ -1,14 +1,17 @@
 package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 
 import android.support.design.widget.NavigationView;
@@ -17,9 +20,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +49,17 @@ import com.google.firebase.database.ValueEventListener;
 import android.Manifest;
 import android.view.View;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,10 +67,6 @@ import java.lang.*;
 
 
 import java.util.ArrayList;
-import java.util.Map;
-
-
-import java.lang.*;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -63,11 +74,6 @@ public class HomeActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
-
-    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
-    private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serving";
-    //private static final int DROP_IN_REQUEST_CODE = 567;
     private static final long REQUEST_INTERVAL = 1000L;
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
@@ -79,7 +85,6 @@ public class HomeActivity extends AppCompatActivity
 
 
     View mapView;
-
 
 
     @Override
@@ -108,10 +113,16 @@ public class HomeActivity extends AppCompatActivity
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
 
+
+
+
         recieveData();
     }
 
-    @Override
+
+
+
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -153,33 +164,39 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
 
-        }else if (id == R.id.nav_list_view) {
+        } else if (id == R.id.nav_list_view) {
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
-        }
-
-        else if (id == R.id.nav_serve) {
-            Location temp = new Location(LocationManager.GPS_PROVIDER);
-            temp.setLatitude(23.5678); //remove in production
-            temp.setLongitude(34.456);
+        } else if (id == R.id.nav_serve) {
+            //Location temp = new Location(LocationManager.GPS_PROVIDER);
+            //temp.setLatitude(23.5678); //remove in production
+            //temp.setLongitude(34.456);
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
-            float [] location = new float[2];
-            location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
-            location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
-            loc.putFloatArray("location",location);
+            float[] location = new float[2];
+            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+            loc.putFloatArray("location", location);
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
-        }
-        else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+            setTitle("Profile");
+            ProfileFragment fragment= new ProfileFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_send) {
 
@@ -218,6 +235,7 @@ public class HomeActivity extends AppCompatActivity
         }
         //replaceMarker(latLng);
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapView.setContentDescription("MAP");
@@ -271,7 +289,7 @@ public class HomeActivity extends AppCompatActivity
     private void replaceMarker(LatLng latLng) {
         // Remove the previous marker
         if (currentLocationMarker != null) {
-                currentLocationMarker.remove();
+            currentLocationMarker.remove();
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -287,8 +305,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                collectLocationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
-
+                collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
             }
 
             @Override
@@ -299,13 +316,14 @@ public class HomeActivity extends AppCompatActivity
 
         });
     }
-    private void collectLocationsAndPutOnMap(Map<String,Object> servings) {
 
-        /*ArrayList<Double> latitudes = new ArrayList<>();
+    private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
+
+        ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : servings.entrySet()){
+        for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
             //Get user map
             Map singleUser = (Map) entry.getValue();
@@ -315,34 +333,201 @@ public class HomeActivity extends AppCompatActivity
             titles.add((String) singleUser.get("title"));
         }
 
-        for (int i = 0; i < latitudes.size(); i++){
+        for (int i = 0; i < latitudes.size(); i++) {
             LatLng aLocation = new LatLng(
-                    latitudes.get(i),longitudes.get(i)
+                    latitudes.get(i), longitudes.get(i)
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));*/
-            googleMap.addMarker(new MarkerOptions()
+                    .title(titles.get(i)));
+        /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
-                        20,-25))
-                .title("fake location"));
+                        20, -25))
+                .title("fake location"));*/
+
+            LatLng dest =  new LatLng(latitudes.get(latitudes.size() - 1), longitudes.get(longitudes.size() - 1)) ;
+            LatLng origin =  new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()) ;
+            String url = getUrl(origin, dest);
+            Log.d("onMapClick", url.toString());
+            FetchUrl FetchUrl = new FetchUrl();
+
+            // Start downloading json data from Google Directions API
+            FetchUrl.execute(url);
         }
+    }
+
+
+    private String getUrl(LatLng origin, LatLng dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+
+        return url;
+    }
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            Log.d("downloadUrl", data.toString());
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    private class FetchUrl extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+                Log.d("Background Task data", data.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+
+        }
+    }
+
+
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                Log.d("ParserTask", jsonData[0].toString());
+                DataParser parser = new DataParser();
+                Log.d("ParserTask", parser.toString());
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+                Log.d("ParserTask", "Executing routes");
+                Log.d("ParserTask", routes.toString());
+
+            } catch (Exception e) {
+                Log.d("ParserTask", e.toString());
+                e.printStackTrace();
+            }
+            return routes;
+        }
+    }
+
+    protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+        ArrayList<LatLng> points;
+        PolylineOptions lineOptions = null;
+
+        // Traversing through all the routes
+        for (int i = 0; i < result.size(); i++) {
+            points = new ArrayList<>();
+            lineOptions = new PolylineOptions();
+
+            // Fetching i-th route
+            List<HashMap<String, String>> path = result.get(i);
+
+            // Fetching all the points in i-th route
+            for (int j = 0; j < path.size(); j++) {
+                HashMap<String, String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll(points);
+            lineOptions.width(10);
+            lineOptions.color(Color.RED);
+
+            Log.d("onPostExecute","onPostExecute lineoptions decoded");
+
+        }
+
+        // Drawing polyline in the Google Map for the i-th route
+        if(lineOptions != null) {
+            googleMap.addPolyline(lineOptions);
+        }
+        else {
+            Log.d("onPostExecute","without Polylines drawn");
+        }
+    }
+
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               // collectLacationsAndPutOnMap((Map<String,Object>) dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
     }
+
+}
    
 

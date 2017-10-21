@@ -7,11 +7,13 @@ public class Serve {
     public String downloadUrl;
     public String ingredients;
     public Float price;
+    String userId;
+    String key;
     public Serve(){
 
     }
 
-    public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl, Float price) {
+    public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, Float price) {
         this.downloadUrl = downloadUrl;
         this.title = title;
         this.description = description;
@@ -19,6 +21,7 @@ public class Serve {
         this.latitude = latitude;
         this.ingredients = ingredients;
         this.price = price;
-
+        this.userId = userId;
+        this.key = key;
     }
 }
