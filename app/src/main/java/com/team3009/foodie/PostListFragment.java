@@ -42,6 +42,9 @@ public class PostListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
+
+        final float[] lastLocation = getArguments().getFloatArray("lastLocation");
+
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving");
         // [END create_database_reference]
@@ -75,16 +78,17 @@ public class PostListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
-                        Profile3 profile = new Profile3();
+                        OrderFragment profile = new OrderFragment();
                         Bundle args = new Bundle();
                         args.putString("key",model.key);
                         args.putString("userId",model.userId);
                         args.putString("amount",model.price.toString());
+                        args.putFloatArray("lastLocation", lastLocation);
                         profile.setArguments(args);
 
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack(null)
+                                .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
                                 .commit();
                     }
                 });
