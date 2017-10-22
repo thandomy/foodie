@@ -6,6 +6,10 @@
             android:id="@+id/nav_list_view"
             android:icon="@drawable/ic_menu_camera"
             android:title="List All" />
+        <item
+            android:id="@+id/nav_serve"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Serve.." />
 
         <item
             android:id="@+id/nav_camera"

@@ -1,34 +1,27 @@
 package com.team3009.foodie;
-
-import android.net.Uri;
-
-import com.google.firebase.database.Exclude;
-
-import java.util.HashMap;
-import java.util.Map;
-/**
- * Created by Thando Moyo on 20-Aug-17.
- */
-
 public class Serve {
+    public String title;
+    public String description;
+    public Float latitude;
+    public Float longitude;
+    public String downloadUrl;
+    public String ingredients;
+    public Float price;
+    String userId;
+    String key;
+    public Serve(){
 
-    String uid;
-    String title;
-    String description;
-    Double latitude;
-    Double longitude;
-    String uri;
-
-    public Serve(String uid, String title, String description, Double latitude, Double longitude, String uri) {
-        this.latitude = latitude;
-        this.uid = uid;
-        this.title = title;
-        this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.uri=uri;
     }
 
-
-
+    public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, Float price) {
+        this.downloadUrl = downloadUrl;
+        this.title = title;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.ingredients = ingredients;
+        this.price = price;
+        this.userId = userId;
+        this.key = key;
+    }
 }
