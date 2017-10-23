@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-import com.cs.googlemaproute.DrawRoute;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -62,7 +61,7 @@ import java.lang.*;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, DrawRoute.onDrawRoute {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
     private static final long REQUEST_INTERVAL = 1000L;
@@ -104,10 +103,6 @@ public class HomeActivity extends AppCompatActivity
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
 
-        DrawRoute.getInstance(this,HomeActivity.this).setFromLatLong(24.905954,67.0803505)
-                .setToLatLong(24.9053485,67.079119).setGmapAndKey("AIzaSyBGSeZJymUZz8nzOYii1THtHtUONVEWOZI",googleMap).run();
-
-        recieveData();
     }
 
     @Override
@@ -148,7 +143,12 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_payments) {
+            CommentFragment fragment = new CommentFragment();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
+
+
 
         } else if (id == R.id.nav_gallery) {
 
@@ -340,10 +340,6 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void afterDraw(String result) {
-
-    }
 }
    
 
