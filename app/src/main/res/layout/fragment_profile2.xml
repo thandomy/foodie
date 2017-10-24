@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/profilePic"
-            android:layout_width="155dp"
-            android:layout_height="119dp"
+            android:layout_width="86dp"
+            android:layout_height="63dp"
             android:layout_alignBottom="@+id/userName"
             android:layout_alignParentTop="true"
             app:srcCompat="@mipmap/ic_launcher_round" />
@@ -37,6 +37,14 @@
                 android:textSize="15dp"
                 android:textColor="#000"
                 android:text="Name" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/userName"
+                android:layout_marginTop="18dp" />
 
         </RelativeLayout>
 
@@ -102,9 +110,18 @@
             android:id="@+id/Order"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
+            android:text="Order"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/seeonmap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/Order"
+            android:layout_alignBottom="@+id/Order"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="75dp"
-            android:text="Order" />
+            android:text="See on Map" />
     </RelativeLayout>
 
 

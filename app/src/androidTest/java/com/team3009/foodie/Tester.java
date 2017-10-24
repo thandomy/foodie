@@ -1,35 +1,70 @@
+
 package com.team3009.foodie;
 
-
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
+import android.support.test.espresso.intent.Intents;
+
+import android.content.Intent;
+
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
+
+import com.google.firebase.database.FirebaseDatabase;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
-
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -39,7 +74,8 @@ public class Tester {
     private String mStringToBetyped;
     private String mNumberToBetyped;
     Uri imageUri;
-
+    Instrumentation.ActivityResult result;
+    Matcher<Intent> expectedIntent;
 
     @Rule
     public ActivityTestRule<MainActivity> mMainActivity = new ActivityTestRule<>(
@@ -68,6 +104,19 @@ public class Tester {
 
 
     }
+
+    @Before
+    public void grantPermission() {
+        getInstrumentation().getUiAutomation().executeShellCommand(
+                "pm grant " + getTargetContext().getPackageName()
+                        + " android.permission.ACCESS_FINE_LOCATION");
+        getInstrumentation().getUiAutomation().executeShellCommand(
+                "pm grant " + getTargetContext().getPackageName()
+                        + " android.permission.INTERNET");
+    }
+
+   
+
     @Test
     public void HomeActivityTest() {
         try {
@@ -108,7 +157,6 @@ public class Tester {
         intenty.setType("image/*");
         intenty.setAction(Intent.ACTION_PICK);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, intenty));
-
         onView(withId(R.id.getPic)).perform(click());
         onView(withId(R.id.subImage)).perform(click());
 
@@ -136,6 +184,8 @@ public class Tester {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         pressBack();
+
     }
 }

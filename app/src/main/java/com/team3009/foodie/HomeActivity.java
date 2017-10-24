@@ -1,8 +1,10 @@
 package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +20,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +49,17 @@ import com.google.firebase.database.ValueEventListener;
 import android.Manifest;
 import android.view.View;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,10 +67,8 @@ import java.lang.*;
 
 
 import java.util.ArrayList;
-import java.util.Map;
-
-
-import java.lang.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -72,9 +84,19 @@ public class HomeActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
+    private ArrayList<Double> latitudes = new ArrayList<>();
+    private ArrayList<Double> longitudes = new ArrayList<>();
 
+    Map singleUser;
+
+    private volatile boolean FLAG = false;
+
+    final CountDownLatch done = new CountDownLatch(1);
 
     View mapView;
+
+    public HomeActivity() throws InterruptedException {
+    }
 
 
     @Override
@@ -102,10 +124,19 @@ public class HomeActivity extends AppCompatActivity
         mapView = mapFragment.getView();
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
+        recieveData();
+
+
+
+
+        //in your waiting thread:
+
+
+
 
     }
 
-    @Override
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -143,18 +174,26 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_payments) {
-            CommentFragment fragment = new CommentFragment();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
-
-
+        if (id == R.id.nav_camera) {
 
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_list_view) {
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
+
+            Bundle loc = new Bundle();
+
+            float[] location = new float[2];
+            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+            loc.putFloatArray("lastLocation", location);
+            fragment.setArguments(loc);
+
+
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
             //Location temp = new Location(LocationManager.GPS_PROVIDER);
@@ -175,8 +214,16 @@ public class HomeActivity extends AppCompatActivity
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
         } else if (id == R.id.nav_slideshow) {
+            CommentFragment fragment= new CommentFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"CommentingFragment");
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_manage) {
+            RatingFrag fragment= new RatingFrag();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_share) {
             setTitle("Profile");
@@ -221,6 +268,7 @@ public class HomeActivity extends AppCompatActivity
             // Move the camera to the user's current location on the first location update
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
+
         //replaceMarker(latLng);
     }
 
@@ -307,17 +355,19 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-        ArrayList<Double> latitudes = new ArrayList<>();
-        ArrayList<Double> longitudes = new ArrayList<>();
+
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
             //Get user map
-            Map singleUser = (Map) entry.getValue();
+            singleUser = (Map) entry.getValue();
             //Get phone field and append to list
-            latitudes.add((Double) singleUser.get("latitude"));
-            longitudes.add((Double) singleUser.get("longitude"));
+
+                    latitudes.add((Double) singleUser.get("latitude"));
+                    longitudes.add((Double) singleUser.get("longitude"));
+
+
             titles.add((String) singleUser.get("title"));
         }
 
@@ -332,13 +382,22 @@ public class HomeActivity extends AppCompatActivity
                 .position(new LatLng(
                         20, -25))
                 .title("fake location"));*/
+
+
         }
+
+
     }
+
+
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 
 }
    

@@ -7,9 +7,15 @@ public class Serve {
     public String downloadUrl;
     public String ingredients;
     public Float price;
-    String userId;
-    String key;
+    public String userId;
+    public String key;
+    public String comment;
     public Serve(){
+
+    }
+
+    public Serve(String comment){
+        this.comment = comment;
 
     }
 
