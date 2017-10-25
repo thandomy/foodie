@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private ImageView mProfilepic;
     GoogleMap googleMap;
     Serve model;
+    private RatingBar indicatorRating;
 
 
 
@@ -164,6 +166,17 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 removeFragment();
             }
         });
+
+        //Raating indicator
+
+
+
+        indicatorRating = (RatingBar) view.findViewById(R.id.indicatorRatingBar);
+
+                indicatorRating.setRating(2);
+                indicatorRating.invalidate();
+                indicatorRating.setIsIndicator(true);
+
 
         return view;
     }

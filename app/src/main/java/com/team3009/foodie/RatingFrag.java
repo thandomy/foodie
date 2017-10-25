@@ -25,6 +25,15 @@ public class RatingFrag extends Fragment {
       View  v = inflater.inflate(R.layout.fragment_rating, container, false);
 
         ratingBar = (RatingBar) v.findViewById(R.id.ratingBar);
+        btnSubmit = (Button) v.findViewById(R.id.button3);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Post post = new Post();
+               // post.sendComment();
+            }
+        });
 
 
         return v;
