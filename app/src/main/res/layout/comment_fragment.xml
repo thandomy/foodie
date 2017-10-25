@@ -17,7 +17,8 @@
             android:id="@+id/add_comment"
             android:layout_width="134dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.92" />
+            android:layout_weight="0.92"
+            android:hint="add a comment..."/>
 
         <Button
             android:id="@+id/submit_comment"

@@ -59,9 +59,6 @@ public class CommentFragment extends Fragment {
             }
         });
 
-
-
-
         return v;
     }
 

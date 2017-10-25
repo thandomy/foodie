@@ -214,10 +214,7 @@ public class HomeActivity extends AppCompatActivity
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
         } else if (id == R.id.nav_slideshow) {
-            CommentFragment fragment= new CommentFragment();
-            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.containerView,fragment,"CommentingFragment");
-            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_manage) {
             RatingFrag fragment= new RatingFrag();

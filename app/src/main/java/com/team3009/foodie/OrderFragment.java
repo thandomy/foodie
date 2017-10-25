@@ -54,6 +54,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     Float rate_flo;
     Map singleUser;
     private String mcomment;
+    Button comment;
 
 
 
@@ -213,6 +214,22 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        comment = (Button) view.findViewById(R.id.comment);
+// i need to make the comment to one specific person
+        //i need to show who made the comment
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentFragment fragment= new CommentFragment();
+                Bundle args = new Bundle();
+                args.putString("userId",getArguments().getString("userId"));
+                fragment.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(((ViewGroup)(getView().getParent())).getId(), fragment,fragment.getTag()).addToBackStack(null)
+                        .commit();
+            }
+        });
 
 
 
