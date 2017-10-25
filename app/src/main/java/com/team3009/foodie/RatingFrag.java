@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RatingFrag extends Fragment {
 
     private RatingBar ratingBar;
 
     private Button btnSubmit;
+    String rating;
 
 
     @Override
@@ -30,8 +32,10 @@ public class RatingFrag extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                rating =String.valueOf(ratingBar.getRating());
                 Post post = new Post();
-               // post.sendComment();
+                post.sendRating(rating);
+                Toast.makeText(getActivity(), rating, Toast.LENGTH_LONG).show();
             }
         });
 

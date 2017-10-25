@@ -25,6 +25,7 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
+
+import static android.R.attr.singleUser;
 
 
 /**
@@ -46,6 +49,11 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap googleMap;
     Serve model;
     private RatingBar indicatorRating;
+    String rate;
+    String rating;
+    Float rate_flo;
+    Map singleUser;
+    private String mcomment;
 
 
 
@@ -81,7 +89,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
         amount = getArguments().getString("amount");
-        Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
         mCustomer.addValueEventListener(new ValueEventListener() {
@@ -129,7 +137,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         view.findViewById(R.id.profileTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
                 profileTab ProfileTab = new profileTab();
                 Bundle args = new Bundle();
                 args.putString("userId",getArguments().getString("userId"));
@@ -172,14 +180,47 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
 
         indicatorRating = (RatingBar) view.findViewById(R.id.indicatorRatingBar);
+          DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Rating");
+                 //rating = getRating(userRef);
 
-                indicatorRating.setRating(2);
-                indicatorRating.invalidate();
-                indicatorRating.setIsIndicator(true);
+
+        userRef.addValueEventListener(new ValueEventListener() {
+
+
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+                        singleUser = (Map) entry.getValue();
+                        //Get phone field and append to list
+                        mcomment = singleUser.get("comment").toString();
+
+                        Float foo = Float.parseFloat(mcomment);
+
+
+                        indicatorRating.setRating(foo);
+                        indicatorRating.invalidate();
+                        indicatorRating.setIsIndicator(true);
+
+
+                    }
+                }
+            }
+            @Override
+            public void onCancelled (DatabaseError databaseError){
+
+
+            }
+        });
+
+
+
 
 
         return view;
     }
+
+
 
     public void onBraintreeSubmit(View v) {
         DropInRequest dropInRequest = new DropInRequest()
@@ -218,4 +259,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
     }
+    public String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+
 }

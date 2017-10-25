@@ -107,6 +107,8 @@ public class UploadFoodFrag extends Fragment {
                 startActivityForResult(takePicIntent, G_I);
             }
         });
+
+
         upload.setOnClickListener(new OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -164,7 +166,7 @@ public class UploadFoodFrag extends Fragment {
             image.setImageBitmap(selectedImage);*/
         }
 
-        if (requestCode == R_I_C && resultCode == RESULT_OK) {
+        else if (requestCode == R_I_C && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);

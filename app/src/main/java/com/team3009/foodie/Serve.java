@@ -10,6 +10,7 @@ public class Serve {
     public String userId;
     public String key;
     public String comment;
+    public String rating;
     public Serve(){
 
     }
@@ -18,6 +19,9 @@ public class Serve {
         this.comment = comment;
 
     }
+
+
+
 
     public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, Float price) {
         this.downloadUrl = downloadUrl;

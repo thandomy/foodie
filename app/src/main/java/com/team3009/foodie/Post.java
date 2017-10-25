@@ -53,6 +53,11 @@ public class Post {
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Comment").push();
         node.setValue(new Serve(comment));
     }
+
+    public void sendRating(String rating){
+        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Rating").push();
+        node.setValue(new Serve(rating));
+    }
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
