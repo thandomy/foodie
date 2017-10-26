@@ -1,14 +1,17 @@
 package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 
 import android.support.design.widget.NavigationView;
@@ -17,9 +20,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +49,17 @@ import com.google.firebase.database.ValueEventListener;
 import android.Manifest;
 import android.view.View;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,10 +67,8 @@ import java.lang.*;
 
 
 import java.util.ArrayList;
-import java.util.Map;
-
-
-import java.lang.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -63,11 +76,6 @@ public class HomeActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
-
-    // private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
-    private static final String ORDER_NODE = "Order";
-    private static final String SERVE_NODE = "Serving";
-    //private static final int DROP_IN_REQUEST_CODE = 567;
     private static final long REQUEST_INTERVAL = 1000L;
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
@@ -76,10 +84,19 @@ public class HomeActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
+    private ArrayList<Double> latitudes = new ArrayList<>();
+    private ArrayList<Double> longitudes = new ArrayList<>();
 
+    Map singleUser;
+
+    private volatile boolean FLAG = false;
+
+    final CountDownLatch done = new CountDownLatch(1);
 
     View mapView;
 
+    public HomeActivity() throws InterruptedException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +123,10 @@ public class HomeActivity extends AppCompatActivity
         mapView = mapFragment.getView();
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
-
         recieveData();
     }
 
-    @Override
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -155,19 +171,33 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_list_view) {
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
+
+            Bundle loc = new Bundle();
+
+            float[] location = new float[2];
+            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
+            loc.putFloatArray("lastLocation", location);
+            fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
-            Location temp = new Location(LocationManager.GPS_PROVIDER);
-            temp.setLatitude(23.5678); //remove in production
-            temp.setLongitude(34.456);
+            //Location temp = new Location(LocationManager.GPS_PROVIDER);
+            //temp.setLatitude(23.5678); //remove in production
+            //temp.setLongitude(34.456);
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
             float[] location = new float[2];
-            location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
-            location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
+            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
+
+            location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
+            location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("location", location);
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
@@ -176,6 +206,12 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+            setTitle("Profile");
+            ProfileFragment fragment= new ProfileFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_send) {
 
@@ -212,6 +248,7 @@ public class HomeActivity extends AppCompatActivity
             // Move the camera to the user's current location on the first location update
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
+
         //replaceMarker(latLng);
     }
 
@@ -298,37 +335,46 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-        /*ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : servings.entrySet()){
+        for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
             //Get user map
-            Map singleUser = (Map) entry.getValue();
+            singleUser = (Map) entry.getValue();
             //Get phone field and append to list
-            latitudes.add((Double) singleUser.get("latitude"));
-            longitudes.add((Double) singleUser.get("longitude"));
+
+                    latitudes.add((Double) singleUser.get("latitude"));
+                    longitudes.add((Double) singleUser.get("longitude"));
+
+
             titles.add((String) singleUser.get("title"));
         }
 
-        for (int i = 0; i < latitudes.size(); i++){
+        for (int i = 0; i < latitudes.size(); i++) {
             LatLng aLocation = new LatLng(
-                    latitudes.get(i),longitudes.get(i)
+                    latitudes.get(i), longitudes.get(i)
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));*/
-        googleMap.addMarker(new MarkerOptions()
+                    .title(titles.get(i)));
+        /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))
-                .title("fake location"));
+                .title("fake location"));*/
+
+        }
     }
+
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }
    
 

@@ -4,23 +4,21 @@ package com.team3009.foodie;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
-
-import com.braintreepayments.api.dropin.DropInRequest;
-import com.braintreepayments.api.dropin.DropInResult;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +42,9 @@ public class PostListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
+
+        final float[] lastLocation = getArguments().getFloatArray("lastLocation");
+
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving");
         // [END create_database_reference]
@@ -76,7 +77,21 @@ public class PostListFragment extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
+                        //startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
+                        OrderFragment profile = new OrderFragment();
+                        Bundle args = new Bundle();
+                        args.putString("key",model.key);
+                        args.putString("userId",model.userId);
+                        args.putString("amount",model.price.toString());
+
+                        args.putFloatArray("lastLocation", lastLocation);
+
+                        profile.setArguments(args);
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
+                                .commit();
                     }
                 });
 
