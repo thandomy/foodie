@@ -83,7 +83,9 @@ public class PostListFragment extends Fragment {
                         args.putString("key",model.key);
                         args.putString("userId",model.userId);
                         args.putString("amount",model.price.toString());
+
                         args.putFloatArray("lastLocation", lastLocation);
+
                         profile.setArguments(args);
 
                         FragmentManager fragmentManager = getFragmentManager();

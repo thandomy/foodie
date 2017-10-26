@@ -73,7 +73,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, DrawRoute.onDrawRoute {
 
     FragmentManager mFragmentManager;
     private static final long REQUEST_INTERVAL = 1000L;
@@ -97,7 +97,6 @@ public class HomeActivity extends AppCompatActivity
 
     public HomeActivity() throws InterruptedException {
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,8 +191,6 @@ public class HomeActivity extends AppCompatActivity
             location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("lastLocation", location);
             fragment.setArguments(loc);
-
-
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
             //Location temp = new Location(LocationManager.GPS_PROVIDER);
@@ -347,7 +344,8 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-
+        ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : servings.entrySet()) {
@@ -375,12 +373,9 @@ public class HomeActivity extends AppCompatActivity
                         20, -25))
                 .title("fake location"));*/
 
-
         }
-
-
     }
-
+        }
 
 
 
@@ -388,7 +383,6 @@ public class HomeActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 
 
 }
