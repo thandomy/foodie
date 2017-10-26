@@ -73,7 +73,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, DrawRoute.onDrawRoute {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FragmentManager mFragmentManager;
     private static final long REQUEST_INTERVAL = 1000L;
@@ -124,13 +124,6 @@ public class HomeActivity extends AppCompatActivity
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
         recieveData();
-
-
-
-
-        //in your waiting thread:
-
-
 
 
     }
@@ -375,7 +368,7 @@ public class HomeActivity extends AppCompatActivity
 
         }
     }
-        }
+
 
 
 

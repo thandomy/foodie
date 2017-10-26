@@ -105,27 +105,27 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
     public void loginAccount(String email, String password){
-      /*mAuth.signInWithEmailAndPassword(email, password)
+      mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        //If sign in fails, display a message to the user. If sign in succeeds
+                        //the auth state listener will be notified and logic to handle the
+                       // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(MainActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();*/
+                                    Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(home);
-                       //}
+                       }
 
-                    //}
-              //  });
+                    }
+              });
     }
 }
