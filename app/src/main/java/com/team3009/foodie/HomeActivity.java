@@ -366,7 +366,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        int i = keys.indexOf(marker.getTag());
+       /* int i = keys.indexOf(marker.getTag());
         OrderFragment profile = new OrderFragment();
         Bundle args = new Bundle();
         args.putString("key",keys.get(i));
@@ -383,7 +383,7 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction.commit();
         //break;
 
-
+*/
         return false;
     }
 }
