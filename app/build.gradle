@@ -70,7 +70,7 @@ dependencies {
     compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.android.gms:play-services-wallet:10.0.1'
     compile 'com.braintreepayments.api:drop-in:3.+'
-    
+
 
 
 

@@ -3,7 +3,6 @@ package com.team3009.foodie;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -157,10 +156,10 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onClick(View v) {
-                Pathing drawPath = new Pathing(googleMap);
                 assert lastLocation != null;
-                //System.out.println("LLLLLLLLLLLLLCAAATIOOOOOO00000000000ON " +" " + lastLocation[0]+" " + lastLocation[1] +" " + model.latitude +" " + model.longitude);
-                drawPath.Draw(lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                MapElements drawPath = new MapElements(googleMap, lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                drawPath.Draw();
+                drawPath.distanceBox();
                 removeFragment();
             }
         });
@@ -205,4 +204,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
     }
+
+
 }
