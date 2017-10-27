@@ -24,6 +24,7 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private ImageView mProfilepic;
     GoogleMap googleMap;
     Serve model;
+    private Button mMessage;
 
 
 
@@ -76,12 +78,24 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         String key = getArguments().getString("key");
         String userId = getArguments().getString("userId");
 
+        //hide send message button from the person who sent the post
+        mMessage = (Button) view.findViewById(R.id.sendMessage);
+        if(userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            mMessage.setVisibility(View.INVISIBLE);
+        }else{
+            mMessage.setVisibility(View.VISIBLE);
+        }
+
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
         amount = getArguments().getString("amount");
         Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        /*if(FirebaseDatabase.getInstance().getReference().child("contactList")== null){
+            Toast.makeText(getActivity(),"Yayo ft August Child iSpillion",Toast.LENGTH_LONG).show();
+        }*/
+
         mCustomer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -165,6 +179,23 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        //functionality for send button
+        ((Button)view.findViewById(R.id.sendMessage)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Chats chats = new Chats();
+                Bundle args = new Bundle();
+                args.putString("userId",getArguments().getString("userId"));
+                Toast.makeText(getActivity(),"Message",Toast.LENGTH_LONG).show();
+                chats.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(((ViewGroup)(getView().getParent())).getId(), chats,chats.getTag()).addToBackStack(null)
+                        .commit();
+            }
+        });
+
         return view;
     }
 
@@ -205,4 +236,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
     }
+
+    //for send button
+
 }

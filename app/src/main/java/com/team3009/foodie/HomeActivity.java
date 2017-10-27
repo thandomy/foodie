@@ -48,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -215,6 +216,15 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if(id == R.id.nav_chats){
+            User chats = new User();
+            //Bundle args = new Bundle();
+            //args.putString("userId",getArguments().getString("userId"));
+            Toast.makeText(this,"call users",Toast.LENGTH_LONG).show();
+            //chats.setArguments(args);
+            FragmentTransaction fragmentManager= getSupportFragmentManager().beginTransaction();
+            fragmentManager.replace(R.id.containerView, chats,chats.getTag()).addToBackStack(null)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -32,6 +32,10 @@
     <item android:title="Foodie">
         <menu>
             <item
+                android:id="@+id/nav_chats"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Chats" />
+            <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Settings" />

@@ -103,14 +103,34 @@ public class Profile3 extends Fragment {
 
                 //Bundle args = new Bundle();
                 //args.putString("userId",userId);
-                Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
-                profileTab ProfileTab = new profileTab();
+                Toast.makeText(getActivity(),"Does this still work",Toast.LENGTH_SHORT).show();
+                Chats ProfileTab = new Chats();
                 Bundle args = new Bundle();
                 args.putString("userId",getArguments().getString("userId"));
                 ProfileTab.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(((ViewGroup)(getView().getParent())).getId(), ProfileTab,ProfileTab.getTag()).addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        ((Button)view.findViewById(R.id.sendMessage)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //String userId = getArguments().getString("userId");
+
+                //Bundle args = new Bundle();
+                //args.putString("userId",userId);
+                ///Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
+                Chats chats = new Chats();
+                Bundle args = new Bundle();
+                args.putString("userId",getArguments().getString("userId"));
+                Toast.makeText(getActivity(),"Message",Toast.LENGTH_LONG).show();
+                chats.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(((ViewGroup)(getView().getParent())).getId(), chats,chats.getTag()).addToBackStack(null)
                         .commit();
             }
         });

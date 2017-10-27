@@ -17,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +38,7 @@ public class Users extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
-        /*usersList = (ListView)findViewById(R.id.usersList);
+        usersList = (ListView)findViewById(R.id.usersList);
         noUsersText = (TextView)findViewById(R.id.noUsersText);
 
         pd = new ProgressDialog(Users.this);
@@ -45,9 +47,10 @@ public class Users extends AppCompatActivity {
 
         //String url = "https://android-chat-app-e711d.firebaseio.com/users.json";
         //set the url contact list
-        String contactListRef = FirebaseAuth.getInstance().getCurrentUser().toString();
+        String contactListRef = FirebaseDatabase.getInstance().getReference().child("contactList").toString();
+        contactListRef = contactListRef +"/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+".json";
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+        StringRequest request = new StringRequest(Request.Method.GET, contactListRef, new Response.Listener<String>(){
             @Override
             public void onResponse(String s) {
                 doOnSuccess(s);
@@ -61,6 +64,15 @@ public class Users extends AppCompatActivity {
 
         RequestQueue rQueue = Volley.newRequestQueue(Users.this);
         rQueue.add(request);
+
+        //change this shandis to a fragment call
+        usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserDetails.chatWith = al.get(position);
+                startActivity(new Intent(Users.this, Chat.class));
+            }
+        });
 
         usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -102,6 +114,6 @@ public class Users extends AppCompatActivity {
             usersList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al));
         }
 
-        pd.dismiss();*/
+        pd.dismiss();
     }
 }
