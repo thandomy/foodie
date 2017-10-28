@@ -44,7 +44,7 @@ public class userList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.user_list, container, false);
-        final String thisUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String thisUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         mRecycler = (RecyclerView) rootView.findViewById(R.id.allUsers);
@@ -74,10 +74,9 @@ public class userList extends Fragment {
             protected void populateViewHolder(final userViewHolder viewHolder,final userProfile model, int position) {
 
                 //Toast.makeText(getActivity(),"Today",Toast.LENGTH_SHORT).show();
-                //viewHolder.userName.setText(model.name);
-                Toast.makeText(getActivity(),"thisUserId "+thisUserId,Toast.LENGTH_LONG).show();
+                viewHolder.userName.setText(model.name);
 
-                FirebaseDatabase.getInstance().getReference().child("Users")
+                /*FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(model.name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,7 +99,7 @@ public class userList extends Fragment {
 
                     }
                 });
-
+                */
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -67,20 +67,13 @@ public class Chats extends Fragment {
         final DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId).child(buyerUId);
 
         HashMap<String, String> map = new HashMap<String, String>();
+        map.put("name", sellerUId);
+        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
 
+        map = new HashMap<String, String>();
+        map.put("name", buyerUId);
+        FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId).push().setValue(map);
 
-        //if(FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId)==null) {
-        //    map.put("name", sellerUId);
-        //    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
-       // }
-        //if(FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId)==null) {
-        //    map = new HashMap<String, String>();
-        //    map.put("name", buyerUId);
-        //    FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId).push().setValue(map);
-        //}
-
-        writeUserList(buyerUId,sellerUId);
-        writeUserList(sellerUId,buyerUId);
         //writeContact(buyer,sellerUId);
         //writeContact(seller,buyerUId);
 
@@ -193,28 +186,5 @@ public class Chats extends Fragment {
             }
         });
         return userName;
-    }
-
-    public void writeUserList(final String buyerUId, final String sellerUId) {
-        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
-                    if (map == null) {
-                        map.put("name", sellerUId);
-                        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
-                    }else if(map.get("name").toString().equals(sellerUId)){
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 }
