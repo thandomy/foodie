@@ -194,39 +194,25 @@ public class Chats extends Fragment {
     }
 
     public void addUser(final String buyerUId, final String sellerUId){
+        //HashMap<String, String> map = new HashMap<String, String>();
+        //map.put("name", sellerUId);
+        //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
+
         FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
             boolean addingUser = false;
             HashMap<String,String> map1 = new HashMap<String, String>();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Toast.makeText(getActivity(),"dataSnapshots exists",Toast.LENGTH_LONG).show();
-                    List<Object> map = (List<Object>) dataSnapshot.getValue();
-                    if(!map.isEmpty()){
-                        Toast.makeText(getActivity(),"map is not empty ",Toast.LENGTH_LONG).show();
-                    }
-                    if(map==null){
-                        map1.put("name", sellerUId);
-                        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
-                        return;
-                    }else{
-                        String u = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        for(Object l:map){
-                            if(!l.toString().equals(u)){
-                                Toast.makeText(getActivity(),"list user names = "+l,Toast.LENGTH_LONG).show();
-                                addingUser=true;
-                                if(addingUser){
-                                    map1 = new HashMap<String, String>();
-                                    map1.put("name", l.toString());
-                                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
-                                }
-                                break;
-                            }
-                        }
 
-                    }
-
+                //Toast.makeText(getActivity(),"dataSnapshots exists",Toast.LENGTH_LONG).show();
+                HashMap<String,String> map = (HashMap<String, String>) dataSnapshot.getValue();
+                if (dataSnapshot.getValue()!= null) {
+                    Toast.makeText(getActivity(), "key" + FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).getKey(), Toast.LENGTH_LONG).show();
                 }
+                //else {
+                    map1.put("name", sellerUId);
+                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map1);
+                //}
             }
 
             @Override
@@ -234,5 +220,7 @@ public class Chats extends Fragment {
 
             }
         });
+
     }
+
 }

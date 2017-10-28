@@ -67,7 +67,7 @@ public class User extends Fragment {
         pd.setMessage("Loading...");
         pd.show();
 
-        String contactListRef = FirebaseDatabase.getInstance().getReference().child("contactList").toString();
+        String contactListRef = FirebaseDatabase.getInstance().getReference().child("userList").toString();
         contactListRef = contactListRef +"/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+".json";
 
         StringRequest request = new StringRequest(Request.Method.GET, contactListRef, new Response.Listener<String>(){
