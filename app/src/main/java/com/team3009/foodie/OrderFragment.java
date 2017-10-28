@@ -197,8 +197,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                         mcomment = singleUser.get("comment").toString();
 
                         Float foo = Float.parseFloat(mcomment);
-
-
                         indicatorRating.setRating(foo);
                         indicatorRating.invalidate();
                         indicatorRating.setIsIndicator(true);
@@ -221,9 +219,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 CommentFragment fragment= new CommentFragment();
-                Bundle args = new Bundle();
-                args.putString("userId",getArguments().getString("userId"));
-                fragment.setArguments(args);
+                //Bundle args = new Bundle();
+                //args.putString("userId",getArguments().getString("userId"));
+               // fragment.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(((ViewGroup)(getView().getParent())).getId(), fragment,fragment.getTag()).addToBackStack(null)

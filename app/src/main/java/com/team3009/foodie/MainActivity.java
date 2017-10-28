@@ -22,110 +22,29 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
-    final String TAG = "state";
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        //FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
-        //FirebaseDatabase.getInstance().goOffline();
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
+
+
         final Button sign_up = (Button) findViewById(R.id.butn_signup);
         sign_up.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
-                String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
-                createAccount(email,password);
+                Intent home = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(home);
             }
         });
         final Button login = (Button) findViewById(R.id.butn_login);
         login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
-                String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
-                loginAccount(email,password);
-
+                Intent home = new Intent(MainActivity.this, SignIn.class);
+                startActivity(home);
             }
         });
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
 
-
-
-
-    public void createAccount(String email, String password){
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-    public void loginAccount(String email, String password){
-      /*mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();*/
-                            Intent home = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(home);
-                       //}
-
-                    //}
-              //  });
-    }
 }

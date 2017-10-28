@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="450dp"
+    android:layout_height="match_parent"
     android:layout_margin="@dimen/nav_header_vertical_spacing"
-    android:background="#bfb7b5"
+    android:background="#ffffff"
     android:orientation="vertical"
     android:weightSum="1">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:text="Enter Meal Title" />
 
     <EditText
@@ -20,6 +22,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:text="Meal Description" />
 
     <EditText
@@ -30,6 +34,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:text="Enter Ingredients" />
 
     <EditText
@@ -40,35 +46,43 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:text="Enter Price" />
 
     <EditText
         android:id="@+id/price"
-        android:layout_width="134dp"
-        android:layout_height="wrap_content" />
+        android:layout_width="93dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <Button
             android:id="@+id/getPic"
+            android:background="@drawable/button_gradient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Image" />
+            android:text="Select Image"
+            android:layout_weight="0.18" />
 
         <Button
             android:id="@+id/takePic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_gradient"
             android:text="Camera" />
 
         <Button
             android:id="@+id/subImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Serve!" />
+            android:background="@drawable/button_gradient"
+            android:text="Serve!"
+            android:layout_weight="0.21" />
     </LinearLayout>
 
     <TextView

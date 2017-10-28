@@ -4,7 +4,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_list_view"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_view_headline_black_24dp"
+
             android:title="List All" />
         <item
             android:id="@+id/nav_serve"
@@ -13,15 +14,15 @@
 
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_payment_black_24dp"
             android:title="Payments" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_local_pizza_black_24dp"
             android:title="Your Orders" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_mood_black_24dp"
             android:title="Free Food" />
         <item
             android:id="@+id/nav_manage"
@@ -33,8 +34,8 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Settings" />
+                android:icon="@drawable/ic_face_black_24dp"
+                android:title="Account Settings" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"

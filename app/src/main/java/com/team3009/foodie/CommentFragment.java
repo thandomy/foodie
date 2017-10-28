@@ -1,24 +1,33 @@
 package com.team3009.foodie;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInResult;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class CommentFragment extends Fragment {
@@ -28,6 +37,12 @@ public class CommentFragment extends Fragment {
     Map singleUser;
     TextView mcommentField, nameCommentField;
     String userId;
+    private static final int DROP_IN_REQUEST_CODE = 567;
+    private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
+    private DatabaseReference mDatabase;
+    private FirebaseRecyclerAdapter<Serve, PostViewHolder_Comments> mAdapter;
+    private RecyclerView mRecycler;
+    private LinearLayoutManager mManager;
 
 
     @Override
@@ -35,35 +50,53 @@ public class CommentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-         View v = inflater.inflate(R.layout.comment_fragment, container, false);
+        final View v = inflater.inflate(R.layout.viewcomments, container, false);
 
-        mcommentField = (TextView) v.findViewById(R.id.commentTxtView);
-        comnt = (EditText) v.findViewById(R.id.add_comment);
-        nameCommentField = (TextView) v.findViewById(R.id.nameComment);
-        submitComment = (Button) v.findViewById(R.id.submit_comment);
 
-        submitComment.setOnClickListener(new View.OnClickListener() {
-            @Override
+
+       // comnt = (EditText) v.findViewById(R.id.add_comment);
+        mDatabase = FirebaseDatabase.getInstance().getReference("Comment");
+        mRecycler = (RecyclerView) v.findViewById(R.id.messages);
+
+
+      /* submitComment.setOnClickListener(new View.OnClickListener() {
+           @Override
             public void onClick(View v) {
-                comment = comnt.getText().toString();
+               comment = comnt.getText().toString();
 
-                Post p = new Post();
-                p.sendComment(comment);
-                final  DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Comment");
-                userId = getUid();
-                final DatabaseReference currentUser = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-                viewComment(userRef);
-                viewName(currentUser);
+              Post p = new Post();
+               p.sendComment(comment);
+               mDatabase= FirebaseDatabase.getInstance().getReference("Comment");
+           }
+        });*/
 
+        mRecycler.setHasFixedSize(true);
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setReverseLayout(true);
+        mManager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(mManager);
+
+
+        Query postsQuery = mDatabase;
+        mAdapter = new FirebaseRecyclerAdapter<Serve, PostViewHolder_Comments>(Serve.class, R.layout.comment_fragment,
+                PostViewHolder_Comments.class, postsQuery) {
+            @Override
+            protected void populateViewHolder(final PostViewHolder_Comments viewHolder, final Serve model, final int position) {
+
+                viewHolder.comment.setText(model.comment);
 
             }
-        });
+        };
+        mRecycler.setAdapter(mAdapter);
+
+
+
 
         return v;
     }
 
 
-    public void viewComment( DatabaseReference userRef) {
+ /*   public void viewComment( DatabaseReference userRef) {
 
         userRef.addValueEventListener(new ValueEventListener() {
                 private String mcomment;
@@ -114,7 +147,7 @@ public class CommentFragment extends Fragment {
             }
         });
 
-    }
+    }*/
 
 }
 

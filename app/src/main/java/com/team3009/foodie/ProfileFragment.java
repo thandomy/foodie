@@ -80,13 +80,13 @@ public class ProfileFragment extends Fragment {
         mNameField=(EditText) v.findViewById(R.id.name);
         mPhoneField=(EditText) v.findViewById(R.id.phone);
         mAddressField=(EditText) v.findViewById(R.id.address);
-        mAgeField=(EditText) v.findViewById(R.id.age);
+
         mEmailField=(EditText) v.findViewById(R.id.email);
         mBioField=(EditText) v.findViewById(R.id.bio);
 
 
         msave=(Button) v.findViewById(R.id.save);
-        mback= (Button) v.findViewById(R.id.back);
+
 
         mProfileImage= (ImageView) v.findViewById(R.id.profileImage);
         mAuth = FirebaseAuth.getInstance();
@@ -109,13 +109,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        mback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //finish();
-                return;
-            }
-        });
+
         return v;
 
     }
@@ -133,10 +127,7 @@ public class ProfileFragment extends Fragment {
                         mPhone= map.get("phone").toString();
                         mPhoneField.setText(mPhone);
                     }
-                    if(map.get("age") != null){
-                        mAge= map.get("age").toString();
-                        mAgeField.setText(mAge);
-                    }
+
                     if(map.get("address") != null){
                         mAddress= map.get("address").toString();
                         mAddressField.setText(mAddress);
@@ -192,7 +183,6 @@ public class ProfileFragment extends Fragment {
         userInfo.put("phone",mPhone);
 
         userInfo.put("address",mAddress);
-        userInfo.put("age",mAge);
         userInfo.put("email",mEmail);
         userInfo.put("bio",mBio);
 

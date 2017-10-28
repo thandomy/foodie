@@ -49,8 +49,8 @@ public class PostListFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving");
         // [END create_database_reference]
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
-        mRecycler.setHasFixedSize(true);
 
+        mRecycler.setHasFixedSize(true);
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
@@ -59,7 +59,7 @@ public class PostListFragment extends Fragment {
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = mDatabase;
         mAdapter = new FirebaseRecyclerAdapter<Serve, PostViewHolder>(Serve.class, R.layout.item_post,
-                PostViewHolder.class, postsQuery) {
+            PostViewHolder.class, postsQuery) {
             @Override
             protected void populateViewHolder(final PostViewHolder viewHolder, final Serve model, final int position) {
                 viewHolder.title.setText(model.title);
