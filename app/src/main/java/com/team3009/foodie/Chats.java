@@ -48,7 +48,7 @@ public class Chats extends Fragment {
         userName = (TextView) rootView.findViewById(R.id.userName);
         layout = (LinearLayout) rootView.findViewById(R.id.layout1);
 
-        sendButton = (ImageView)rootView.findViewById(R.id.sendButton);
+        sendButton = (ImageView) rootView.findViewById(R.id.sendButton);
 
         messageArea = (EditText) rootView.findViewById(R.id.messageArea);
         scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
@@ -59,30 +59,30 @@ public class Chats extends Fragment {
         userName.setVisibility(View.VISIBLE);
 
         //Each user has their own copy of contact lists
-        final String  buyerUId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String buyerUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId);
         Map<String, String> map = (new HashMap<String, String>());
-        map.put("name",sellerUId);
+        map.put("name", sellerUId);
         buyer.setValue(map);
         buyer.child("messages");
         //buyer = buyer.child(sellerUId);
         DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId);
         map = (new HashMap<String, String>());
-        map.put("name",buyerUId);
+        map.put("name", buyerUId);
         seller.setValue(map);
         //seller = seller.child(buyerUId);
         //writeContact(buyer,sellerUId);
         //writeContact(seller,buyerUId);
 
-        final DatabaseReference finalBuyer = buyer.child("messages");
-        final DatabaseReference finalSeller = seller.child("messages");
+        final DatabaseReference finalBuyer = buyer.child(sellerUId);
+        final DatabaseReference finalSeller = seller.child(buyerUId);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String messageText = messageArea.getText().toString();
                 //Toast.makeText(getActivity(), FirebaseDatabase.getInstance().getReference().child("Users").toString(), Toast.LENGTH_SHORT).show();
 
-               if(!messageText.equals("")){
+                if (!messageText.equals("")) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", buyerUId);
@@ -91,31 +91,33 @@ public class Chats extends Fragment {
                     messageArea.setText("");
                 }
 
-                Toast.makeText(getActivity(),finalBuyer.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), finalBuyer.toString(), Toast.LENGTH_SHORT).show();
             }
 
         });
 
+        listen(finalBuyer,buyerUId,sellerUId);
+        //listen(finalSeller,buyerUId,sellerUId);
+        return rootView;
+    }
 
-
-
+    public void listen(final DatabaseReference finalBuyer, final String buyerUId, final String sellerUId){
         finalBuyer.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
             @Override
             public void onChildAdded(com.google.firebase.database.DataSnapshot dataSnapshot, String s) {
                 //Map map = dataSnapshot.getValue(Map.class);
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                if(map.get("message")==null) {
+                if (map.get("message") == null) {
                     return;
-                }else if(map.get("user")==null){
+                } else if (map.get("user") == null) {
                     return;
                 }
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
 
-                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(buyerUId)){
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(buyerUId)) {
                     addMessageBox("You:-\n" + message, 1);
-                }
-                else{
+                } else {
                     addMessageBox(getUserName(sellerUId) + ":-\n" + message, 2);
                 }
             }
@@ -141,9 +143,6 @@ public class Chats extends Fragment {
             }
         });
 
-
-
-        return rootView;
     }
 
     public void addMessageBox(String message, int type){
