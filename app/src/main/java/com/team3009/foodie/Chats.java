@@ -60,11 +60,22 @@ public class Chats extends Fragment {
 
         //Each user has their own copy of contact lists
         final String  buyerUId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId).child(sellerUId);
-        final DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId).child(buyerUId);
+        DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId);
+        Map<String, String> map = (new HashMap<String, String>());
+        map.put("name",sellerUId);
+        buyer.setValue(map);
+        buyer.child("messages");
+        //buyer = buyer.child(sellerUId);
+        DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId);
+        map = (new HashMap<String, String>());
+        map.put("name",buyerUId);
+        seller.setValue(map);
+        //seller = seller.child(buyerUId);
         //writeContact(buyer,sellerUId);
         //writeContact(seller,buyerUId);
 
+        final DatabaseReference finalBuyer = buyer.child("messages");
+        final DatabaseReference finalSeller = seller.child("messages");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,19 +86,29 @@ public class Chats extends Fragment {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", buyerUId);
-                    buyer.push().setValue(map);
-                    seller.push().setValue(map);
+                    finalBuyer.push().setValue(map);
+                    finalSeller.push().setValue(map);
                     messageArea.setText("");
                 }
 
+                Toast.makeText(getActivity(),finalBuyer.toString(),Toast.LENGTH_SHORT).show();
             }
+
         });
 
-        buyer.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
+
+
+
+        finalBuyer.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
             @Override
             public void onChildAdded(com.google.firebase.database.DataSnapshot dataSnapshot, String s) {
                 //Map map = dataSnapshot.getValue(Map.class);
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                if(map.get("message")==null) {
+                    return;
+                }else if(map.get("user")==null){
+                    return;
+                }
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
 
@@ -119,6 +140,7 @@ public class Chats extends Fragment {
 
             }
         });
+
 
 
         return rootView;

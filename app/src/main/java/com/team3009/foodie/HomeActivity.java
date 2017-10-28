@@ -217,7 +217,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }else if(id == R.id.nav_chats){
-            User chats = new User();
+            userList chats = new userList();
             //Bundle args = new Bundle();
             //args.putString("userId",getArguments().getString("userId"));
             Toast.makeText(this,"call users",Toast.LENGTH_LONG).show();
