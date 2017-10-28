@@ -57,20 +57,16 @@ public class userList extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("contactList")
-                .child(thisUserId);
-        final Query postsQuery = mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        final Query postsQuery = mDatabase.child("contactList").equalTo(thisUserId);
 
-        Toast.makeText(getActivity(),"get to 1",Toast.LENGTH_SHORT).show();
-
-        mAdapter = new FirebaseRecyclerAdapter<userProfile , userViewHolder>(null, R.layout.user_item,
+        //Toast.makeText(getActivity(),thisUserId,Toast.LENGTH_SHORT).show();
+        mAdapter = new FirebaseRecyclerAdapter<userProfile , userViewHolder>(userProfile.class, R.layout.user_item,
                 userViewHolder.class, postsQuery) {
 
             @Override
             protected void populateViewHolder(final userViewHolder viewHolder,final userProfile model, int position) {
                 Toast.makeText(getActivity(),model.name,Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(),"can't get here",Toast.LENGTH_SHORT).show();
-
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(model.name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -95,6 +91,7 @@ public class userList extends Fragment {
                     }
                 });
 
+
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -114,7 +111,7 @@ public class userList extends Fragment {
             }
 
         };
-
+        mRecycler.setAdapter(mAdapter);
         return rootView;
     }
 
