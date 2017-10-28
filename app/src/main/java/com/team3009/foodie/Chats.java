@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -66,6 +67,7 @@ public class Chats extends Fragment {
         final DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId).child(sellerUId);
         final DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId).child(buyerUId);
 
+        /*
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("name", sellerUId);
         FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
@@ -73,6 +75,9 @@ public class Chats extends Fragment {
         map = new HashMap<String, String>();
         map.put("name", buyerUId);
         FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId).push().setValue(map);
+        */
+        addUser(buyerUId,sellerUId);
+        addUser(sellerUId,buyerUId);
 
         //writeContact(buyer,sellerUId);
         //writeContact(seller,buyerUId);
@@ -186,5 +191,48 @@ public class Chats extends Fragment {
             }
         });
         return userName;
+    }
+
+    public void addUser(final String buyerUId, final String sellerUId){
+        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
+            boolean addingUser = false;
+            HashMap<String,String> map1 = new HashMap<String, String>();
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Toast.makeText(getActivity(),"dataSnapshots exists",Toast.LENGTH_LONG).show();
+                    List<Object> map = (List<Object>) dataSnapshot.getValue();
+                    if(!map.isEmpty()){
+                        Toast.makeText(getActivity(),"map is not empty ",Toast.LENGTH_LONG).show();
+                    }
+                    if(map==null){
+                        map1.put("name", sellerUId);
+                        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
+                        return;
+                    }else{
+                        String u = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        for(Object l:map){
+                            if(!l.toString().equals(u)){
+                                Toast.makeText(getActivity(),"list user names = "+l,Toast.LENGTH_LONG).show();
+                                addingUser=true;
+                                if(addingUser){
+                                    map1 = new HashMap<String, String>();
+                                    map1.put("name", l.toString());
+                                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
+                                }
+                                break;
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
