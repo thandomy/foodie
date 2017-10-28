@@ -9,9 +9,14 @@ public class Serve {
     public Float price;
     String userId;
     String key;
+    public String comment;
+    public String postedUID;
+
+
     public Serve(){
 
     }
+
 
     public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, Float price) {
         this.downloadUrl = downloadUrl;

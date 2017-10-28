@@ -43,6 +43,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private ImageView mProfilepic;
     GoogleMap googleMap;
     Serve model;
+    Button comment;
 
 
 
@@ -80,6 +81,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         amount = getArguments().getString("amount");
         Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
+
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
         mCustomer.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,7 +94,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                     if(map.get("profileImageUrl")!=null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
-                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .error(R.drawable.bt_ic_android_pay)
                                 .into((ImageView) view.findViewById(R.id.profilePic));
                     }
                 }
@@ -111,7 +113,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 ((TextView) view.findViewById(R.id.title)).setText(model.title);
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.bt_payment_method_list_item_bg)
                         .into((ImageView) view.findViewById(R.id.userPic));
 
                 ((TextView) view.findViewById(R.id.ingredientslist)).setText(model.description);
@@ -163,6 +165,26 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 removeFragment();
             }
         });
+
+
+        comment = (Button) view.findViewById(R.id.comment);
+// i need to make the comment to one specific person
+        //i need to show who made the comment
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentFrag fragment= new CommentFrag();
+                Bundle args = new Bundle();
+                args.putString("userId",getArguments().getString("userId"));
+                fragment.setArguments(args);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(((ViewGroup)(getView().getParent())).getId(), fragment,fragment.getTag()).addToBackStack(null)
+                        .commit();
+            }
+        });
+
 
         return view;
     }

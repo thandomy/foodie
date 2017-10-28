@@ -187,6 +187,9 @@ public class HomeActivity extends AppCompatActivity
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
         } else if (id == R.id.nav_slideshow) {
 
+
+
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -306,7 +309,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
+                if(dataSnapshot.exists()) collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
             }
 
             @Override

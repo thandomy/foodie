@@ -67,6 +67,18 @@ public class Post {
 
         node.setValue(new Serve(title,body,ingre,latitude,longitude, url, key, userId,price));
     }
+
+    public void sendComment (String comment, String postedUId){
+
+        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Comments").push();
+
+        node.setValue(new Comment(comment));
+
+
+
+    }
+
+
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }

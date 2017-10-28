@@ -41,12 +41,15 @@
                 android:text="Name" />
 
             <RatingBar
-                android:id="@+id/ratingBar"
+                android:id="@+id/indicatorRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:isIndicator="true"
                 android:layout_alignTop="@+id/userName"
-                android:layout_marginTop="18dp" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="13dp"
+                android:layout_alignParentBottom="true"
+                style="?android:attr/ratingBarStyleIndicator"/>
 
 
         </RelativeLayout>
@@ -103,17 +106,27 @@
             </LinearLayout>
         </ScrollView>
 
+
+        <Button
+            android:id="@+id/comment"
+            android:layout_width="175dp"
+            android:layout_height="39dp"
+
+            android:text="comments"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+
         <Button
             android:id="@+id/Order"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-
             android:text="Order"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
@@ -126,6 +139,9 @@
             android:layout_alignBottom="@+id/Order"
             android:layout_alignParentEnd="true"
             android:text="See on Map" />
+
+
+
 
     </RelativeLayout>
 
