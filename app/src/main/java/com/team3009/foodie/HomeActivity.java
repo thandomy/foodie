@@ -220,7 +220,7 @@ public class HomeActivity extends AppCompatActivity
             userList chats = new userList();
             //Bundle args = new Bundle();
             //args.putString("userId",getArguments().getString("userId"));
-            Toast.makeText(this,"call users",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"call users",Toast.LENGTH_SHORT).show();
             //chats.setArguments(args);
             FragmentTransaction fragmentManager= getSupportFragmentManager().beginTransaction();
             fragmentManager.replace(R.id.containerView, chats,chats.getTag()).addToBackStack(null)

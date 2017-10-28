@@ -62,6 +62,7 @@ public class PostListFragment extends Fragment {
                 PostViewHolder.class, postsQuery) {
             @Override
             protected void populateViewHolder(final PostViewHolder viewHolder, final Serve model, final int position) {
+                //Toast.makeText(getActivity(),model.title,Toast.LENGTH_SHORT).show();
                 viewHolder.title.setText(model.title);
                 viewHolder.body.setText(model.description);
                 viewHolder.price.setText(model.price.toString());

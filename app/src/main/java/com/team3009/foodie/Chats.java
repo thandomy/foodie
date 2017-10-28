@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -48,7 +51,7 @@ public class Chats extends Fragment {
         userName = (TextView) rootView.findViewById(R.id.userName);
         layout = (LinearLayout) rootView.findViewById(R.id.layout1);
 
-        sendButton = (ImageView) rootView.findViewById(R.id.sendButton);
+        sendButton = (ImageView)rootView.findViewById(R.id.sendButton);
 
         messageArea = (EditText) rootView.findViewById(R.id.messageArea);
         scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
@@ -59,65 +62,58 @@ public class Chats extends Fragment {
         userName.setVisibility(View.VISIBLE);
 
         //Each user has their own copy of contact lists
-        final String buyerUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId);
-        Map<String, String> map = (new HashMap<String, String>());
-        map.put("name", sellerUId);
-        buyer.setValue(map);
-        buyer.child("messages");
-        //buyer = buyer.child(sellerUId);
-        DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId);
-        map = (new HashMap<String, String>());
-        map.put("name", buyerUId);
-        seller.setValue(map);
-        //seller = seller.child(buyerUId);
+        final String  buyerUId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId).child(sellerUId);
+        final DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId).child(buyerUId);
+
+        HashMap<String, String> map = new HashMap<String, String>();
+
+
+        //if(FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId)==null) {
+        //    map.put("name", sellerUId);
+        //    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
+       // }
+        //if(FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId)==null) {
+        //    map = new HashMap<String, String>();
+        //    map.put("name", buyerUId);
+        //    FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId).push().setValue(map);
+        //}
+
+        writeUserList(buyerUId,sellerUId);
+        writeUserList(sellerUId,buyerUId);
         //writeContact(buyer,sellerUId);
         //writeContact(seller,buyerUId);
 
-        final DatabaseReference finalBuyer = buyer.child(sellerUId);
-        final DatabaseReference finalSeller = seller.child(buyerUId);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String messageText = messageArea.getText().toString();
                 //Toast.makeText(getActivity(), FirebaseDatabase.getInstance().getReference().child("Users").toString(), Toast.LENGTH_SHORT).show();
 
-                if (!messageText.equals("")) {
+               if(!messageText.equals("")){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", buyerUId);
-                    finalBuyer.push().setValue(map);
-                    finalSeller.push().setValue(map);
+                    buyer.push().setValue(map);
+                    seller.push().setValue(map);
                     messageArea.setText("");
                 }
 
-                Toast.makeText(getActivity(), finalBuyer.toString(), Toast.LENGTH_SHORT).show();
             }
-
         });
 
-        listen(finalBuyer,buyerUId,sellerUId);
-        //listen(finalSeller,buyerUId,sellerUId);
-        return rootView;
-    }
-
-    public void listen(final DatabaseReference finalBuyer, final String buyerUId, final String sellerUId){
-        finalBuyer.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
+        buyer.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
             @Override
             public void onChildAdded(com.google.firebase.database.DataSnapshot dataSnapshot, String s) {
                 //Map map = dataSnapshot.getValue(Map.class);
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                if (map.get("message") == null) {
-                    return;
-                } else if (map.get("user") == null) {
-                    return;
-                }
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
 
-                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(buyerUId)) {
+                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(buyerUId)){
                     addMessageBox("You:-\n" + message, 1);
-                } else {
+                }
+                else{
                     addMessageBox(getUserName(sellerUId) + ":-\n" + message, 2);
                 }
             }
@@ -143,6 +139,8 @@ public class Chats extends Fragment {
             }
         });
 
+
+        return rootView;
     }
 
     public void addMessageBox(String message, int type){
@@ -195,5 +193,28 @@ public class Chats extends Fragment {
             }
         });
         return userName;
+    }
+
+    public void writeUserList(final String buyerUId, final String sellerUId) {
+        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+                    if (map == null) {
+                        map.put("name", sellerUId);
+                        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
+                    }else if(map.get("name").toString().equals(sellerUId)){
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

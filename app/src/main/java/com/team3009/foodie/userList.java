@@ -44,7 +44,7 @@ public class userList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.user_list, container, false);
-        String thisUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String thisUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         mRecycler = (RecyclerView) rootView.findViewById(R.id.allUsers);
@@ -58,7 +58,13 @@ public class userList extends Fragment {
         // Set up FirebaseRecyclerAdapter with the Query
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        final Query postsQuery = mDatabase.child("contactList").equalTo(thisUserId);
+        //final Query postsQuery = FirebaseDatabase.getInstance().getReference().child("userList").equalTo(thisUserId);
+        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").child(thisUserId);
+        if(postsQuery==null){
+            Toast.makeText(getActivity(),"postsQuery is null",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getActivity(),postsQuery.toString(),Toast.LENGTH_SHORT).show();
+        }
 
         //Toast.makeText(getActivity(),thisUserId,Toast.LENGTH_SHORT).show();
         mAdapter = new FirebaseRecyclerAdapter<userProfile , userViewHolder>(userProfile.class, R.layout.user_item,
@@ -66,7 +72,11 @@ public class userList extends Fragment {
 
             @Override
             protected void populateViewHolder(final userViewHolder viewHolder,final userProfile model, int position) {
-                Toast.makeText(getActivity(),model.name,Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(getActivity(),"Today",Toast.LENGTH_SHORT).show();
+                //viewHolder.userName.setText(model.name);
+                Toast.makeText(getActivity(),"thisUserId "+thisUserId,Toast.LENGTH_LONG).show();
+
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(model.name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -108,6 +118,7 @@ public class userList extends Fragment {
                                 .commit();
                     }
                 });
+
             }
 
         };

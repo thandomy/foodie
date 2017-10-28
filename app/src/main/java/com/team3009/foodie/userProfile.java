@@ -10,14 +10,20 @@ import java.util.Map;
 
 public class userProfile {
     public String name;
-    public Map<String, String> messages;
+    Map<String, Object> messages;
     //public String profileImageUrl;
 
     public userProfile(){
 
     }
 
-    public userProfile(String name, Map<String, String> messages){
+    /*
+    public userProfile(String name){
+        this.name = name;
+        //this.profileImageUrl = profileImageUrl;
+    }*/
+
+    public userProfile(String name, Map<String, Object> messages){
         this.name = name;
         this.messages = messages;
         //this.profileImageUrl = profileImageUrl;
