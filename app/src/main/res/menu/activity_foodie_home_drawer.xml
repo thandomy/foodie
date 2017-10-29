@@ -1,45 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_list_view"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="List All" />
-        <item
-            android:id="@+id/nav_serve"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Serve.." />
+
+    <item
+        android:title="List All"
+        android:icon="@drawable/ic_view_headline_black_24dp"
+        android:id="@+id/nav_list_view"/>
+
+    <item android:title="Serve.."
+        android:icon="@drawable/ic_menu_camera"
+        android:id="@+id/nav_serve"/>
+
+    <item
+        android:title="Payments"
+        android:icon="@drawable/ic_payment_black_24dp"
+        android:id="@+id/nav_camera"/>
+
+    <item
+        android:title="Your Orders"
+        android:icon="@drawable/ic_local_pizza_black_24dp"
+        android:id="@+id/nav_gallery"/>
+
+    <item
+        android:title="Free Food"
+        android:icon="@drawable/ic_mood_black_24dp"
+        android:id="@+id/nav_slideshow"/>
+
+    <item
+        android:title="Help"
+        android:icon="@drawable/ic_menu_manage"
+        android:id="@+id/nav_manage"/>
+
+</group>
+
+
+    <item
+        android:title="Foodie">
+
+
+    <menu>
+
+    <item
+        android:title="Account Settings"
+        android:icon="@drawable/ic_face_black_24dp"
+        android:id="@+id/nav_share"/>
+
+    <item
+        android:title="Legal"
+        android:icon="@drawable/ic_menu_send"
+        android:id="@+id/nav_send"/>
 
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Payments" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Your Orders" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Free Food" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Help" />
-    </group>
+            android:title="Logout"
+            android:icon="@drawable/ic_menu_send"
+            android:id="@+id/nav_logout"/>
 
-    <item android:title="Foodie">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Settings" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Legal" />
-        </menu>
-    </item>
+     </menu>
+
+</item>
 
 </menu>

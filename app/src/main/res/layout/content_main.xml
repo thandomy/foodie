@@ -1,57 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <RelativeLayout app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    tools:context=".MainActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ViewFlipper
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.team3009.foodie.MainActivity"
-    tools:showIn="@layout/activity_main">
-
-
-
-    <EditText
-        android:id="@+id/txt_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="129dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Email"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    android:id ="@+id/flipper">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background2"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background3"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background4"/>
+</ViewFlipper>
+        <EditText
+            android:id="@+id/txt_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_centerHorizontal="true"
+            android:background="@color/button_color"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/txt_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint = "password"
+        android:layout_alignStart="@+id/txt_email"
         android:layout_below="@+id/txt_email"
-        android:layout_alignLeft="@+id/txt_email"
-        android:layout_alignStart="@+id/txt_email" />
+        android:layout_marginTop="42dp"
+        android:background="@color/button_color"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        android:textColor="#000000" />
 
-
-
-    <Button
-        android:id="@+id/butn_signup"
-        android:layout_width="wrap_content"
+    <Button android:background="@drawable/button_gradient"
         android:layout_height="wrap_content"
-        android:text="Signup"
-        android:layout_marginBottom="32dp"
+        android:layout_width="wrap_content"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_marginEnd="23dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="12dp"
+        android:text="Signup"
+        android:id="@+id/butn_signup"/>
 
-    <Button
-        android:id="@+id/butn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button android:background="@drawable/button_gradient" android:layout_height="wrap_content" android:layout_width="wrap_content" style="?android:attr/borderlessButtonStyle" android:text="Login" android:id="@+id/butn_login" android:layout_alignParentStart="true" android:layout_alignTop="@+id/butn_signup" android:layout_marginStart="26dp"/>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_alignEnd="@+id/butn_signup"
-        android:layout_alignRight="@+id/butn_signup"
-        android:layout_below="@+id/txt_pass"
-        android:layout_marginTop="30dp"
-        android:text="Login" />
-
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/finallogo" />
 
 </RelativeLayout>
+
+
+<!--
+
+-->

@@ -1,10 +1,8 @@
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,56 +33,47 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-
-
-
 import android.Manifest;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-
 import java.lang.*;
-
-
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
+import static android.net.wifi.WifiConfiguration.Status.CURRENT;
+import static android.transition.Fade.IN;
+import static android.widget.Toast.LENGTH_LONG;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,GoogleMap.OnMarkerClickListener{
 
     FragmentManager mFragmentManager;
     private static final long REQUEST_INTERVAL = 1000L;
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
-
+    private FirebaseAuth mAuth;
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private Marker currentLocationMarker;
     private ArrayList<Double> latitudes = new ArrayList<>();
     private ArrayList<Double> longitudes = new ArrayList<>();
+    private ArrayList<String> keys = new ArrayList<>();
+    private ArrayList<String> titles = new ArrayList<>();
+    private ArrayList<String> userIds = new ArrayList<>();
+    private ArrayList<Double> amount = new ArrayList<>();
 
     Map singleUser;
 
@@ -94,10 +82,9 @@ public class HomeActivity extends AppCompatActivity
     final CountDownLatch done = new CountDownLatch(1);
 
     View mapView;
-
+    String email;
     public HomeActivity() throws InterruptedException {
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +92,8 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_foodie_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -126,15 +115,11 @@ public class HomeActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
         recieveData();
 
-
-
-
-        //in your waiting thread:
-
-
-
-
     }
+
+
+
+
 
         @Override
     public void onBackPressed() {
@@ -192,8 +177,6 @@ public class HomeActivity extends AppCompatActivity
             location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("lastLocation", location);
             fragment.setArguments(loc);
-
-
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
             //Location temp = new Location(LocationManager.GPS_PROVIDER);
@@ -215,15 +198,14 @@ public class HomeActivity extends AppCompatActivity
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("v").commit();
         } else if (id == R.id.nav_slideshow) {
 
-
         } else if (id == R.id.nav_manage) {
-            RatingFrag fragment= new RatingFrag();
-            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
-            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_share) {
             setTitle("Profile");
+            Bundle loc = new Bundle();
+            loc.putString("Email", email);
+
+
             ProfileFragment fragment= new ProfileFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
@@ -231,6 +213,18 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_logout){
+
+             FirebaseAuth.getInstance().signOut();
+
+// this listener will be called when there is change in firebase user session
+
+                        // user auth state is changed - user is null
+                        // launch login activity
+                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        finish();
+
 
         }
 
@@ -263,7 +257,7 @@ public class HomeActivity extends AppCompatActivity
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (currentLocationMarker == null) {
             // Move the camera to the user's current location on the first location update
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
 
         //replaceMarker(latLng);
@@ -278,6 +272,7 @@ public class HomeActivity extends AppCompatActivity
             // Draw an indication of the user's current location on the map
             this.googleMap.setMyLocationEnabled(true);
         }
+        googleMap.setOnMarkerClickListener(this);
     }
 
     /**
@@ -310,7 +305,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             } else {
                 // Show a message that the position has not been granted
-                Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.permission_not_granted, LENGTH_LONG).show();
             }
         }
 
@@ -352,8 +347,6 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-
-        ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
@@ -361,8 +354,11 @@ public class HomeActivity extends AppCompatActivity
             singleUser = (Map) entry.getValue();
             //Get phone field and append to list
 
-                    latitudes.add((Double) singleUser.get("latitude"));
-                    longitudes.add((Double) singleUser.get("longitude"));
+            latitudes.add((Double) singleUser.get("latitude"));
+            longitudes.add((Double) singleUser.get("longitude"));
+            keys.add((String) singleUser.get("key"));
+            userIds.add((String) singleUser.get("userId"));
+            //amount.add((Double) singleUser.get("price"));
 
 
             titles.add((String) singleUser.get("title"));
@@ -374,18 +370,18 @@ public class HomeActivity extends AppCompatActivity
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));
+                    .title(titles.get(i))
+            ).setTag(keys.get(i));
+
+
         /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))
                 .title("fake location"));*/
 
-
         }
 
-
     }
-
 
 
 
@@ -393,9 +389,27 @@ public class HomeActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        System.out.println("GOT HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        int i = keys.indexOf(marker.getTag());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                                                                      "+keys.get(i));
+        Bundle args = new Bundle();
+        args.putString("key",keys.get(i));
+        args.putString("userId",userIds.get(i));
+        args.putString("amount", "2");             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        //args.putFloatArray("lastLocation", lastLocation);
 
 
-
+        OrderFragment fragment= new OrderFragment();
+        fragment.setArguments(args);
+        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment");
+        fragmentTransaction.commit();
+        //break;
+        return false;
+    }
 }
    
 

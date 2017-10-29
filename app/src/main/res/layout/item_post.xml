@@ -14,15 +14,17 @@
             android:id="@+id/star"
             android:layout_width="190dp"
             android:layout_height="150dp"
+
             android:layout_alignEnd="@+id/post_title"
             android:layout_alignStart="@+id/post_title"
-            android:layout_below="@+id/post_title" />
+            android:layout_below="@+id/post_title" android:contentDescription="TODO"/>
 
         <TextView
             android:id="@+id/post_title"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="300dp"
             android:layout_height="35dp"
+            android:gravity="center_horizontal"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/post_body"
             android:ellipsize="end"

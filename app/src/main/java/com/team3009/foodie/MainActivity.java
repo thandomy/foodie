@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,10 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 
 public class MainActivity extends AppCompatActivity {
     final String TAG = "state";
     private FirebaseAuth mAuth;
+    Animation fade_in,fade_out;
+    ViewFlipper viewFlipper;
     private FirebaseAuth.AuthStateListener mAuthListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        viewFlipper = (ViewFlipper) this.findViewById(R.id.flipper);
+        fade_in = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
+        fade_out = AnimationUtils.loadAnimation(this,android.R.anim.fade_out);
+        viewFlipper.setInAnimation(fade_in);
+        viewFlipper.setInAnimation(fade_out);
+        viewFlipper.setAutoStart(true);
+        viewFlipper.setFlipInterval(5000);
+        viewFlipper.startFlipping();
+
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         //FirebaseDatabase.getInstance().getReference("Serving").keepSynced(true);
         //FirebaseDatabase.getInstance().goOffline();
@@ -42,9 +59,12 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+
                 }
             }
         };
@@ -104,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void loginAccount(String email, String password){
-      /*mAuth.signInWithEmailAndPassword(email, password)
+    public void loginAccount(final String email, String password){
+      mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -120,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();*/
-                            Intent home = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(home);
-                       //}
+                                    Toast.LENGTH_SHORT).show();
 
-                    //}
-              //  });
+
+                            Intent home = new Intent(MainActivity.this, HomeActivity.class);
+
+
+
+                            startActivity(home);
+
+                       }
+
+            }
+              });
     }
 }

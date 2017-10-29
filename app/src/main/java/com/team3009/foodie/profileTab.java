@@ -50,7 +50,7 @@ public class profileTab extends Fragment {
             TextView mNameField=(TextView) view.findViewById(R.id.name);
             TextView mPhoneField=(TextView) view.findViewById(R.id.phone);
             TextView mAddressField=(TextView) view.findViewById(R.id.address);
-            TextView mAgeField=(TextView) view.findViewById(R.id.age);
+
             TextView mEmailField=(TextView) view.findViewById(R.id.email);
             TextView mBioField=(TextView) view.findViewById(R.id.bio);
             private ImageView mProfileImage = (ImageView) view.findViewById(R.id.profileImage);
@@ -58,7 +58,6 @@ public class profileTab extends Fragment {
             //private String userID;
             private String mName;
             private String mPhone;
-            private String mAge;
             private String mAddress;
 
             private String mBio;
@@ -76,10 +75,7 @@ public class profileTab extends Fragment {
                         mPhone= map.get("phone").toString();
                         mPhoneField.setText(mPhone);
                     }
-                    if(map.get("age") != null){
-                        mAge= map.get("age").toString();
-                        mAgeField.setText(mAge);
-                    }
+
                     if(map.get("address") != null){
                         mAddress= map.get("address").toString();
                         mAddressField.setText(mAddress);

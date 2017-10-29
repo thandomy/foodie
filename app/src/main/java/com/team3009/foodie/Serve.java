@@ -7,21 +7,11 @@ public class Serve {
     public String downloadUrl;
     public String ingredients;
     public Float price;
-    public String userId;
-    public String key;
-    public String comment;
-    public String rating;
+    String userId;
+    String key;
     public Serve(){
 
     }
-
-    public Serve(String comment){
-        this.comment = comment;
-
-    }
-
-
-
 
     public Serve(String title, String description, String ingredients, Float latitude, Float longitude,String downloadUrl,String  key,String  userId, Float price) {
         this.downloadUrl = downloadUrl;

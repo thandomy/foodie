@@ -67,7 +67,7 @@ public class PostListFragment extends Fragment {
                 viewHolder.price.setText(model.price.toString());
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.cast_mini_controller_progress_drawable)
                         .into(viewHolder.imageView);
 
 
@@ -83,7 +83,9 @@ public class PostListFragment extends Fragment {
                         args.putString("key",model.key);
                         args.putString("userId",model.userId);
                         args.putString("amount",model.price.toString());
+
                         args.putFloatArray("lastLocation", lastLocation);
+
                         profile.setArguments(args);
 
                         FragmentManager fragmentManager = getFragmentManager();

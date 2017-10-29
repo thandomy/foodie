@@ -3,7 +3,6 @@ package com.team3009.foodie;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +23,6 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,8 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
-
-import static android.R.attr.singleUser;
 
 
 /**
@@ -48,13 +43,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private ImageView mProfilepic;
     GoogleMap googleMap;
     Serve model;
-    private RatingBar indicatorRating;
-    String rate;
-    String rating;
-    Float rate_flo;
-    Map singleUser;
-    private String mcomment;
-    Button comment;
 
 
 
@@ -90,7 +78,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
         amount = getArguments().getString("amount");
-      //  Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
         mCustomer.addValueEventListener(new ValueEventListener() {
@@ -104,7 +92,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                     if(map.get("profileImageUrl")!=null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
-                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .error(R.drawable.bt_ic_vaulted_venmo)
                                 .into((ImageView) view.findViewById(R.id.profilePic));
                     }
                 }
@@ -115,18 +103,15 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
+
+
         ValueEventListener valueEventListener = mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 model = dataSnapshot.getValue(Serve.class);
-                //((TextView) view.findViewById(R.id.foodDesc)).setText(model.description);
-                ((TextView) view.findViewById(R.id.title)).setText(model.title);
-                Picasso.with(getActivity())
-                        .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
-                        .into((ImageView) view.findViewById(R.id.userPic));
+                //((TextView) view.findViewById(R.id.foodDesc
 
-                ((TextView) view.findViewById(R.id.ingredientslist)).setText(model.description);
             }
 
             @Override
@@ -138,7 +123,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         view.findViewById(R.id.profileTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
                 profileTab ProfileTab = new profileTab();
                 Bundle args = new Bundle();
                 args.putString("userId",getArguments().getString("userId"));
@@ -168,76 +153,16 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onClick(View v) {
-                Pathing drawPath = new Pathing(googleMap);
                 assert lastLocation != null;
-                //System.out.println("LLLLLLLLLLLLLCAAATIOOOOOO00000000000ON " +" " + lastLocation[0]+" " + lastLocation[1] +" " + model.latitude +" " + model.longitude);
-                drawPath.Draw(lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                MapElements drawPath = new MapElements(googleMap, lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                drawPath.Draw();
+                drawPath.distanceBox();
                 removeFragment();
             }
         });
 
-        //Raating indicator
-
-
-
-        indicatorRating = (RatingBar) view.findViewById(R.id.indicatorRatingBar);
-          DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Rating");
-                 //rating = getRating(userRef);
-
-
-        userRef.addValueEventListener(new ValueEventListener() {
-
-
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    for (Map.Entry<String, Object> entry : map.entrySet()) {
-                        singleUser = (Map) entry.getValue();
-                        //Get phone field and append to list
-                        mcomment = singleUser.get("comment").toString();
-
-                        Float foo = Float.parseFloat(mcomment);
-
-
-                        indicatorRating.setRating(foo);
-                        indicatorRating.invalidate();
-                        indicatorRating.setIsIndicator(true);
-
-
-                    }
-                }
-            }
-            @Override
-            public void onCancelled (DatabaseError databaseError){
-
-
-            }
-        });
-
-        comment = (Button) view.findViewById(R.id.comment);
-// i need to make the comment to one specific person
-        //i need to show who made the comment
-        comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CommentFragment fragment= new CommentFragment();
-                Bundle args = new Bundle();
-                args.putString("userId",getArguments().getString("userId"));
-                fragment.setArguments(args);
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(((ViewGroup)(getView().getParent())).getId(), fragment,fragment.getTag()).addToBackStack(null)
-                        .commit();
-            }
-        });
-
-
-
-
         return view;
     }
-
-
 
     public void onBraintreeSubmit(View v) {
         DropInRequest dropInRequest = new DropInRequest()
@@ -275,9 +200,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-    }
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
 

@@ -1,5 +1,6 @@
 package com.team3009.foodie;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +51,7 @@ public class UploadFoodFrag extends Fragment {
     private StorageReference mStorageRef;
 
     public String downloadUrl;
-
+    private ProgressBar progressBar;
     private Button selImage,takePic,upload;
     private TextView textView;
     private EditText titl,descrip,ingre,pric;
@@ -107,36 +109,54 @@ public class UploadFoodFrag extends Fragment {
                 startActivityForResult(takePicIntent, G_I);
             }
         });
-
-
         upload.setOnClickListener(new OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
 
+               // progressBar.setVisibility(View.VISIBLE);
+                ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                progressDialog.setTitle("Upload");
+                progressDialog.setMessage("Uploading...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StorageReference riversRef = mStorageRef.child(url.toString());
 
-                StorageReference riversRef = mStorageRef.child(url.toString());
+                        riversRef.putFile(url)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        // Get a URL to the uploaded content
 
-                riversRef.putFile(url)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-                                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                                Post p = new Post();
-                                assert locData != null;
-                                p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                //...
-                            }
-                        });
-            }
-        });
+                                        downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                                        Post p = new Post();
+                                        assert locData != null;
+                                        p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
+                                    }
+
+
+
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle unsuccessful uploads
+                                        //...
+                                    }
+                                });
+
+
+
+                    }
+
+                });
+                progressDialog.dismiss();
+                    }
+                });
+
         return v;
     }
 
@@ -166,7 +186,7 @@ public class UploadFoodFrag extends Fragment {
             image.setImageBitmap(selectedImage);*/
         }
 
-        else if (requestCode == R_I_C && resultCode == RESULT_OK) {
+        if (requestCode == R_I_C && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);

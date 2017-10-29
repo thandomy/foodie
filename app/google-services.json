@@ -8,74 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:963281907599:android:63e347c49b9bd639",
-        "android_client_info": {
-          "package_name": "com.team3009.foodie"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "963281907599-q8ubvc7h63neg3fpdvr556b9jdq1r1kp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.team3009.foodie",
-            "certificate_hash": "b9403f4d538f92a816fc906d349af77f50864f87"
-          }
-        },
-        {
-          "client_id": "963281907599-bo4r10b4vq7huvq8a75mflvlumdrdj1s.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.team3009.foodie",
-            "certificate_hash": "a066d95c7e179f0d092528df9a1844f56a206c81"
-          }
-        },
-        {
-          "client_id": "963281907599-4233bfcdsebp1kdq0fob6k6fkt9ctjuu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.team3009.foodie",
-            "certificate_hash": "a5a52296ff0df80ae64f25ef5a849e59ea16ebdb"
-          }
-        },
-        {
-          "client_id": "963281907599-hjasgm0295of9sbce7hb7bjtamlemcrl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.team3009.foodie",
-            "certificate_hash": "1240ac92cb6333548eb4e163286e82c9bcdbf35f"
-          }
-        },
-        {
-          "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAGz-SFJbVQAX4XbF5NMU4DKfYrIhMCecs"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:963281907599:android:a0a0d8c6bac76a34",
         "android_client_info": {
           "package_name": "com.example.clubless.meals"
@@ -176,6 +108,82 @@
           "android_info": {
             "package_name": "com.example.clubless.uploadfragment",
             "certificate_hash": "a066d95c7e179f0d092528df9a1844f56a206c81"
+          }
+        },
+        {
+          "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGz-SFJbVQAX4XbF5NMU4DKfYrIhMCecs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963281907599-r0keefqfqr59i76a39lu1ahu0ig5glc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963281907599:android:63e347c49b9bd639",
+        "android_client_info": {
+          "package_name": "com.team3009.foodie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963281907599-b1lfu6k3gssl9rv6pbt3nbk6dlm06eb5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "90c0e4804cbf34d5f8a8e7be6a9d15c17495de21"
+          }
+        },
+        {
+          "client_id": "963281907599-q8ubvc7h63neg3fpdvr556b9jdq1r1kp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "b9403f4d538f92a816fc906d349af77f50864f87"
+          }
+        },
+        {
+          "client_id": "963281907599-bo4r10b4vq7huvq8a75mflvlumdrdj1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "a066d95c7e179f0d092528df9a1844f56a206c81"
+          }
+        },
+        {
+          "client_id": "963281907599-4233bfcdsebp1kdq0fob6k6fkt9ctjuu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "a5a52296ff0df80ae64f25ef5a849e59ea16ebdb"
+          }
+        },
+        {
+          "client_id": "963281907599-hjasgm0295of9sbce7hb7bjtamlemcrl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team3009.foodie",
+            "certificate_hash": "1240ac92cb6333548eb4e163286e82c9bcdbf35f"
           }
         },
         {
