@@ -198,6 +198,7 @@ public class Chats extends Fragment {
         //map.put("name", sellerUId);
         //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
 
+        //problem is currently I can't add more than one chat user
         FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
             boolean addingUser = false;
             HashMap<String,String> map1 = new HashMap<String, String>();
