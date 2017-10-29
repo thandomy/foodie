@@ -43,6 +43,10 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Legal" />
+            <item
+                android:title="Logout"
+                android:icon="@drawable/ic_menu_send"
+                android:id="@+id/nav_logout"/>
         </menu>
     </item>
 

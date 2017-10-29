@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/nav_header_vertical_spacing"
     android:background="#ffff"
     android:orientation="vertical"
     android:weightSum="1">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/profileTab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
+        android:background="@color/button_color"
         android:orientation="horizontal">
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profilePic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
 
-            android:layout_width="86dp"
-            android:layout_height="63dp"
-
-            android:layout_alignBottom="@+id/userName"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="34dp"
+            android:background="@mipmap/ic_launcher_round"
+            app:civ_border_color="#ffffff"
+            app:civ_border_width="10dp" />
 
         <RelativeLayout
             android:layout_width="201dp"
+            android:layout_marginBottom="25dp"
             android:layout_height="match_parent">
 
             <TextView
@@ -37,18 +43,11 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="38dp"
-                android:textSize="15dp"
-                android:textColor="#000"
+                android:layout_marginLeft="30dp"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
                 android:text="Name" />
-
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/userName"
-                android:layout_marginTop="18dp" />
-
 
         </RelativeLayout>
 
@@ -64,6 +63,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="15dp"
             android:textColor="#000"
@@ -83,8 +83,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+
             android:textColor="#000"
             android:textSize="15dp"
+            android:textStyle="bold"
             android:text="Ingredients" />
 
         <ScrollView
@@ -104,26 +106,46 @@
             </LinearLayout>
         </ScrollView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="Rate" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/userName" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/btnContain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/sendMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="message" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
 
         <Button
             android:id="@+id/Order"
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
 
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/sendMessage"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_gradient"
             android:text="Order" />
 
         <Button
@@ -132,10 +154,22 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/Order"
             android:layout_alignBottom="@+id/Order"
+            android:background="@drawable/button_gradient"
             android:layout_alignParentEnd="true"
             android:text="See on Map" />
 
+        <Button
+            android:id="@+id/sendMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/Order"
+            android:background="@drawable/button_gradient"
+            android:text="Message" />
+
     </RelativeLayout>
 
-
 </LinearLayout>
+
+</ScrollView>

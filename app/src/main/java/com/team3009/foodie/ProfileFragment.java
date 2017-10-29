@@ -1,6 +1,7 @@
 package com.team3009.foodie;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 //import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,6 +47,7 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
   private EditText mNameField, mPhoneField,mAddressField,mAgeField,mEmailField,mBioField;
+
     private ImageView mProfileImage;
     private Button msave,mback;
 
@@ -80,23 +83,35 @@ public class ProfileFragment extends Fragment {
         mNameField=(EditText) v.findViewById(R.id.name);
         mPhoneField=(EditText) v.findViewById(R.id.phone);
         mAddressField=(EditText) v.findViewById(R.id.address);
-        mAgeField=(EditText) v.findViewById(R.id.age);
+        //mAgeField=(EditText) v.findViewById(R.id.age);
         mEmailField=(EditText) v.findViewById(R.id.email);
         mBioField=(EditText) v.findViewById(R.id.bio);
+        Bundle loc = getArguments();
+
+
+
 
 
         msave=(Button) v.findViewById(R.id.save);
-        mback= (Button) v.findViewById(R.id.back);
+        //mback= (Button) v.findViewById(R.id.back);
 
         mProfileImage= (ImageView) v.findViewById(R.id.profileImage);
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         mCustomerDatabase= FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
        getUserInfo();
-        msave.setOnClickListener(new View.OnClickListener() {
+        msave.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                progressDialog.setTitle("Saving");
+                progressDialog.setMessage("Saving...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
                 saveuserInformation();
+                progressDialog.dismiss();
+
             }
         });
 
@@ -109,13 +124,12 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        mback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //finish();
-                return;
-            }
-        });
+
+
+       String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        mEmailField.setText(email);
+
+
         return v;
 
     }
@@ -133,10 +147,7 @@ public class ProfileFragment extends Fragment {
                         mPhone= map.get("phone").toString();
                         mPhoneField.setText(mPhone);
                     }
-                    if(map.get("age") != null){
-                        mAge= map.get("age").toString();
-                        mAgeField.setText(mAge);
-                    }
+
                     if(map.get("address") != null){
                         mAddress= map.get("address").toString();
                         mAddressField.setText(mAddress);
@@ -184,7 +195,7 @@ public class ProfileFragment extends Fragment {
         mPhone= mPhoneField.getText().toString();
         mAddress= mAddressField.getText().toString();
         mEmail= mEmailField.getText().toString();
-        mAge= mAgeField.getText().toString();
+        //mAge= mAgeField.getText().toString();
         mBio= mBioField.getText().toString();
 
         Map userInfo = new HashMap();

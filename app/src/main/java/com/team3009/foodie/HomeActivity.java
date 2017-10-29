@@ -1,6 +1,6 @@
-
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -35,6 +35,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -47,6 +53,10 @@ import java.lang.*;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import static android.net.wifi.WifiConfiguration.Status.CURRENT;
+import static android.transition.Fade.IN;
+import static android.widget.Toast.LENGTH_LONG;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,GoogleMap.OnMarkerClickListener{
@@ -56,6 +66,7 @@ public class HomeActivity extends AppCompatActivity
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
 
+    private FirebaseAuth mAuth;
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
@@ -74,7 +85,7 @@ public class HomeActivity extends AppCompatActivity
     final CountDownLatch done = new CountDownLatch(1);
 
     View mapView;
-
+    String email;
     public HomeActivity() throws InterruptedException {
     }
 
@@ -192,23 +203,37 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
             setTitle("Profile");
+
+            Bundle loc = new Bundle();
+            loc.putString("Email", email);
+
             ProfileFragment fragment= new ProfileFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
             fragmentTransaction.commit();
 
 
+        }else if (id == R.id.nav_chats) {
+            userList fragment= new userList();
+
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"userList");
+            fragmentTransaction.commit();
+
         } else if (id == R.id.nav_send) {
 
-        }else if(id == R.id.nav_chats){
-            userList chats = new userList();
-            //Bundle args = new Bundle();
-            //args.putString("userId",getArguments().getString("userId"));
-            Toast.makeText(this,"call users",Toast.LENGTH_SHORT).show();
-            //chats.setArguments(args);
-            FragmentTransaction fragmentManager= getSupportFragmentManager().beginTransaction();
-            fragmentManager.replace(R.id.containerView, chats,chats.getTag()).addToBackStack(null)
-                    .commit();
+        } else if (id == R.id.nav_logout){
+
+             FirebaseAuth.getInstance().signOut();
+
+// this listener will be called when there is change in firebase user session
+
+                        // user auth state is changed - user is null
+                        // launch login activity
+                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        finish();
+
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -227,11 +252,16 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -242,7 +272,6 @@ public class HomeActivity extends AppCompatActivity
             // Move the camera to the user's current location on the first location update
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
-
         //replaceMarker(latLng);
     }
 
@@ -257,6 +286,8 @@ public class HomeActivity extends AppCompatActivity
         }
         googleMap.setOnMarkerClickListener(this);
     }
+
+
 
     /**
      * Sets up the Google API client to use the location services API and relevant callbacks.
@@ -288,12 +319,11 @@ public class HomeActivity extends AppCompatActivity
                 }
             } else {
                 // Show a message that the position has not been granted
-                Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.permission_not_granted, LENGTH_LONG).show();
             }
         }
 
     }
-
     /**
      * Adds a marker to the current position.
      */
@@ -367,13 +397,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
     @Override
     public boolean onMarkerClick(Marker marker) {
        int i = keys.indexOf(marker.getTag());
@@ -390,7 +413,7 @@ public class HomeActivity extends AppCompatActivity
         return false;
     }
 }
-   
+
 
 
 

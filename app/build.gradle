@@ -69,6 +69,7 @@ dependencies {
     compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.android.gms:play-services-wallet:11.0.4'
     compile 'com.braintreepayments.api:drop-in:3.+'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 
 
 
