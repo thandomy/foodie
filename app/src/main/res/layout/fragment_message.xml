@@ -12,15 +12,22 @@
         android:layout_marginBottom="169dp"
         android:text="Send" />
 
-    <TextView
-        android:id="@+id/message_box"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="65dp"
-        android:text="message here..." />
+        android:layout_margin="5dp">
+        <TextView
+            android:id="@+id/message_box"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="65dp"
+            android:text="message here..." />
+    </android.support.v7.widget.CardView>
+
+
 
     <Button
         android:id="@+id/logTokenButton"

@@ -1,5 +1,6 @@
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,6 +48,8 @@ import java.lang.*;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import static android.content.ContentValues.TAG;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,GoogleMap.OnMarkerClickListener{
@@ -68,9 +72,7 @@ public class HomeActivity extends AppCompatActivity
 
     Map singleUser;
 
-    private volatile boolean FLAG = false;
-
-    final CountDownLatch done = new CountDownLatch(1);
+    String message;
 
     View mapView;
 
@@ -83,6 +85,18 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_foodie_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        if (getIntent().hasExtra("message")) {
+            Bundle messageBundle = getIntent().getExtras();
+            String message = messageBundle.getString("message");
+            Bundle mess = new Bundle();
+            mess.putString("message",message);
+            OrderFragment fragment = new OrderFragment();
+            fragment.setArguments(mess);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
+        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,6 +179,7 @@ public class HomeActivity extends AppCompatActivity
             location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
             location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("lastLocation", location);
+
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {

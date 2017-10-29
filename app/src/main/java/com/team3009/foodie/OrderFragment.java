@@ -75,6 +75,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         }
         String key = getArguments().getString("key");
         String userId = getArguments().getString("userId");
+        //String message = getArguments().getString("message");
 
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
@@ -178,7 +179,10 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
                 Messenger ProfileTab = new Messenger();
                 Bundle args = new Bundle();
+
                 args.putString("userId", getArguments().getString("userId"));
+                args.putString("message", getArguments().getString("message"));
+
                 ProfileTab.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()

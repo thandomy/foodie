@@ -45,6 +45,7 @@ public class PostListFragment extends Fragment {
 
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
+
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving");
         // [END create_database_reference]
@@ -55,6 +56,9 @@ public class PostListFragment extends Fragment {
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
+
+
+
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = mDatabase;
@@ -74,6 +78,22 @@ public class PostListFragment extends Fragment {
                 final DatabaseReference postRef = getRef(position);
                 final String postKey = postRef.getKey();
 
+
+                if(getArguments()!= null){
+                    OrderFragment profile = new OrderFragment();
+                    Bundle args = new Bundle();
+                    final String message = getArguments().getString("message");
+                    args.putString("message", message);
+                    args.putString("key",model.key);
+                    args.putString("userId",model.userId);
+                    args.putString("amount",model.price.toString());
+                    profile.setArguments(args);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
+                            .commit();
+                }
+
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -83,9 +103,7 @@ public class PostListFragment extends Fragment {
                         args.putString("key",model.key);
                         args.putString("userId",model.userId);
                         args.putString("amount",model.price.toString());
-
                         args.putFloatArray("lastLocation", lastLocation);
-
                         profile.setArguments(args);
 
                         FragmentManager fragmentManager = getFragmentManager();
@@ -122,6 +140,9 @@ public class PostListFragment extends Fragment {
                 .requestThreeDSecureVerification(true)
                 .collectDeviceData(true);
     }
+
+
+
 
 }
 

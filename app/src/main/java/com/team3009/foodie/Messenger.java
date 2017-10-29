@@ -1,15 +1,22 @@
 package com.team3009.foodie;
 
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -28,8 +35,13 @@ public class Messenger extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         final View v = inflater.inflate(R.layout.fragment_message, container, false);
+
+        Bundle loc = this.getArguments();
+        String message = loc.getString("message");
+        TextView t = (TextView) v.findViewById(R.id.message_box);
+
+
         if (getArguments() != null) {
             for (String key : getArguments().keySet()) {
                 Object value =getArguments().get(key);
@@ -53,7 +65,9 @@ public class Messenger extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseMessaging.getInstance().subscribeToTopic("news");
+
+
+                //FirebaseMessaging.getInstance().subscribeToTopic("news");
                 // [END subscribe_topics]
 
                 // Log and toast
