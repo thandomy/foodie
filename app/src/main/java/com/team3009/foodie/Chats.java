@@ -44,8 +44,6 @@ public class Chats extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //TextView textView = new TextView(getActivity());
-        //textView.setText(R.string.hello_blank_fragment);
         View rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         //setting the userName shandis
@@ -80,20 +78,8 @@ public class Chats extends Fragment {
         final DatabaseReference buyer = FirebaseDatabase.getInstance().getReference().child("contactList").child(buyerUId).child(sellerUId);
         final DatabaseReference seller = FirebaseDatabase.getInstance().getReference().child("contactList").child(sellerUId).child(buyerUId);
 
-        /*
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("name", sellerUId);
-        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
-
-        map = new HashMap<String, String>();
-        map.put("name", buyerUId);
-        FirebaseDatabase.getInstance().getReference().child("userList").child(sellerUId).push().setValue(map);
-        */
         addUser(buyerUId,sellerUId);
         addUser(sellerUId,buyerUId);
-
-        //writeContact(buyer,sellerUId);
-        //writeContact(seller,buyerUId);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,10 +160,10 @@ public class Chats extends Fragment {
         textView.setLayoutParams(lp);
 
         if(type == 1) {
-            textView.setBackgroundResource(R.drawable.rounded_corner1);
+            textView.setBackgroundResource(R.drawable.bubble_in);
         }
         else{
-            textView.setBackgroundResource(R.drawable.rounded_corner2);
+            textView.setBackgroundResource(R.drawable.bubble_out);
         }
 
         layout.addView(textView);
