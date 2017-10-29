@@ -59,7 +59,19 @@ public class Chats extends Fragment {
 
         // Make an arguments of bundles that will take in the userId of the seller from Profile3 or profileTab
         final String sellerUId = getArguments().getString("userId"); //For now
-        userName.setText(getUserName(sellerUId));
+        FirebaseDatabase.getInstance().getReference().child("Users").child(sellerUId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+                userName.setText((String)map.get("name"));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         userName.setVisibility(View.VISIBLE);
 
         //Each user has their own copy of contact lists
@@ -223,21 +235,6 @@ public class Chats extends Fragment {
         });
 
     }
-    public String getUserName(final String userId){
-        String userName = null;
-        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
-                String userName = (String) map.get("name");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return userName;
-    }
+    
 }
 
