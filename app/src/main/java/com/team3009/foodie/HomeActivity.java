@@ -366,8 +366,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-       /* int i = keys.indexOf(marker.getTag());
-        OrderFragment profile = new OrderFragment();
+       int i = keys.indexOf(marker.getTag());
         Bundle args = new Bundle();
         args.putString("key",keys.get(i));
         args.putString("userId",userIds.get(i));
@@ -375,15 +374,11 @@ public class HomeActivity extends AppCompatActivity
 
         //args.putFloatArray("lastLocation", lastLocation);
 
-        profile.setArguments(args);
-
         OrderFragment fragment= new OrderFragment();
+        fragment.setArguments(args);
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment");
         fragmentTransaction.commit();
-        //break;
-
-*/
         return false;
     }
 }

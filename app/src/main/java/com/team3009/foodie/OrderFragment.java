@@ -92,7 +92,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                     if(map.get("profileImageUrl")!=null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
-                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .error(R.drawable.bt_ic_vaulted_venmo)
                                 .into((ImageView) view.findViewById(R.id.profilePic));
                     }
                 }
@@ -111,7 +111,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 ((TextView) view.findViewById(R.id.title)).setText(model.title);
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.bt_ic_vaulted_venmo)
                         .into((ImageView) view.findViewById(R.id.userPic));
 
                 ((TextView) view.findViewById(R.id.ingredientslist)).setText(model.description);
