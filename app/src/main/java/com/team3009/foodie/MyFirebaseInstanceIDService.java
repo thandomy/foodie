@@ -18,6 +18,7 @@ package com.team3009.foodie;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -57,7 +58,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
-        DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Tokens").push();
-        refDatabase.setValue(token);
+
     }
 }

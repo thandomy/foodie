@@ -16,9 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -38,14 +40,20 @@ public class Messenger extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_message, container, false);
 
+
+        if(getArguments() != null){
+            //String recievedMessage = loc.getString("message");
+        }
         Bundle loc = this.getArguments();
-        String message = loc.getString("message");
-        TextView t = (TextView) v.findViewById(R.id.message_box);
+        final String key = loc.getString("key");
+        final String userId = loc.getString("userId");
+
+        final TextView mes = (TextView) v.findViewById(R.id.message_box);
 
 
         if (getArguments() != null) {
-            for (String key : getArguments().keySet()) {
-                Object value =getArguments().get(key);
+            for (String i : getArguments().keySet()) {
+                Object value =getArguments().get(i);
                 Log.d(TAG, "Key: " + key + " Value: " + value);
             }
         }
@@ -66,12 +74,20 @@ public class Messenger extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String token = FirebaseInstanceId.getInstance().getToken();
+                DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").push();
+                refDatabase.setValue(token);
 
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   "+ FirebaseAuth.getInstance().getCurrentUser().getUid()) ;
+
+
+                String my_message = mes.getText().toString();
                 FirebaseMessaging fm = FirebaseMessaging.getInstance();
-                fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-                        .setMessageId(Integer.toString(msgId.incrementAndGet()))
-                        .addData("my_message", "Hello World")
-                        .addData("my_action","SAY_HELLO")
+                fm.send(new RemoteMessage.Builder("AAAA4EgTb48:APA91bGYHTTpoBhyIcN4DucK0OEtcY2U7hAoTgsWkpW1ANr2nBPBUeP2xOXR091e1BHD-XOjK2HURq7nnsy7Bj7EfbuWLDVrvth4a2lhFhC5eGhNFaGBoD6xC9STorKOjkQ1C3wz2zaE" + "@gcm.googleapis.com")
+                        .setMessageId(Integer.toString(113))
+                        .addData("message", my_message)
+                        .addData("userId",userId)
+                        .addData("key",key)
                         .build());
             }
         });
@@ -87,7 +103,6 @@ public class Messenger extends Fragment {
                 Toast.makeText(getActivity(), token, Toast.LENGTH_SHORT).show();
             }
         });
-
         return v;
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     final String TAG = "state";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static final String REQUIRED = "Required";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +63,21 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+
                 String email = ((EditText) findViewById(R.id.txt_email)).getText().toString();
                 String password = ((EditText) findViewById(R.id.txt_pass)).getText().toString();
+                // Title is required
+                if (TextUtils.isEmpty(email)) {
+                    ((EditText) findViewById(R.id.txt_email)).setError(REQUIRED);
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    ((EditText) findViewById(R.id.txt_pass)).setError(REQUIRED);
+                    return;
+                }
+
+
                 loginAccount(email,password);
 
             }
@@ -105,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
     public void loginAccount(String email, String password){
-     /* mAuth.signInWithEmailAndPassword(email, password)
+     mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -120,12 +135,12 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(MainActivity.this, "success",
-                                    Toast.LENGTH_SHORT).show();*/
+                                    Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(home);
                        }
 
-    //}
-        //       });
-    //}
+    }
+               });
+    }
 }

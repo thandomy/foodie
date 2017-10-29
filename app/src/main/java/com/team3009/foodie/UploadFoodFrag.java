@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +57,8 @@ public class UploadFoodFrag extends Fragment {
     private ImageView image;
     String title,description,url1,ingredients,price;
     Float nPrice;
+    private static final String REQUIRED = "Required";
+
 
     private static final int G_I = 2, R_I_C = 1;
     private Uri url;
@@ -77,19 +80,11 @@ public class UploadFoodFrag extends Fragment {
         upload = (Button) v.findViewById(R.id.subImage);
 
         textView = (TextView) v.findViewById(R.id.picUrl);
-        titl = (EditText) v.findViewById(R.id.mealtitle);
-        descrip = (EditText) v.findViewById(R.id.mealDescription);
-        ingre = (EditText) v.findViewById(R.id.Ingredients);
-        pric =(EditText) v.findViewById(R.id.price);
+
 
         selImage.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View view) {
-                title = titl.getText().toString();
-                description = descrip.getText().toString();
-                ingredients = ingre.getText().toString();
-                price = pric.getText().toString();
-                nPrice = Float.parseFloat(price);
 
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
@@ -107,12 +102,49 @@ public class UploadFoodFrag extends Fragment {
                 startActivityForResult(takePicIntent, G_I);
             }
         });
+
+
         upload.setOnClickListener(new OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
 
 
+
+                ingre = (EditText) v.findViewById(R.id.Ingredients);
+                pric =(EditText) v.findViewById(R.id.price);
+                titl = (EditText) v.findViewById(R.id.mealtitle);
+                descrip = (EditText) v.findViewById(R.id.mealDescription);
+                title = titl.getText().toString();
+                description = descrip.getText().toString();
+                ingredients = ingre.getText().toString();
+                price = pric.getText().toString();
+
+
+                if (TextUtils.isEmpty(title)) {
+                    titl.setError(REQUIRED);
+                    return;
+                }
+
+                if (TextUtils.isEmpty(description)) {
+                    descrip.setError(REQUIRED);
+                    return;
+                }
+
+                if (TextUtils.isEmpty(ingredients)) {
+                    ingre.setError(REQUIRED);
+                    return;
+                }
+
+
+
+
+                if (TextUtils.isEmpty(price)) {
+                    pric.setError(REQUIRED);
+                    return;
+                }
+
+                nPrice = Float.parseFloat(price);
                 StorageReference riversRef = mStorageRef.child(url.toString());
 
                 riversRef.putFile(url)
@@ -120,7 +152,11 @@ public class UploadFoodFrag extends Fragment {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // Get a URL to the uploaded content
-                                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                                
+                                    downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
+
+
+
                                 Post p = new Post();
                                 assert locData != null;
                                 p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
@@ -150,9 +186,10 @@ public class UploadFoodFrag extends Fragment {
             url = data.getData();
             // Bitmap bitmap = MediaStore.Images.Media.getBitmap(UploadFoodFrag.this.getContentResolver(), url);
             //url =  Uri.parse("/storage/emulated/0/Pictures/imgen/new.png");
-
-
             url1 = url.toString();
+
+
+
             textView.setText(url1);
             textView.setTextColor(Color.BLUE);
 

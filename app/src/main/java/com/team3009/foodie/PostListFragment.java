@@ -16,10 +16,17 @@ import android.widget.Toast;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
@@ -58,26 +65,7 @@ public class PostListFragment extends Fragment {
         mRecycler.setLayoutManager(mManager);
 
 
-        if (getArguments() != null) {
-            for (String key : getArguments().keySet()) {
-                if (key.equals("message")){
-                    OrderFragment profile = new OrderFragment();
-                    Bundle args = new Bundle();
-                    final String message = getArguments().getString("message");
-                    args.putString("message", message);
-                    args.putString("key","12");
-                    args.putString("userId","KLK");
-                    args.putString("amount","hjk");
-                    profile.setArguments(args);
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
-                            .commit();
-                }
-                //Object value =getArguments().get(key);
-                //Log.d(TAG, "Key: " + key + " Value: " + value);
-            }
-        }
+
 
 
 
@@ -98,8 +86,34 @@ public class PostListFragment extends Fragment {
                         .into(viewHolder.imageView);
 
 
+
+
+
+
                 final DatabaseReference postRef = getRef(position);
                 final String postKey = postRef.getKey();
+
+
+                if (getArguments() != null) {
+                    for (String key : getArguments().keySet()) {
+                        if (key.equals("message")){
+                            OrderFragment profile = new OrderFragment();
+                            Bundle args = new Bundle();
+                            final String message = getArguments().getString("message");
+                            args.putString("message", message);
+                            args.putString("key",model.key);
+                            args.putString("userId",model.userId);
+                            args.putString("amount",model.price.toString());
+                            profile.setArguments(args);
+                            FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
+                                    .commit();
+                        }
+                        //Object value =getArguments().get(key);
+                        //Log.d(TAG, "Key: " + key + " Value: " + value);
+                    }
+                }
 
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +127,6 @@ public class PostListFragment extends Fragment {
                         args.putString("amount",model.price.toString());
                         args.putFloatArray("lastLocation", lastLocation);
                         profile.setArguments(args);
-
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.beginTransaction()
                                 .replace(((ViewGroup)(getView().getParent())).getId(), profile,profile.getTag()).addToBackStack("v")
@@ -151,7 +164,31 @@ public class PostListFragment extends Fragment {
 
 
 
+    private void recieveData() {
+        // Get the Firebase node to write the  read data from
+        DatabaseReference refDatabase = FirebaseDatabase.getInstance().getReference("Serving");
+        refDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
-}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) collect((Map<String, Object>) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
+
+    private void collect(Map<String, Object> servings) {
+
+
+        }
+
+    }
+
 
 

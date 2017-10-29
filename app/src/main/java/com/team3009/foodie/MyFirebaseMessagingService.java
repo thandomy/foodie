@@ -33,10 +33,15 @@ import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
-
+    JSONObject data;
     /**
      * Called when message is received.
      *
@@ -63,6 +68,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
+            Map<String, String> params = remoteMessage.getData();
+            JSONObject data = new JSONObject(params);
+
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
                 scheduleJob();
@@ -76,7 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(data);
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -108,26 +116,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param data FCM message body received.
      */
-    private void sendNotification(String messageBody) {
+    private void sendNotification(JSONObject data) {
+
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle args = new Bundle();
-        args.putString("message",messageBody);
+        try {
+            args.putString("message", String.valueOf(data.getJSONObject("message")));
+            args.putString("key", String.valueOf(data.getJSONObject("key")));
+            args.putString("userId", String.valueOf(data.getJSONObject("userId")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         intent.putExtras(args);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
-                .setContentTitle("FCM Message")
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+        NotificationCompat.Builder notificationBuilder = null;
+        try {
+            notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                    .setContentTitle(String.valueOf(data.getJSONObject("userId")))
+                    .setContentText(String.valueOf(data.getJSONObject("message")))
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
