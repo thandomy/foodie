@@ -240,7 +240,7 @@ public class HomeActivity extends AppCompatActivity
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (currentLocationMarker == null) {
             // Move the camera to the user's current location on the first location update
-            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
 
         //replaceMarker(latLng);
@@ -382,12 +382,10 @@ public class HomeActivity extends AppCompatActivity
         args.putString("userId",userIds.get(i));
         args.putString("amount", "2");             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        //args.putFloatArray("lastLocation", lastLocation);
-
         OrderFragment fragment= new OrderFragment();
         fragment.setArguments(args);
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment");
+        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment").addToBackStack("ADD");
         fragmentTransaction.commit();
         return false;
     }
