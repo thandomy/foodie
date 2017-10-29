@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import static android.content.ContentValues.TAG;
 
@@ -66,17 +67,12 @@ public class Messenger extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-                //FirebaseMessaging.getInstance().subscribeToTopic("news");
-                // [END subscribe_topics]
-
-                // Log and toast
-                String msg = "subbed";
-                Log.d(TAG, msg);
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-
-
-
+                FirebaseMessaging fm = FirebaseMessaging.getInstance();
+                fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
+                        .setMessageId(Integer.toString(msgId.incrementAndGet()))
+                        .addData("my_message", "Hello World")
+                        .addData("my_action","SAY_HELLO")
+                        .build());
             }
         });
 
