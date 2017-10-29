@@ -3,7 +3,6 @@ package com.team3009.foodie;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -92,10 +91,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
         mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
-        /*if(FirebaseDatabase.getInstance().getReference().child("contactList")== null){
-            Toast.makeText(getActivity(),"Yayo ft August Child iSpillion",Toast.LENGTH_LONG).show();
-        }*/
-
         mCustomer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,7 +102,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                     if(map.get("profileImageUrl")!=null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
-                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .error(R.drawable.bt_ic_vaulted_venmo)
                                 .into((ImageView) view.findViewById(R.id.profilePic));
                     }
                 }
@@ -126,7 +121,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 ((TextView) view.findViewById(R.id.title)).setText(model.title);
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.bt_ic_vaulted_venmo)
                         .into((ImageView) view.findViewById(R.id.userPic));
 
                 ((TextView) view.findViewById(R.id.ingredientslist)).setText(model.description);
@@ -171,10 +166,10 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onClick(View v) {
-                Pathing drawPath = new Pathing(googleMap);
                 assert lastLocation != null;
-                //System.out.println("LLLLLLLLLLLLLCAAATIOOOOOO00000000000ON " +" " + lastLocation[0]+" " + lastLocation[1] +" " + model.latitude +" " + model.longitude);
-                drawPath.Draw(lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                MapElements drawPath = new MapElements(googleMap, lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                drawPath.Draw();
+                drawPath.distanceBox();
                 removeFragment();
             }
         });
@@ -236,7 +231,4 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
     }
-
-    //for send button
-
 }

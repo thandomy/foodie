@@ -68,7 +68,7 @@ public class PostListFragment extends Fragment {
                 viewHolder.price.setText(model.price.toString());
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.bt_ic_vaulted_venmo)
                         .into(viewHolder.imageView);
 
 

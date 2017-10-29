@@ -1,10 +1,8 @@
+
 package com.team3009.foodie;
 
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,45 +33,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-
-
-
 import android.Manifest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-
 import java.lang.*;
-
-
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,GoogleMap.OnMarkerClickListener{
 
     FragmentManager mFragmentManager;
     private static final long REQUEST_INTERVAL = 1000L;
@@ -87,6 +62,10 @@ public class HomeActivity extends AppCompatActivity
     private Marker currentLocationMarker;
     private ArrayList<Double> latitudes = new ArrayList<>();
     private ArrayList<Double> longitudes = new ArrayList<>();
+    private ArrayList<String> keys = new ArrayList<>();
+    private ArrayList<String> titles = new ArrayList<>();
+    private ArrayList<String> userIds = new ArrayList<>();
+    private ArrayList<Double> amount = new ArrayList<>();
 
     Map singleUser;
 
@@ -125,7 +104,12 @@ public class HomeActivity extends AppCompatActivity
         mapView.setContentDescription("MAP NOT READY");
         mapFragment.getMapAsync(this);
         recieveData();
+
     }
+
+
+
+
 
         @Override
     public void onBackPressed() {
@@ -256,7 +240,7 @@ public class HomeActivity extends AppCompatActivity
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (currentLocationMarker == null) {
             // Move the camera to the user's current location on the first location update
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
 
         //replaceMarker(latLng);
@@ -271,6 +255,7 @@ public class HomeActivity extends AppCompatActivity
             // Draw an indication of the user's current location on the map
             this.googleMap.setMyLocationEnabled(true);
         }
+        googleMap.setOnMarkerClickListener(this);
     }
 
     /**
@@ -345,9 +330,6 @@ public class HomeActivity extends AppCompatActivity
 
     private void collectLocationsAndPutOnMap(Map<String, Object> servings) {
 
-        ArrayList<Double> latitudes = new ArrayList<>();
-        ArrayList<Double> longitudes = new ArrayList<>();
-        ArrayList<String> titles = new ArrayList<>();
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : servings.entrySet()) {
 
@@ -355,8 +337,11 @@ public class HomeActivity extends AppCompatActivity
             singleUser = (Map) entry.getValue();
             //Get phone field and append to list
 
-                    latitudes.add((Double) singleUser.get("latitude"));
-                    longitudes.add((Double) singleUser.get("longitude"));
+            latitudes.add((Double) singleUser.get("latitude"));
+            longitudes.add((Double) singleUser.get("longitude"));
+            keys.add((String) singleUser.get("key"));
+            userIds.add((String) singleUser.get("userId"));
+            //amount.add((Double) singleUser.get("price"));
 
 
             titles.add((String) singleUser.get("title"));
@@ -368,13 +353,17 @@ public class HomeActivity extends AppCompatActivity
             );
             googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
-                    .title(titles.get(i)));
+                    .title(titles.get(i))
+            ).setTag(keys.get(i));
+
+
         /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))
                 .title("fake location"));*/
 
         }
+
     }
 
 
@@ -385,6 +374,25 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+       int i = keys.indexOf(marker.getTag());
+        Bundle args = new Bundle();
+        args.putString("key",keys.get(i));
+        args.putString("userId",userIds.get(i));
+        args.putString("amount", "2");             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        //args.putFloatArray("lastLocation", lastLocation);
+
+        OrderFragment fragment= new OrderFragment();
+        fragment.setArguments(args);
+        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment");
+        fragmentTransaction.commit();
+        return false;
+    }
 }
    
+
+
 
