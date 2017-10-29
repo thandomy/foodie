@@ -87,12 +87,15 @@ public class userList extends Fragment {
                             if(map.get("name")!=null) {
                                 viewHolder.userName.setText(map.get("name").toString());
                             }
-                            /*if(map.get("profileImageUrl")!= null){
+                            if(map.get("profileImageUrl")!= null){
+                                Toast.makeText(getActivity(),map.get("profileImageUrl").toString(),Toast.LENGTH_LONG).show();
+
                                 Picasso.with(getActivity()).load(map.get("profileImageUrl").toString())
                                         .error(R.drawable.common_google_signin_btn_icon_dark)
                                         .into(viewHolder.userPic);
+
                             }
-                            */
+
                         }
                     }
 
