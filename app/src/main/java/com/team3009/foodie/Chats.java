@@ -211,7 +211,9 @@ public class Chats extends Fragment {
                 }
                 //else {
                     map1.put("name", sellerUId);
-                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map1);
+                    //map1.put("key" ,FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().getKey());
+                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
+                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
                 //}
             }
 
