@@ -72,7 +72,7 @@ public class Post {
 
         DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Comments").push();
 
-        node.setValue(new Comment(comment));
+        node.setValue(new Comment(comment,"Jason"));
 
 
 

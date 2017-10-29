@@ -173,14 +173,16 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentFrag fragment= new CommentFrag();
-                Bundle args = new Bundle();
-                args.putString("userId",getArguments().getString("userId"));
-                fragment.setArguments(args);
 
+
+
+                Messenger ProfileTab = new Messenger();
+                Bundle args = new Bundle();
+                args.putString("userId", getArguments().getString("userId"));
+                ProfileTab.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(((ViewGroup)(getView().getParent())).getId(), fragment,fragment.getTag()).addToBackStack(null)
+                        .replace(((ViewGroup) (getView().getParent())).getId(), ProfileTab, ProfileTab.getTag()).addToBackStack(null)
                         .commit();
             }
         });

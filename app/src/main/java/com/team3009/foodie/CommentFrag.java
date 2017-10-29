@@ -1,10 +1,8 @@
 package com.team3009.foodie;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,37 +11,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.braintreepayments.api.dropin.DropInResult;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
+import java.util.ArrayList;
 import java.util.Map;
-
-import static android.app.Activity.RESULT_OK;
-
 
 public class CommentFrag extends Fragment {
     private EditText comnt;
     private Button submitComment;
     String comment, commentStr, nameStr;
-    Map singleUser;
     TextView mNameField, textViewComment;
-    String userId;
-    private static final int DROP_IN_REQUEST_CODE = 567;
-    private static final String SANDBOX_TOKENIZATION_KEY = "sandbox_tmxhyf7d_dcpspy2brwdjr3qn";
-    private DatabaseReference mDatabase, mDatabase2;
 
-    private FirebaseRecyclerAdapter<Serve, HolderComment> mAdapter;
-    private RecyclerView mRecycler;
-    private LinearLayoutManager mManager;
+    private ArrayList<Comment> movieList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private CommentAdapter mAdapter;
+    private DatabaseReference mDatabase, mDatabase2;
 
 
     @Override
@@ -55,6 +41,17 @@ public class CommentFrag extends Fragment {
         final String postedUserId = getArguments().getString("userId");
 
        String commentingUserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.messages);
+
+        mAdapter = new CommentAdapter(movieList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+
 
        //but i cant have this here as these are not in veiwcomments
 
@@ -69,7 +66,8 @@ public class CommentFrag extends Fragment {
                comment = comnt.getText().toString();
               Post p = new Post();
                p.sendComment(comment,postedUserId);
-               mDatabase= FirebaseDatabase.getInstance().getReference("Comment");
+               mDatabase = FirebaseDatabase.getInstance().getReference("Comments");
+               //System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP "+mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()));
            }
         });
 
@@ -77,21 +75,7 @@ public class CommentFrag extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference("Comments");
 
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    if (map.get("comments") != null) {
-                        commentStr = map.get("comments").toString();
-                        textViewComment.setText(commentStr);
-                    }
-                }
-            }
-                @Override
-                public void onCancelled (DatabaseError databaseError){
 
-                }
-            });
 
 
         //get the imagine
@@ -103,7 +87,27 @@ public class CommentFrag extends Fragment {
                     Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                     if (map.get("name") != null) {
                         nameStr = map.get("name").toString();
-                        mNameField.setText(nameStr);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled (DatabaseError databaseError){
+
+            }
+        });
+
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if (map.get("comment") != null) {
+                        commentStr = map.get("comment").toString();
+                        System.out.println("ASSSJK:BBOJDB HHHHHHVOEUEHFJLE FJNEN ND NJD ND: "+nameStr +" " + commentStr);
+                        movieList.add( new Comment(nameStr,commentStr));
+                        mAdapter.notifyDataSetChanged();
+
+
                     }
                 }
             }
@@ -115,36 +119,10 @@ public class CommentFrag extends Fragment {
 
 
 
-
-
-        mRecycler = (RecyclerView) v.findViewById(R.id.messages);
-        mRecycler.setHasFixedSize(true);
-        mManager = new LinearLayoutManager(getActivity());
-        mManager.setReverseLayout(true);
-        mManager.setStackFromEnd(true);
-        mRecycler.setLayoutManager(mManager);
-
-        Query postsQuery = mDatabase;
-
-        mAdapter = new RecyclerAdapter<Serve, HolderComment>(Serve.class, R.layout.fragment_comment,
-                HolderComment.class, postsQuery) {
-            @Override
-            protected void populateViewHolder(final HolderComment viewHolder, final Serve model, final int position) {
-
-                viewHolder.comment.setText(model.comment);
-
-
-
-
-            }
-        };
-        mRecycler.setAdapter(mAdapter);
-
-
-
-
         return v;
     }
+
+   // public void prepareMovieData(Comment c){}
 
 
 }
