@@ -105,14 +105,26 @@ public class Chats extends Fragment {
             public void onChildAdded(com.google.firebase.database.DataSnapshot dataSnapshot, String s) {
                 //Map map = dataSnapshot.getValue(Map.class);
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                String message = map.get("message").toString();
+                final String message = map.get("message").toString();
                 String userName = map.get("user").toString();
 
-                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(buyerUId)){
+                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(userName)){
                     addMessageBox("You:-\n" + message, 1);
                 }
                 else{
-                    addMessageBox(getUserName(sellerUId) + ":-\n" + message, 2);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                            HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+                            //String userName = (String) map.get("name");
+                            addMessageBox((String) map.get("name") + ":-\n" + message, 2);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -176,23 +188,6 @@ public class Chats extends Fragment {
         });
     }
 
-    public String getUserName(final String userId){
-        String userName = null;
-        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
-                String userName = (String) map.get("name");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return userName;
-    }
-
     public void addUser(final String buyerUId, final String sellerUId){
         //HashMap<String, String> map = new HashMap<String, String>();
         //map.put("name", sellerUId);
@@ -209,12 +204,15 @@ public class Chats extends Fragment {
                 HashMap<String,String> map = (HashMap<String, String>) dataSnapshot.getValue();
                 if (dataSnapshot.getValue()!= null) {
                     Toast.makeText(getActivity(), "key" + FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).getKey(), Toast.LENGTH_LONG).show();
+                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).orderByChild("name").equalTo(sellerUId);
                 }
                 //else {
                     map1.put("name", sellerUId);
                     //map1.put("key" ,FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().getKey());
-                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
-                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
+                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
+                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
+                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map1);
+                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
                 //}
             }
 
@@ -225,5 +223,21 @@ public class Chats extends Fragment {
         });
 
     }
+    public String getUserName(final String userId){
+        String userName = null;
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+                String userName = (String) map.get("name");
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return userName;
+    }
 }
+

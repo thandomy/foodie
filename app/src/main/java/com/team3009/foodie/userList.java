@@ -59,7 +59,8 @@ public class userList extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //final Query postsQuery = FirebaseDatabase.getInstance().getReference().child("userList");
-        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").orderByKey().equalTo(thisUserId);
+        //final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").orderByKey().equalTo(thisUserId);
+        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").child(thisUserId).orderByKey();
         if(postsQuery==null){
             Toast.makeText(getActivity(),"postsQuery is null",Toast.LENGTH_SHORT).show();
         }else{
@@ -76,7 +77,7 @@ public class userList extends Fragment {
                 Toast.makeText(getActivity(),model.name,Toast.LENGTH_SHORT).show();
 
 
-                /*FirebaseDatabase.getInstance().getReference().child("Users")
+                FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(model.name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,11 +87,12 @@ public class userList extends Fragment {
                             if(map.get("name")!=null) {
                                 viewHolder.userName.setText(map.get("name").toString());
                             }
-                            if(map.get("profileImageUrl")!= null){
+                            /*if(map.get("profileImageUrl")!= null){
                                 Picasso.with(getActivity()).load(map.get("profileImageUrl").toString())
                                         .error(R.drawable.common_google_signin_btn_icon_dark)
                                         .into(viewHolder.userPic);
                             }
+                            */
                         }
                     }
 
@@ -99,7 +101,7 @@ public class userList extends Fragment {
 
                     }
                 });
-                */
+
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
