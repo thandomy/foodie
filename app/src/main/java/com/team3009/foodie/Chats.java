@@ -58,6 +58,7 @@ public class Chats extends Fragment {
         scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
 
         // Make an arguments of bundles that will take in the userId of the seller from Profile3 or profileTab
+        //The userName for textView
         final String sellerUId = getArguments().getString("userId"); //For now
         FirebaseDatabase.getInstance().getReference().child("Users").child(sellerUId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -184,21 +185,6 @@ public class Chats extends Fragment {
     }
 
     //need to write to both of ther contactList
-
-    public void writeContact(final DatabaseReference ref, final String otherContact){
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                ref.push();
-                ref.setValue(otherContact);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     public void addUser(final String buyerUId, final String sellerUId){
 

@@ -105,8 +105,23 @@ public class userList extends Fragment {
                     }
                 });
 
+                viewHolder.userPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        profileTab chats = new profileTab();
+                        Bundle args = new Bundle();
+                        args.putString("userId", model.name);
 
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        chats.setArguments(args);
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(((ViewGroup)(getView().getParent())).getId(), chats,chats.getTag()).addToBackStack("v")
+                                .commit();
+                    }
+                });
+
+                viewHolder.userName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
