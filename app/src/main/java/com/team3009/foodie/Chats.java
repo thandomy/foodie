@@ -201,29 +201,24 @@ public class Chats extends Fragment {
     }
 
     public void addUser(final String buyerUId, final String sellerUId){
-        //HashMap<String, String> map = new HashMap<String, String>();
-        //map.put("name", sellerUId);
-        //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map);
 
-        //problem is currently I can't add more than one chat user
-        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).orderByChild("name").equalTo(sellerUId).addListenerForSingleValueEvent(new ValueEventListener() {
             boolean addingUser = false;
             HashMap<String,String> map1 = new HashMap<String, String>();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 //Toast.makeText(getActivity(),"dataSnapshots exists",Toast.LENGTH_LONG).show();
-                HashMap<String,String> map = (HashMap<String, String>) dataSnapshot.getValue();
-                if (dataSnapshot.getValue()!= null) {
-                    Toast.makeText(getActivity(), "key" + FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).getKey(), Toast.LENGTH_LONG).show();
-                    FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).orderByChild("name").equalTo(sellerUId);
+                HashMap<String,Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                DatabaseReference node;
+                if (dataSnapshot.exists()) {
+                    return;
                 }
-                //else {
-                    map1.put("name", sellerUId);
-                    //map1.put("key" ,FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().getKey());
-                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
-                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
-                FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push().setValue(map1);
+
+                node = FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
+                //map1.put("key",node.getKey());
+                map1.put("name", sellerUId);
+                node.setValue(map1);
                 //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
                 //}
             }
@@ -235,6 +230,6 @@ public class Chats extends Fragment {
         });
 
     }
-    
+
 }
 
