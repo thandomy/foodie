@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -160,7 +159,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
 
         } else if (id == R.id.nav_gallery) {
-            historyFragment chats = new historyFragment();
+            HistoryFragment chats = new HistoryFragment();
             //Bundle args = new Bundle();
             //args.putString("userId",getArguments().getString("userId"));
             Toast.makeText(this,"call users",Toast.LENGTH_SHORT).show();
@@ -216,9 +215,9 @@ public class HomeActivity extends AppCompatActivity
 
         }else if (id == R.id.nav_chats) {
             setTitle("Chats");
-            userList fragment= new userList();
+            UserList fragment= new UserList();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.containerView,fragment,"userList");
+            fragmentTransaction.replace(R.id.containerView,fragment,"UserList");
             fragmentTransaction.commit();
 
         } else if (id == R.id.nav_logout){

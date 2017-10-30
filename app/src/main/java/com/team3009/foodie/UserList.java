@@ -27,10 +27,10 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class userList extends Fragment {
+public class UserList extends Fragment {
 
 
-    public userList() {
+    public UserList() {
         // Required empty public constructor
     }
 
@@ -59,7 +59,7 @@ public class userList extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").child(thisUserId).orderByKey();
+        final Query postsQuery = FirebaseDatabase.getInstance().getReference("UserList").child(thisUserId).orderByKey();
         mAdapter = new FirebaseRecyclerAdapter<userProfile , userViewHolder>(userProfile.class, R.layout.user_item,
                 userViewHolder.class, postsQuery) {
 

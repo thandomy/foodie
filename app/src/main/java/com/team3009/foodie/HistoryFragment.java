@@ -25,10 +25,10 @@ import java.util.Iterator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class historyFragment extends Fragment {
+public class HistoryFragment extends Fragment {
 
 
-    public historyFragment() {
+    public HistoryFragment() {
         // Required empty public constructor
     }
 

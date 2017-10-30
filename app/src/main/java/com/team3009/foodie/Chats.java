@@ -174,7 +174,7 @@ public class Chats extends Fragment {
 
     public void addUser(final String buyerUId, final String sellerUId){
 
-        FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).orderByChild("name").equalTo(sellerUId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("UserList").child(buyerUId).orderByChild("name").equalTo(sellerUId).addListenerForSingleValueEvent(new ValueEventListener() {
             boolean addingUser = false;
             HashMap<String,String> map1 = new HashMap<String, String>();
             @Override
@@ -187,11 +187,11 @@ public class Chats extends Fragment {
                     return;
                 }
 
-                node = FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).push();
+                node = FirebaseDatabase.getInstance().getReference().child("UserList").child(buyerUId).push();
                 //map1.put("key",node.getKey());
                 map1.put("name", sellerUId);
                 node.setValue(map1);
-                //FirebaseDatabase.getInstance().getReference().child("userList").child(buyerUId).setValue(map1);
+                //FirebaseDatabase.getInstance().getReference().child("UserList").child(buyerUId).setValue(map1);
                 //}
             }
 

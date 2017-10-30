@@ -113,71 +113,55 @@ public class UploadFoodFrag extends Fragment {
             @Override
             public void onClick(View view) {
 
-                final ProgressDialog progressDialog= new ProgressDialog(getActivity(),R.style.AppCompatAlertDialogStyle);
-                progressDialog.setTitle("Serving");
-                progressDialog.setMessage("Serving...");
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                if(url == null){
+                    url = Uri.parse("url");
+                }
+                StorageReference riversRef = mStorageRef.child(url.toString());
 
-                progressDialog.show();
-                Runnable runnable=new Runnable() {
-                    @Override
-                    public void run() {
+                riversRef.putFile(url)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Get a URL to the uploaded content
 
-                        if(url == null){
-                            url = Uri.parse("url");
-                        }
-                        StorageReference riversRef = mStorageRef.child(url.toString());
-
-                        riversRef.putFile(url)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        // Get a URL to the uploaded content
-
-                                        downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                                        Post p = new Post();
-                                        assert locData != null;
-                                        p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
-                                    }
+                                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                                Post p = new Post();
+                                assert locData != null;
+                                p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
+                            }
 
 
 
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        // Handle unsuccessful uploads
-                                        //...
-                                    }
-                                });
-
-                    }
-                };
-                Handler pdCanceller = new Handler();
-                pdCanceller.postDelayed(runnable, 3000);
-
-                    }
-                });
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle unsuccessful uploads
+                                //...
+                            }
+                        });
+            }
+        });
 
         return v;
     }
 
-/*
-  final ProgressDialog progressDialog= new ProgressDialog(getActivity());
-                progressDialog.setTitle("Saving");
-                progressDialog.setMessage("Saving...");
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
-                Runnable runnable=new Runnable() {
-                    @Override
-                    public void run() {
-                        saveuserInformation();
-                        progressDialog.cancel();
-                    }
-                };
+    /*
+      final ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                    progressDialog.setTitle("Saving");
+                    progressDialog.setMessage("Saving...");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.show();
+                    Runnable runnable=new Runnable() {
+                        @Override
+                        public void run() {
+                            saveuserInformation();
+                            progressDialog.cancel();
+                        }
+                    };
 
 
-*/
+    */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
