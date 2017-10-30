@@ -1,6 +1,9 @@
 package com.team3009.foodie;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,22 +32,26 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import android.Manifest;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 import java.util.Map;
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -55,6 +62,7 @@ public class HomeActivity extends AppCompatActivity
     private static final float ZOOM_LEVEL = 18f;
     private static final int LOCATION_REQUEST_CODE = 123;
 
+    private FirebaseAuth mAuth;
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
@@ -73,7 +81,7 @@ public class HomeActivity extends AppCompatActivity
     final CountDownLatch done = new CountDownLatch(1);
 
     View mapView;
-
+    String email;
     public HomeActivity() throws InterruptedException {
     }
 
@@ -153,6 +161,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_list_view) {
+            setTitle("Food");
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
 
@@ -168,18 +177,13 @@ public class HomeActivity extends AppCompatActivity
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
-            //Location temp = new Location(LocationManager.GPS_PROVIDER);
-            //temp.setLatitude(23.5678); //remove in production
-            //temp.setLongitude(34.456);
+           setTitle("Serve");
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
             float[] location = new float[2];
-            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
-            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
-
             location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
             location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("location", location);
@@ -191,13 +195,34 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
             setTitle("Profile");
+
+            Bundle loc = new Bundle();
+            loc.putString("Email", email);
+
             ProfileFragment fragment= new ProfileFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.containerView,fragment,"ProfileFragment");
             fragmentTransaction.commit();
 
 
-        } else if (id == R.id.nav_send) {
+        }else if (id == R.id.nav_chats) {
+            setTitle("Chats");
+            userList fragment= new userList();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.containerView,fragment,"userList");
+            fragmentTransaction.commit();
+
+        } else if (id == R.id.nav_logout){
+
+             FirebaseAuth.getInstance().signOut();
+
+// this listener will be called when there is change in firebase user session
+
+                        // user auth state is changed - user is null
+                        // launch login activity
+                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        finish();
+
 
         }
 
@@ -217,11 +242,16 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -230,9 +260,8 @@ public class HomeActivity extends AppCompatActivity
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (currentLocationMarker == null) {
             // Move the camera to the user's current location on the first location update
-            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
         }
-
         //replaceMarker(latLng);
     }
 
@@ -247,6 +276,8 @@ public class HomeActivity extends AppCompatActivity
         }
         googleMap.setOnMarkerClickListener(this);
     }
+
+
 
     /**
      * Sets up the Google API client to use the location services API and relevant callbacks.
@@ -278,12 +309,11 @@ public class HomeActivity extends AppCompatActivity
                 }
             } else {
                 // Show a message that the position has not been granted
-                Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.permission_not_granted, LENGTH_LONG).show();
             }
         }
 
     }
-
     /**
      * Adds a marker to the current position.
      */
@@ -341,12 +371,21 @@ public class HomeActivity extends AppCompatActivity
             LatLng aLocation = new LatLng(
                     latitudes.get(i), longitudes.get(i)
             );
-            googleMap.addMarker(new MarkerOptions()
+
+
+            BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.wii);
+            Bitmap b=bitmapdraw.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 150, 150, false);
+
+            Marker marker =  googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
                     .title(titles.get(i))
-            ).setTag(keys.get(i));
+                    .icon(BitmapDescriptorFactory.
+                            fromBitmap(smallMarker))
 
-
+            );
+            marker.setTag(keys.get(i));
+            marker.showInfoWindow();
         /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))
@@ -357,35 +396,23 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
     @Override
     public boolean onMarkerClick(Marker marker) {
-       /* int i = keys.indexOf(marker.getTag());
-        OrderFragment profile = new OrderFragment();
+       int i = keys.indexOf(marker.getTag());
         Bundle args = new Bundle();
         args.putString("key",keys.get(i));
         args.putString("userId",userIds.get(i));
         args.putString("amount", "2");             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        //args.putFloatArray("lastLocation", lastLocation);
-
-        profile.setArguments(args);
-
         OrderFragment fragment= new OrderFragment();
+        fragment.setArguments(args);
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment");
+        fragmentTransaction.replace(R.id.containerView,fragment,"OrderFragment").addToBackStack("ADD");
         fragmentTransaction.commit();
-        //break;
-
-*/
         return false;
     }
 }
-   
+
+
+
 

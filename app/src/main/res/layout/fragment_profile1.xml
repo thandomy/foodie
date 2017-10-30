@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_shadow_start_color"
-    tools:context="com.team3009.foodie.Profile">
+    tools:context="com.team3009.foodie.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:background="@color/cardview_shadow_start_color">
 
         <TextView

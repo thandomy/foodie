@@ -4,41 +4,45 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_list_view"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_filter_list_black_24dp"
             android:title="List All" />
         <item
             android:id="@+id/nav_serve"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_local_pizza_black_24dp"
             android:title="Serve.." />
 
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_payment_black_24dp"
             android:title="Payments" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_face_black_24dp"
             android:title="Your Orders" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_local_pizza_black_24dp"
             android:title="Free Food" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_help_black_24dp"
             android:title="Help" />
     </group>
 
     <item android:title="Foodie">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Settings" />
+                android:id="@+id/nav_chats"
+                android:icon="@drawable/ic_group_add_black_24dp"
+                android:title="Chats" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Legal" />
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="Profile Settings" />
+            <item
+                android:title="Logout"
+                android:icon="@drawable/ic_cancel_black_24dp"
+                android:id="@+id/nav_logout"/>
         </menu>
     </item>
 

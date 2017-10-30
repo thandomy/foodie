@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -38,11 +41,25 @@ import java.util.Map;
  */
 public class OrderFragment extends Fragment implements OnMapReadyCallback {
     String key,amount;
-    private Button mOrder;
+    private Button mOrder, Rate;
     private TextView mIngredients, mUserName,mTitle;
     private ImageView mProfilepic;
     GoogleMap googleMap;
     Serve model;
+    private Button mMessage;
+    private String   mRating;
+    private Float number;
+    private Float num = 0f;
+    Map singleUser;
+    ArrayList <String>  numbers= new ArrayList<>();
+
+
+
+
+
+
+
+    RatingBar ratingBar;
 
 
 
@@ -75,6 +92,14 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         String key = getArguments().getString("key");
         String userId = getArguments().getString("userId");
 
+        //hide send message button from the person who sent the post
+        mMessage = (Button) view.findViewById(R.id.sendMessage);
+        if(userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            mMessage.setVisibility(View.INVISIBLE);
+        }else{
+            mMessage.setVisibility(View.VISIBLE);
+        }
+
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
         amount = getArguments().getString("amount");
@@ -92,7 +117,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                     if(map.get("profileImageUrl")!=null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
-                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .error(R.drawable.bt_ic_vaulted_venmo)
                                 .into((ImageView) view.findViewById(R.id.profilePic));
                     }
                 }
@@ -103,6 +128,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
+
+
         ValueEventListener valueEventListener = mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -111,7 +139,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 ((TextView) view.findViewById(R.id.title)).setText(model.title);
                 Picasso.with(getActivity())
                         .load(model.downloadUrl)
-                        .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                        .error(R.drawable.bt_ic_vaulted_venmo)
                         .into((ImageView) view.findViewById(R.id.userPic));
 
                 ((TextView) view.findViewById(R.id.ingredientslist)).setText(model.description);
@@ -164,9 +192,100 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        //functionality for send button
+        ((Button)view.findViewById(R.id.sendMessage)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Chats chats = new Chats();
+                Bundle args = new Bundle();
+                args.putString("userId",getArguments().getString("userId"));
+                Toast.makeText(getActivity(),"Message",Toast.LENGTH_LONG).show();
+                chats.setArguments(args);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(((ViewGroup)(getView().getParent())).getId(), chats,chats.getTag()).addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
+        Rate = (Button) view.findViewById(R.id.ratefrag);
+
+
+        if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+            Rate.setVisibility(View.INVISIBLE);
+        } else {
+            Rate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RatingFrag ratingfrag = new RatingFrag();
+                    Bundle args = new Bundle();
+                    args.putString("userId", getArguments().getString("userId"));
+                    ratingfrag.setArguments(args);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(((ViewGroup) (getView().getParent())).getId(), ratingfrag, ratingfrag.getTag()).addToBackStack("v")
+                            .commit();
+                }
+            });
+        }
+
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Rating").child(userId);
+
+
+
+        userRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                    collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue(), view);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         return view;
     }
 
+
+    private void collectLocationsAndPutOnMap(Map<String, Object> servings, View v) {
+
+
+        ratingBar = (RatingBar) v.findViewById(R.id.indicatorRatingBar);
+        //iterate through each user, ignoring their UID
+        for (Map.Entry<String, Object> entry : servings.entrySet()) {
+
+            //Get user map
+            singleUser = (Map) entry.getValue();
+            //Get phone field and append to list
+
+            numbers.add((String) singleUser.get("rating"));
+        }
+        for( int i= 0; i < numbers.size(); i++ ) {
+
+            number = Float.parseFloat(numbers.get(i));
+            num = num + number;
+        }
+        num= num/numbers.size();
+
+
+        ratingBar.setRating(num);
+        ratingBar.invalidate();
+        ratingBar.setIsIndicator(true);
+        num = 0f;
+
+
+
+
+    }
     public void onBraintreeSubmit(View v) {
         DropInRequest dropInRequest = new DropInRequest()
                 .clientToken(token/*clientToken*/).amount(amount);
@@ -204,6 +323,4 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
     }
-
-
 }

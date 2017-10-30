@@ -3,9 +3,11 @@ package com.team3009.foodie;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,19 +40,31 @@ public class profileTab extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_tab, container, false);
         String userId = getArguments().getString("userId");
-        Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         getUserInfo(view,userRef);
+        Button backButton= (Button) view.findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         return view;
     }
-
+    public void onBackPressed()
+    {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        fm.popBackStack();
+    }
     private void getUserInfo(final View view, DatabaseReference userRef){
         userRef.addValueEventListener(new ValueEventListener() {
+
 
             TextView mNameField=(TextView) view.findViewById(R.id.name);
             TextView mPhoneField=(TextView) view.findViewById(R.id.phone);
             TextView mAddressField=(TextView) view.findViewById(R.id.address);
-            TextView mAgeField=(TextView) view.findViewById(R.id.age);
+
             TextView mEmailField=(TextView) view.findViewById(R.id.email);
             TextView mBioField=(TextView) view.findViewById(R.id.bio);
             private ImageView mProfileImage = (ImageView) view.findViewById(R.id.profileImage);
@@ -58,7 +72,6 @@ public class profileTab extends Fragment {
             //private String userID;
             private String mName;
             private String mPhone;
-            private String mAge;
             private String mAddress;
 
             private String mBio;
@@ -76,10 +89,7 @@ public class profileTab extends Fragment {
                         mPhone= map.get("phone").toString();
                         mPhoneField.setText(mPhone);
                     }
-                    if(map.get("age") != null){
-                        mAge= map.get("age").toString();
-                        mAgeField.setText(mAge);
-                    }
+
                     if(map.get("address") != null){
                         mAddress= map.get("address").toString();
                         mAddressField.setText(mAddress);
@@ -103,6 +113,7 @@ public class profileTab extends Fragment {
 
                 }
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

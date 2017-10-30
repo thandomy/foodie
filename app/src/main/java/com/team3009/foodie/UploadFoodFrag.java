@@ -1,5 +1,6 @@
 package com.team3009.foodie;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,15 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +54,7 @@ public class UploadFoodFrag extends Fragment {
     private StorageReference mStorageRef;
 
     public String downloadUrl;
-
+    private ProgressBar progressBar;
     private Button selImage,takePic,upload;
     private TextView textView;
     private EditText titl,descrip,ingre,pric;
@@ -100,11 +105,7 @@ public class UploadFoodFrag extends Fragment {
         takePic.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent takePicIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePicIntent.resolveActivity(contxt.getPackageManager()) != null) {
-                    startActivityForResult(takePicIntent, R_I_C);
-                }
-                startActivityForResult(takePicIntent, G_I);
+                dispatchTakePictureIntent();
             }
         });
         upload.setOnClickListener(new OnClickListener(){
@@ -112,36 +113,71 @@ public class UploadFoodFrag extends Fragment {
             @Override
             public void onClick(View view) {
 
+                final ProgressDialog progressDialog= new ProgressDialog(getActivity(),R.style.AppCompatAlertDialogStyle);
+                progressDialog.setTitle("Serving");
+                progressDialog.setMessage("Serving...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-                StorageReference riversRef = mStorageRef.child(url.toString());
+                progressDialog.show();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
 
-                riversRef.putFile(url)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-                                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                                Post p = new Post();
-                                assert locData != null;
-                                p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                //...
-                            }
-                        });
-            }
-        });
+                        if(url == null){
+                            url = Uri.parse("url");
+                        }
+                        StorageReference riversRef = mStorageRef.child(url.toString());
+
+                        riversRef.putFile(url)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        // Get a URL to the uploaded content
+
+                                        downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                                        Post p = new Post();
+                                        assert locData != null;
+                                        p.sendData(title,description,ingredients,locData[0],locData[1],downloadUrl,nPrice);
+                                    }
+
+
+
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle unsuccessful uploads
+                                        //...
+                                    }
+                                });
+
+                    }
+                };
+                Handler pdCanceller = new Handler();
+                pdCanceller.postDelayed(runnable, 3000);
+
+                    }
+                });
+
         return v;
     }
 
-    /*public void toast(){
+/*
+  final ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                progressDialog.setTitle("Saving");
+                progressDialog.setMessage("Saving...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
+                        saveuserInformation();
+                        progressDialog.cancel();
+                    }
+                };
 
-                //.makeText(UploadFoodFrag.this, "Invalid Username, Please Try Again", Toast.LENGTH_LONG).show();
-    }*/
+
+*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -164,7 +200,7 @@ public class UploadFoodFrag extends Fragment {
             image.setImageBitmap(selectedImage);*/
         }
 
-        if (requestCode == R_I_C && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);
@@ -172,5 +208,21 @@ public class UploadFoodFrag extends Fragment {
 
     }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public void removeFragment(){
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(this);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        ft.commit();
+    }
 
 }
