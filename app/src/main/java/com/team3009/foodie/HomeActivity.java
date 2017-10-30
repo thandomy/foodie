@@ -53,6 +53,7 @@ import java.util.concurrent.CountDownLatch;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap;
 
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,GoogleMap.OnMarkerClickListener{
@@ -159,6 +160,14 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
 
         } else if (id == R.id.nav_gallery) {
+            historyFragment chats = new historyFragment();
+            //Bundle args = new Bundle();
+            //args.putString("userId",getArguments().getString("userId"));
+            Toast.makeText(this,"call users",Toast.LENGTH_SHORT).show();
+            //chats.setArguments(args);
+            FragmentTransaction fragmentManager= getSupportFragmentManager().beginTransaction();
+            fragmentManager.replace(R.id.containerView, chats,chats.getTag()).addToBackStack(null)
+                    .commit();
 
         } else if (id == R.id.nav_list_view) {
             setTitle("Food");
