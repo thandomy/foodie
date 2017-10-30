@@ -168,6 +168,14 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
 
         } else if (id == R.id.nav_gallery) {
+            historyFragment chats = new historyFragment();
+            //Bundle args = new Bundle();
+            //args.putString("userId",getArguments().getString("userId"));
+            Toast.makeText(this,"call users",Toast.LENGTH_SHORT).show();
+            //chats.setArguments(args);
+            FragmentTransaction fragmentManager= getSupportFragmentManager().beginTransaction();
+            fragmentManager.replace(R.id.containerView, chats,chats.getTag()).addToBackStack(null)
+                    .commit();
 
         } else if (id == R.id.nav_list_view) {
             PostListFragment fragment = new PostListFragment();
@@ -217,6 +225,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }else if(id == R.id.nav_chats){
+
             userList chats = new userList();
             //Bundle args = new Bundle();
             //args.putString("userId",getArguments().getString("userId"));

@@ -15,9 +15,12 @@ import android.widget.Toast;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
@@ -41,7 +44,7 @@ public class PostListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
 
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
@@ -70,7 +73,30 @@ public class PostListFragment extends Fragment {
                         .load(model.downloadUrl)
                         .error(R.drawable.common_google_signin_btn_text_light_disabled)
                         .into(viewHolder.imageView);
+                /*FirebaseDatabase.getInstance().getReference().child("Orders").orderByChild("mealOrdered").equalTo(model.key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //if(dataSnapshot.exists()) {
+                            //mRecycler.removeViewAt(viewHolder.getLayoutPosition());
+                            //viewHolder.itemView.setVisibility(View.GONE);
+                            //mRecycler.removeViewAt(position);
+                          //  return;
+                       // }
+                        viewHolder.title.setText(model.title);
+                        viewHolder.body.setText(model.description);
+                        viewHolder.price.setText(model.price.toString());
+                        Picasso.with(getActivity())
+                                .load(model.downloadUrl)
+                                .error(R.drawable.common_google_signin_btn_text_light_disabled)
+                                .into(viewHolder.imageView);
 
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });*/
 
                 final DatabaseReference postRef = getRef(position);
                 final String postKey = postRef.getKey();
