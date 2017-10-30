@@ -2,6 +2,8 @@ package com.team3009.foodie;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,32 +32,26 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import android.Manifest;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 import java.util.Map;
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import static android.net.wifi.WifiConfiguration.Status.CURRENT;
-import static android.transition.Fade.IN;
 import static android.widget.Toast.LENGTH_LONG;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -165,6 +161,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_list_view) {
+            setTitle("Food");
             PostListFragment fragment = new PostListFragment();
             mFragmentManager = getSupportFragmentManager();
 
@@ -180,18 +177,13 @@ public class HomeActivity extends AppCompatActivity
             fragment.setArguments(loc);
             mFragmentManager.beginTransaction().replace(R.id.containerView, fragment).addToBackStack("t").commit();
         } else if (id == R.id.nav_serve) {
-            //Location temp = new Location(LocationManager.GPS_PROVIDER);
-            //temp.setLatitude(23.5678); //remove in production
-            //temp.setLongitude(34.456);
+           setTitle("Serve");
             UploadFoodFrag fragment = new UploadFoodFrag();
             mFragmentManager = getSupportFragmentManager();
 
             Bundle loc = new Bundle();
 
             float[] location = new float[2];
-            //location[0] = Float.parseFloat(Double.toString(temp.getLatitude()));
-            //location[1] = Float.parseFloat(Double.toString(temp.getLongitude()));
-
             location[0] = Float.parseFloat(Double.toString(lastLocation.getLatitude()));
             location[1] = Float.parseFloat(Double.toString(lastLocation.getLongitude()));
             loc.putFloatArray("location", location);
@@ -214,13 +206,11 @@ public class HomeActivity extends AppCompatActivity
 
 
         }else if (id == R.id.nav_chats) {
+            setTitle("Chats");
             userList fragment= new userList();
-
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.containerView,fragment,"userList");
             fragmentTransaction.commit();
-
-        } else if (id == R.id.nav_send) {
 
         } else if (id == R.id.nav_logout){
 
@@ -381,12 +371,21 @@ public class HomeActivity extends AppCompatActivity
             LatLng aLocation = new LatLng(
                     latitudes.get(i), longitudes.get(i)
             );
-            googleMap.addMarker(new MarkerOptions()
+
+
+            BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.wii);
+            Bitmap b=bitmapdraw.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 150, 150, false);
+
+            Marker marker =  googleMap.addMarker(new MarkerOptions()
                     .position(aLocation)
                     .title(titles.get(i))
-            ).setTag(keys.get(i));
+                    .icon(BitmapDescriptorFactory.
+                            fromBitmap(smallMarker))
 
-
+            );
+            marker.setTag(keys.get(i));
+            marker.showInfoWindow();
         /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(
                         20, -25))

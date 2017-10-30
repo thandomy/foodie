@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    <LinearLayout android:weightSum="1" android:orientation="vertical" android:background="#ffffff" android:layout_margin="@dimen/nav_header_vertical_spacing" android:layout_height="match_parent" android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:weightSum="1
+" android:orientation="vertical"
+        android:background="#ffffff"
+        
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <TextView

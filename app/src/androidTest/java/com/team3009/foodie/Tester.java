@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.not;
 @LargeTest
 public class Tester {
 
-    private String mStringToBetyped;
+   /* private String mStringToBetyped;
     private String mNumberToBetyped;
     Uri imageUri;
 
@@ -137,5 +137,5 @@ public class Tester {
             e.printStackTrace();
         }
         pressBack();
-    }
+    }*/
 }

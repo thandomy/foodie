@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -104,14 +105,21 @@ public class ProfileFragment extends Fragment {
                 new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                final ProgressDialog progressDialog= new ProgressDialog(getActivity(), R.style.AppCompatAlertDialogStyle);
                 progressDialog.setTitle("Saving");
                 progressDialog.setMessage("Saving...");
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.show();
-                saveuserInformation();
-                progressDialog.dismiss();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
+                        saveuserInformation();
+                        progressDialog.cancel();
+                    }
+                };
 
+                Handler pdCanceller = new Handler();
+                pdCanceller.postDelayed(runnable, 5000);
             }
         });
 

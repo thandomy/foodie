@@ -11,6 +11,7 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -104,11 +105,7 @@ public class UploadFoodFrag extends Fragment {
         takePic.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent takePicIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePicIntent.resolveActivity(contxt.getPackageManager()) != null) {
-                    startActivityForResult(takePicIntent, R_I_C);
-                }
-                startActivityForResult(takePicIntent, G_I);
+                dispatchTakePictureIntent();
             }
         });
         upload.setOnClickListener(new OnClickListener(){
@@ -116,15 +113,19 @@ public class UploadFoodFrag extends Fragment {
             @Override
             public void onClick(View view) {
 
-               // progressBar.setVisibility(View.VISIBLE);
-                ProgressDialog progressDialog= new ProgressDialog(getActivity());
-                progressDialog.setTitle("Upload");
-                progressDialog.setMessage("Uploading...");
+                final ProgressDialog progressDialog= new ProgressDialog(getActivity(),R.style.AppCompatAlertDialogStyle);
+                progressDialog.setTitle("Serving");
+                progressDialog.setMessage("Serving...");
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
                 progressDialog.show();
-                new Thread(new Runnable() {
+                Runnable runnable=new Runnable() {
                     @Override
                     public void run() {
+
+                        if(url == null){
+                            url = Uri.parse("url");
+                        }
                         StorageReference riversRef = mStorageRef.child(url.toString());
 
                         riversRef.putFile(url)
@@ -150,22 +151,33 @@ public class UploadFoodFrag extends Fragment {
                                     }
                                 });
 
-
-
                     }
+                };
+                Handler pdCanceller = new Handler();
+                pdCanceller.postDelayed(runnable, 3000);
 
-                });
-                progressDialog.dismiss();
                     }
                 });
 
         return v;
     }
 
-    /*public void toast(){
+/*
+  final ProgressDialog progressDialog= new ProgressDialog(getActivity());
+                progressDialog.setTitle("Saving");
+                progressDialog.setMessage("Saving...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
+                        saveuserInformation();
+                        progressDialog.cancel();
+                    }
+                };
 
-                //.makeText(UploadFoodFrag.this, "Invalid Username, Please Try Again", Toast.LENGTH_LONG).show();
-    }*/
+
+*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -188,13 +200,21 @@ public class UploadFoodFrag extends Fragment {
             image.setImageBitmap(selectedImage);*/
         }
 
-        if (requestCode == R_I_C && resultCode == RESULT_OK) {
-
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);
         }
 
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     public void removeFragment(){

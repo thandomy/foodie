@@ -42,7 +42,7 @@ public class userList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.user_list, container, false);
         final String thisUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -55,41 +55,31 @@ public class userList extends Fragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
-        // Set up FirebaseRecyclerAdapter with the Query
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //final Query postsQuery = FirebaseDatabase.getInstance().getReference().child("userList");
-        //final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").orderByKey().equalTo(thisUserId);
-        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").child(thisUserId).orderByKey();
-        if(postsQuery==null){
-            Toast.makeText(getActivity(),"postsQuery is null",Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getActivity(),postsQuery.toString(),Toast.LENGTH_SHORT).show();
-        }
 
-        //Toast.makeText(getActivity(),thisUserId,Toast.LENGTH_SHORT).show();
+        final Query postsQuery = FirebaseDatabase.getInstance().getReference("userList").child(thisUserId).orderByKey();
         mAdapter = new FirebaseRecyclerAdapter<userProfile , userViewHolder>(userProfile.class, R.layout.user_item,
                 userViewHolder.class, postsQuery) {
 
             @Override
             protected void populateViewHolder(final userViewHolder viewHolder, final userProfile model, int position) {
 
-                Toast.makeText(getActivity(),model.name,Toast.LENGTH_SHORT).show();
+
 
 
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(model.name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        //I'm actually doing this the long way
+
                         if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
                             Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                             if(map.get("name")!=null) {
                                 viewHolder.userName.setText(map.get("name").toString());
                             }
                             if(map.get("profileImageUrl")!= null){
-                                Toast.makeText(getActivity(),map.get("profileImageUrl").toString(),Toast.LENGTH_LONG).show();
-
                                 Picasso.with(getActivity()).load(map.get("profileImageUrl").toString())
                                         .error(R.drawable.common_google_signin_btn_icon_dark)
                                         .into(viewHolder.userPic);
@@ -124,7 +114,7 @@ public class userList extends Fragment {
                 viewHolder.userName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //startActivityForResult(getDropInRequest().getIntent(getActivity()), DROP_IN_REQUEST_CODE);
+
                         Chats chats = new Chats();
                         Bundle args = new Bundle();
                         args.putString("userId", model.name);
