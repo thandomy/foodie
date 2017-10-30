@@ -158,8 +158,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                         PaymentOptions fragment = new PaymentOptions();
                         Bundle args = new Bundle();
                         fragment.setArguments(args);
-                        Toast.makeText(getActivity(), model.key, Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getActivity(), model.key, Toast.LENGTH_LONG).show();
                         args.putString("Key", key);
+                        args.putString("amount",model.price.toString());
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.containerView, fragment).addToBackStack("t").commit();
                     }

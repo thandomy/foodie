@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.braintreepayments.api.BraintreeFragment;
@@ -69,8 +70,10 @@ public class PaymentOptions extends Fragment {
         final float[] locData = loc.getFloatArray("location");
 
         v = inflater.inflate(R.layout.fragment_payment_options, container, false);
+        TextView text = (TextView) v.findViewById(R.id.amount);
+        text.setText("R "+getArguments().getString("amount"));
 
-        payCash = (Button) v.findViewById(R.id.cash);
+        /*payCash = (Button) v.findViewById(R.id.cash);
         payCash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +83,7 @@ public class PaymentOptions extends Fragment {
                 order.sendData(getArguments().getString("Key"));
                 removeFragment();
             }
-        });
+        });*/
 
         payCredit = (Button) v.findViewById(R.id.credit_card);
         payCredit.setOnClickListener(new View.OnClickListener() {

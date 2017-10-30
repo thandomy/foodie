@@ -2,34 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/nav_header_vertical_spacing"
     android:background="#ffff"
     android:orientation="vertical"
     android:weightSum="1">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        android:textColor="#000"
-        android:text="Select Payment Option:" />
+        android:layout_height="200dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/cash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CASH"
-        android:layout_alignParentTop="true" />
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"/>
+
+        <Button
+            android:id="@+id/credit_card"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:text="Pay"
+            android:layout_marginLeft="50dp"/>
+    </LinearLayout>
 
 
-    <Button
-        android:id="@+id/credit_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="#000"
-        android:textSize="15dp"
-        android:text="Credit Card" />
+
 </LinearLayout>
