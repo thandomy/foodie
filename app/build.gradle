@@ -50,6 +50,8 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
 
+    //had to add this for messaging , my part
+    //compile 'com.firebase:firebase-client-android:2.5.2+'
 
 
 
