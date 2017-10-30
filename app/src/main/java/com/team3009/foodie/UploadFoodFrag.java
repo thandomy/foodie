@@ -152,7 +152,7 @@ public class UploadFoodFrag extends Fragment {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // Get a URL to the uploaded content
-                                
+
                                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl().toString();
 
 

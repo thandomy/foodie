@@ -145,5 +145,11 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/ratefrag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate" />
+
 
 </LinearLayout>

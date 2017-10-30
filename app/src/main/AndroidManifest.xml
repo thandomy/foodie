@@ -47,6 +47,8 @@
 
         <activity android:name=".ResultActivity"/>
 
+
+
         <service
             android:name=".MyFirebaseMessagingService">
             <intent-filter>

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,9 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Map;
+
+import static com.paypal.android.sdk.onetouch.core.metadata.ah.v;
 
 
 /**
@@ -38,14 +45,19 @@ import java.util.Map;
  */
 public class OrderFragment extends Fragment implements OnMapReadyCallback {
     String key,amount;
-    private Button mOrder;
+    private Button mOrder, Rate;
     private TextView mIngredients, mUserName,mTitle;
     private ImageView mProfilepic;
+    private String   mRating;
+    private Float number;
+    private Float num = 0f;
     GoogleMap googleMap;
     Serve model;
     Button comment;
+    Map singleUser;
+    ArrayList <String>  numbers= new ArrayList<>();
 
-
+    RatingBar ratingBar;
 
     // [START define_database_reference]
     private DatabaseReference mDatabase;
@@ -66,9 +78,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_profile2, container, false);
+        final View view = inflater.inflate(R.layout.fragment_order, container, false);
         try {
-            mBraintreeFragment = BraintreeFragment.newInstance(getActivity(),mAuthorization);
+            mBraintreeFragment = BraintreeFragment.newInstance(getActivity(), mAuthorization);
             // mBraintreeFragment is ready to use!
         } catch (InvalidArgumentException e) {
             // There was an issue with your authorization string.
@@ -80,19 +92,19 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         final float[] lastLocation = getArguments().getFloatArray("lastLocation");
 
         amount = getArguments().getString("amount");
-        Toast.makeText(getActivity(),userId,Toast.LENGTH_SHORT).show();
+
         mDatabase = FirebaseDatabase.getInstance().getReference("Serving").child(key);
 
-        mCustomer= FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        mCustomer = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         mCustomer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
                     Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    if(map.get("name") != null){
+                    if (map.get("name") != null) {
                         ((TextView) view.findViewById(R.id.userName)).setText(map.get("name").toString());
                     }
-                    if(map.get("profileImageUrl")!=null) {
+                    if (map.get("profileImageUrl") != null) {
                         Picasso.with(getActivity())
                                 .load(map.get("profileImageUrl").toString())
                                 .error(R.drawable.bt_ic_android_pay)
@@ -129,14 +141,14 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         view.findViewById(R.id.profileTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"Life Sucks",Toast.LENGTH_SHORT).show();
+
                 profileTab ProfileTab = new profileTab();
                 Bundle args = new Bundle();
-                args.putString("userId",getArguments().getString("userId"));
+                args.putString("userId", getArguments().getString("userId"));
                 ProfileTab.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(((ViewGroup)(getView().getParent())).getId(), ProfileTab,ProfileTab.getTag()).addToBackStack(null)
+                        .replace(((ViewGroup) (getView().getParent())).getId(), ProfileTab, ProfileTab.getTag()).addToBackStack(null)
                         .commit();
             }
         });
@@ -160,7 +172,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 assert lastLocation != null;
-                MapElements drawPath = new MapElements(googleMap, lastLocation[0],lastLocation[1],model.latitude, model.longitude);
+                MapElements drawPath = new MapElements(googleMap, lastLocation[0], lastLocation[1], model.latitude, model.longitude);
                 drawPath.Draw();
                 drawPath.distanceBox();
                 removeFragment();
@@ -191,8 +203,79 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         });
 
 
+        Rate = (Button) view.findViewById(R.id.ratefrag);
+
+
+        if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+            Rate.setVisibility(View.INVISIBLE);
+        } else {
+            Rate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RatingFrag ratingfrag = new RatingFrag();
+                    Bundle args = new Bundle();
+                    args.putString("userId", getArguments().getString("userId"));
+                    ratingfrag.setArguments(args);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(((ViewGroup) (getView().getParent())).getId(), ratingfrag, ratingfrag.getTag()).addToBackStack("v")
+                            .commit();
+                }
+            });
+        }
+
+
+       DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Rating").child(userId);
+
+
+
+        userRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                    collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue(), view);
+            }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
         return view;
     }
+
+    private void collectLocationsAndPutOnMap(Map<String, Object> servings, View v) {
+        ratingBar = (RatingBar) v.findViewById(R.id.indicatorRatingBar);
+        //iterate through each user, ignoring their UID
+        for (Map.Entry<String, Object> entry : servings.entrySet()) {
+
+            //Get user map
+            singleUser = (Map) entry.getValue();
+            //Get phone field and append to list
+
+            numbers.add((String) singleUser.get("rating"));
+        }
+        for( int i= 0; i < numbers.size(); i++ ) {
+
+            number = Float.parseFloat(numbers.get(i));
+            num = num + number;
+        }
+        num= num/numbers.size();
+
+
+        ratingBar.setRating(num);
+        ratingBar.invalidate();
+        ratingBar.setIsIndicator(true);
+        num = 0f;
+
+    }
+
+
 
     public void onBraintreeSubmit(View v) {
         DropInRequest dropInRequest = new DropInRequest()

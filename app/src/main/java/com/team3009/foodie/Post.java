@@ -79,6 +79,15 @@ public class Post {
     }
 
 
+    public void sendRating (String rating, String postedUId){
+
+        DatabaseReference node = FirebaseDatabase.getInstance().getReference().child("Rating").child(postedUId).push();
+
+        node.setValue(new Rating(rating));
+    }
+
+
+
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }

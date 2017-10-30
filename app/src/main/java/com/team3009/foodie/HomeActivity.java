@@ -324,7 +324,8 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
+                if(dataSnapshot.exists())
+                    collectLocationsAndPutOnMap((Map<String, Object>) dataSnapshot.getValue());
             }
 
             @Override
